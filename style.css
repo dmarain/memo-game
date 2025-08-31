@@ -1,34 +1,20 @@
-/* Base */
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7ff;color:#222;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7ff;color:#222;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
 #app{width:100%;max-width:860px;padding:20px}
-
-/* Screens */
 .screen{display:none}.screen.active{display:block}
-
-/* Headings */
 h1,h2{margin:10px 0;text-align:center;color:#0b4aa8}
-
-/* Welcome */
 .welcome-top{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px}
 #welcome-screen img{width:170px;height:auto;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.1)}
 .welcome-actions,.welcome-buttons{margin-top:14px;display:flex;justify-content:center;gap:12px}
-
-/* Quick name form */
 .quick-name{margin:18px auto 6px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
 .quick-name label{font-size:.95rem}
 .quick-name input{padding:8px 10px;font-size:1rem;border:2px solid #0b4aa8;border-radius:8px;min-width:240px;background:#fff}
 .quick-name button{padding:9px 14px}
-
-/* Parent settings */
 #parent-settings form{display:flex;flex-direction:column;gap:10px;max-width:520px;margin:0 auto}
 #parent-settings label{display:flex;flex-direction:column;font-size:.95rem}
 .settings-actions{display:flex;gap:10px;justify-content:center;margin-top:8px}
-
-/* Returning */
 .level-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-#returning-screen button{margin-top:12px}
-
-/* Game */
 .game-header{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .labels span{margin-left:10px}
 .instruction{margin:14px 0;font-weight:700;text-align:center}
@@ -39,20 +25,13 @@ h1,h2{margin:10px 0;text-align:center;color:#0b4aa8}
 #answerForm{text-align:center;margin-top:6px}
 #answerInput{padding:8px 10px;width:240px;font-size:1rem;border:2px solid #0b4aa8;border-radius:8px}
 .feedback{margin-top:8px;text-align:center;font-size:1.05rem;font-weight:700}
-
-/* Buttons */
 button{padding:8px 14px;border:0;border-radius:10px;background:#0b4aa8;color:#fff;font-size:.95rem;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.08)}
 button:hover{background:#0f63db}
-
-/* Modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center}
 .modal.hidden{display:none}
 .modal-content{background:#fff;padding:20px;border-radius:14px;text-align:center;max-width:420px;width:90%}
 .modal-actions{display:flex;justify-content:space-around;gap:10px;margin-top:12px}
-
-/* End */
 #end-screen{text-align:center}
 .end-actions{margin-top:16px;display:flex;justify-content:center;gap:12px}
-
-/* A11y */
 .visually-hidden{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+
