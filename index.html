@@ -1,208 +1,133 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>MEMO’S Memory Mystery</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MEMO’S Memory Mystery</title>
+  <link rel="preload" href="images/memo-fox.png" as="image">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="app" class="app">
+  <div id="app">
+    <!-- Welcome -->
+    <section id="welcome-screen" class="screen active" aria-labelledby="welcome-title">
+      <h1 id="welcome-title">MEMO’S Detective Agency</h1>
+      <div class="welcome-top">
+        <img id="memoImage" src="images/memo-fox.png" alt="Memo the Fox" />
+        <div class="welcome-actions">
+          <button id="hearVoiceBtn" type="button">Hear Memo Speak</button>
+          <button id="musicToggleBtn" type="button" aria-pressed="false">Music: OFF</button>
+        </div>
+      </div>
 
-<!-- Top Bar -->
-<header class="topbar">
-<!-- Replace your current Memo image block in index.html -->
-<div class="brand">
-  <img src="memo-fox.png" alt="Memo the Fox" class="memo-img">
-  <button id="btnHearMemo" class="btn ghost">
-    Click here to hear Memo’s Welcome and Instructions
-  </button>
-</div>
+      <!-- Simple name entry (press Enter to continue) -->
+      <form id="quickNameForm" class="quick-name" autocomplete="off">
+        <label for="quickNameInput">Type your name to begin</label>
+        <input id="quickNameInput" name="childName" type="text" maxlength="20" required autofocus />
+        <button id="quickStartBtn" type="submit">Start</button>
+      </form>
 
-<div class="top-actions">
-  <button id="btnMusic" class="btn ghost" aria-pressed="false">Music: OFF</button>
-</div>
+      <div class="welcome-buttons">
+        <button id="firstTimeBtn" type="button">Parent Settings</button>
+        <button id="returningBtn" type="button">Returning User</button>
+      </div>
+    </section>
 
-</header>
+    <!-- Parent Settings -->
+    <section id="parent-settings" class="screen" aria-labelledby="parent-title">
+      <h2 id="parent-title">Parent Settings</h2>
+      <form id="settingsForm" autocomplete="off">
+        <label>Child Name
+          <input id="childName" name="childName" type="text" maxlength="20" required />
+        </label>
+        <label>Start Level
+          <select id="startLevel" name="startLevel">
+            <option value="1A">Level 1A (1–3)</option>
+            <option value="1B">Level 1B (1–3)</option>
+            <option value="1C">Level 1C (1–3)</option>
+            <option value="2A">Level 2A (1–4)</option>
+          </select>
+        </label>
+        <fieldset>
+          <legend>Options</legend>
+          <label><input id="timerEnabled" type="checkbox" /> Enable Timer</label>
+          <label>Timer Seconds
+            <input id="timerSeconds" type="number" min="5" max="15" value="10" />
+          </label>
+          <label><input id="voiceOn" type="checkbox" checked /> Memo’s Voice On</label>
+        </fieldset>
+        <div class="settings-actions">
+          <button id="saveSettingsBtn" type="submit">Save</button>
+          <button id="startGameBtn" type="button">Start Game</button>
+        </div>
+      </form>
+    </section>
 
-<!-- Screens -->
-<main class="screen-wrap">
+    <!-- Returning User -->
+    <section id="returning-screen" class="screen" aria-labelledby="returning-title">
+      <h2 id="returning-title">Resume or Step Up</h2>
+      <p id="returningNote">Choose your level to begin.</p>
+      <div id="availableLevels" class="level-grid"></div>
+      <button id="returningStartBtn" type="button">Start</button>
+    </section>
 
-<!-- Welcome Screen -->
-<section id="screen-welcome" class="screen active">
-<div class="card tight">
-<h2 class="h2">Welcome, Detective!</h2>
-<p class="muted">Choose your path to begin.</p> <button id="btnHearMemo" class="btn ghost">Click here to hear Memo’s Welcome and Instructions</button>
+    <!-- Game -->
+    <section id="game-screen" class="screen" aria-live="polite" aria-labelledby="game-title">
+      <div class="game-header">
+        <h2 id="game-title">Find the Missing Number(s)</h2>
+        <div class="labels">
+          <span id="levelLabel">Level —</span>
+          <span id="streakLabel">Streak: 0</span>
+        </div>
+        <button id="inGameMusicToggle" type="button" aria-pressed="false">Music: OFF</button>
+      </div>
 
+      <div id="instructionText" class="instruction"></div>
 
-<div class="flow-row">
-<button id="btnFirstTime" class="btn primary">First-Time User</button>
-<button id="btnReturning" class="btn">Returning User</button>
-</div>
+      <div id="numberDisplay" class="number-row" aria-label="Number row"></div>
 
-<div id="nameRow" class="row hidden">
-<label for="childName" class="label">Child’s Name</label>
-<input id="childName" class="input" type="text" placeholder="ENTER NAME and press Enter" autocomplete="off" />
-</div>
+      <div id="timerBar" class="timer hidden" role="status" aria-live="polite">
+        <span id="timerCount">10</span>s
+      </div>
 
-<div class="tips muted">
-Tip: Memo speaks all instructions. You can turn music on or off anytime.
-</div>
-</div>
-</section>
+      <form id="answerForm" autocomplete="off">
+        <label for="answerInput" class="visually-hidden">Enter your answer</label>
+        <input id="answerInput" type="text" inputmode="numeric" placeholder="Type answers (space-separated)" />
+        <button id="submitAnswerBtn" type="submit">Submit</button>
+      </form>
 
-<!-- Parent Settings -->
-<section id="screen-settings" class="screen">
-<div class="card">
-<h2 class="h2">Parent Settings</h2>
-<div class="grid2">
-<div class="form-group">
-<label class="label">Timer Mode (Levels 1–2 only)</label>
-<div class="row">
-<input id="chkTimer" type="checkbox" />
-<label for="chkTimer">Enable Timer</label>
-</div>
-<div class="row">
-<label for="timerSeconds" class="label small">Seconds</label>
-<input id="timerSeconds" class="input short" type="number" min="5" max="15" value="8" />
-</div>
-</div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
 
-<div class="form-group">
-<label class="label">Audio-Only Mode (Levels 1–2 only)</label>
-<div class="row">
-<input id="chkAudioOnly" type="checkbox" />
-<label for="chkAudioOnly">Enable Audio-Only</label>
-</div>
-</div>
+      <div class="game-footer">
+        <button id="changeLevelBtn" type="button">Change Level</button>
+        <button id="endGameBtn" type="button">End Game</button>
+      </div>
+    </section>
 
-<div class="form-group">
-<label class="label">Higher-Range B: Missing Count</label>
-<select id="selHiRangeB" class="input">
-<option value="random" selected>Random (2–3)</option>
-<option value="2">Exactly 2</option>
-<option value="3">Exactly 3</option>
-</select>
-</div>
+    <!-- Celebration Modal -->
+    <section id="celebrationModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="celebrate-title">
+      <div class="modal-content">
+        <h3 id="celebrate-title">Congratulations — five in a row!</h3>
+        <p id="celebrateText">You’re becoming a first-class detective!</p>
+        <div class="modal-actions">
+          <button id="stayLevelBtn" type="button">Stay on this level</button>
+          <button id="nextLevelBtn" type="button">Go to next level</button>
+          <button id="celebrationEndBtn" type="button">End game</button>
+        </div>
+      </div>
+    </section>
 
-<div class="form-group">
-<label class="label">Reduced Motion</label>
-<div class="row">
-<input id="chkReducedMotion" type="checkbox" />
-<label for="chkReducedMotion">Gentle animations</label>
-</div>
-</div>
-</div>
+    <!-- End Screen -->
+    <section id="end-screen" class="screen" aria-labelledby="end-title">
+      <h2 id="end-title">Session Summary</h2>
+      <div id="summaryStats"></div>
+      <div class="end-actions">
+        <button id="playAgainBtn" type="button">Play Again</button>
+        <button id="exitToWelcomeBtn" type="button">Back to Welcome</button>
+      </div>
+    </section>
+  </div>
 
-<div class="flow-row">
-<button id="btnSaveSettings" class="btn primary">Save & Choose Level</button>
-<button id="btnBackWelcome1" class="btn ghost">Back</button>
-</div>
-</div>
-</section>
-
-<!-- Returning User Level Select -->
-<section id="screen-level-select" class="screen">
-<div class="card">
-<h2 class="h2">Choose Your Level</h2>
-<p class="muted" id="levelSelectNote"></p>
-<div id="levelList" class="level-list"></div>
-<div class="flow-row">
-<button id="btnStartSelected" class="btn primary">Start</button>
-<button id="btnBackWelcome2" class="btn ghost">Back</button>
-</div>
-</div>
-</section>
-
-<!-- Game Screen -->
-<section id="screen-game" class="screen">
-<div class="hud">
-<div class="hud-left">
-<span id="hudName" class="tag"></span>
-<span id="hudLevel" class="tag"></span>
-<span id="hudSub" class="tag"></span>
-<span id="hudStreak" class="tag">Streak: 0</span>
-</div>
-<div class="hud-right">
-<button id="btnEndGame" class="btn danger">End Game</button>
-</div>
-</div>
-
-<div class="game-area">
-<div id="instructions" class="instructions"></div>
-
-<!-- Timer -->
-<div id="timerWrap" class="timer hidden" aria-hidden="true">
-<div class="hourglass" aria-hidden="true"></div>
-<div id="timerText" class="timer-text">8</div>
-</div>
-
-<!-- Numbers Row -->
-<div id="numbersRow" class="numbers-row"></div>
-
-<!-- Input -->
-<div class="input-row">
-<input id="answerInput" class="input wide" type="text" placeholder="Type missing numbers separated by spaces" autocomplete="off" />
-<button id="btnSubmit" class="btn primary">Submit</button>
-<button id="btnNext" class="btn" disabled>Next</button>
-</div>
-
-<div id="feedback" class="feedback"></div>
-</div>
-</section>
-
-<!-- Celebration Modal -->
-<div id="modal-celebrate" class="modal" aria-hidden="true">
-<div class="modal-card">
-<h3 id="celebrateHeading" class="h2 center">Congratulations!</h3>
-<div id="celebrateBadge" class="badge"></div>
-<p id="celebrateText" class="center"></p>
-<div id="celebrateFX" class="celebrate-fx"></div>
-<div class="flow-row center">
-<button id="btnStayLevel" class="btn">Stay Here</button>
-<button id="btnNextLevel" class="btn primary">Next Level</button>
-<button id="btnEndFromCelebrate" class="btn danger">End Game</button>
-</div>
-</div>
-</div>
-
-<!-- Unlock Modal (L3+ 5-in-a-row) -->
-<div id="modal-unlock" class="modal" aria-hidden="true">
-<div class="modal-card">
-<h3 class="h2 center">Master Challenge Unlocked!</h3>
-<p class="center">Would you like to try <b>Timer Mode</b> or <b>Audio-Only Mode</b> next?</p>
-<div class="flow-row center">
-<button id="btnUnlockTimer" class="btn">Timer Mode</button>
-<button id="btnUnlockAudio" class="btn">Audio-Only</button>
-<button id="btnUnlockKeep" class="btn ghost">Keep Normal Mode</button>
-</div>
-</div>
-</div>
-
-<!-- Summary Screen -->
-<section id="screen-summary" class="screen">
-<div class="card">
-<h2 class="h2">Case File Summary</h2>
-<div id="summaryTableWrap" class="summary-wrap"></div>
-<p id="summaryPraise" class="center bigpraise"></p>
-<div class="flow-row center">
-<button id="btnPlayAgain" class="btn primary">Play Again</button>
-<button id="btnChooseLevel" class="btn">Choose Level</button>
-<button id="btnExit" class="btn ghost">Exit</button>
-</div>
-</div>
-</section>
-
-</main>
-
-<!-- Background Music (optional asset) -->
-<audio id="bgMusic" preload="auto" loop>
-<source src="sounds/background-loop.mp3" type="audio/mpeg" />
-</audio>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-
