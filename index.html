@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>MEMO’S Memory Mystery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app" class="app">
+
+<!-- Top Bar -->
+<header class="topbar">
+<!-- Replace your current Memo image block in index.html -->
+<div class="brand">
+  <img src="memo-fox.png" alt="Memo the Fox" class="memo-img">
+  <button id="btnHearMemo" class="btn ghost">
+    Click here to hear Memo’s Welcome and Instructions
+  </button>
+</div>
+
+<div class="top-actions">
+  <button id="btnMusic" class="btn ghost" aria-pressed="false">Music: OFF</button>
+</div>
+
+</header>
+
+<!-- Screens -->
+<main class="screen-wrap">
+
+<!-- Welcome Screen -->
+<section id="screen-welcome" class="screen active">
+<div class="card tight">
+<h2 class="h2">Welcome, Detective!</h2>
+<p class="muted">Choose your path to begin.</p> <button id="btnHearMemo" class="btn ghost">Click here to hear Memo’s Welcome and Instructions</button>
+
+
+<div class="flow-row">
+<button id="btnFirstTime" class="btn primary">First-Time User</button>
+<button id="btnReturning" class="btn">Returning User</button>
+</div>
+
+<div id="nameRow" class="row hidden">
+<label for="childName" class="label">Child’s Name</label>
+<input id="childName" class="input" type="text" placeholder="ENTER NAME and press Enter" autocomplete="off" />
+</div>
+
+<div class="tips muted">
+Tip: Memo speaks all instructions. You can turn music on or off anytime.
+</div>
+</div>
+</section>
+
+<!-- Parent Settings -->
+<section id="screen-settings" class="screen">
+<div class="card">
+<h2 class="h2">Parent Settings</h2>
+<div class="grid2">
+<div class="form-group">
+<label class="label">Timer Mode (Levels 1–2 only)</label>
+<div class="row">
+<input id="chkTimer" type="checkbox" />
+<label for="chkTimer">Enable Timer</label>
+</div>
+<div class="row">
+<label for="timerSeconds" class="label small">Seconds</label>
+<input id="timerSeconds" class="input short" type="number" min="5" max="15" value="8" />
+</div>
+</div>
+
+<div class="form-group">
+<label class="label">Audio-Only Mode (Levels 1–2 only)</label>
+<div class="row">
+<input id="chkAudioOnly" type="checkbox" />
+<label for="chkAudioOnly">Enable Audio-Only</label>
+</div>
+</div>
+
+<div class="form-group">
+<label class="label">Higher-Range B: Missing Count</label>
+<select id="selHiRangeB" class="input">
+<option value="random" selected>Random (2–3)</option>
+<option value="2">Exactly 2</option>
+<option value="3">Exactly 3</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="label">Reduced Motion</label>
+<div class="row">
+<input id="chkReducedMotion" type="checkbox" />
+<label for="chkReducedMotion">Gentle animations</label>
+</div>
+</div>
+</div>
+
+<div class="flow-row">
+<button id="btnSaveSettings" class="btn primary">Save & Choose Level</button>
+<button id="btnBackWelcome1" class="btn ghost">Back</button>
+</div>
+</div>
+</section>
+
+<!-- Returning User Level Select -->
+<section id="screen-level-select" class="screen">
+<div class="card">
+<h2 class="h2">Choose Your Level</h2>
+<p class="muted" id="levelSelectNote"></p>
+<div id="levelList" class="level-list"></div>
+<div class="flow-row">
+<button id="btnStartSelected" class="btn primary">Start</button>
+<button id="btnBackWelcome2" class="btn ghost">Back</button>
+</div>
+</div>
+</section>
+
+<!-- Game Screen -->
+<section id="screen-game" class="screen">
+<div class="hud">
+<div class="hud-left">
+<span id="hudName" class="tag"></span>
+<span id="hudLevel" class="tag"></span>
+<span id="hudSub" class="tag"></span>
+<span id="hudStreak" class="tag">Streak: 0</span>
+</div>
+<div class="hud-right">
+<button id="btnEndGame" class="btn danger">End Game</button>
+</div>
+</div>
+
+<div class="game-area">
+<div id="instructions" class="instructions"></div>
+
+<!-- Timer -->
+<div id="timerWrap" class="timer hidden" aria-hidden="true">
+<div class="hourglass" aria-hidden="true"></div>
+<div id="timerText" class="timer-text">8</div>
+</div>
+
+<!-- Numbers Row -->
+<div id="numbersRow" class="numbers-row"></div>
+
+<!-- Input -->
+<div class="input-row">
+<input id="answerInput" class="input wide" type="text" placeholder="Type missing numbers separated by spaces" autocomplete="off" />
+<button id="btnSubmit" class="btn primary">Submit</button>
+<button id="btnNext" class="btn" disabled>Next</button>
+</div>
+
+<div id="feedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- Celebration Modal -->
+<div id="modal-celebrate" class="modal" aria-hidden="true">
+<div class="modal-card">
+<h3 id="celebrateHeading" class="h2 center">Congratulations!</h3>
+<div id="celebrateBadge" class="badge"></div>
+<p id="celebrateText" class="center"></p>
+<div id="celebrateFX" class="celebrate-fx"></div>
+<div class="flow-row center">
+<button id="btnStayLevel" class="btn">Stay Here</button>
+<button id="btnNextLevel" class="btn primary">Next Level</button>
+<button id="btnEndFromCelebrate" class="btn danger">End Game</button>
+</div>
+</div>
+</div>
+
+<!-- Unlock Modal (L3+ 5-in-a-row) -->
+<div id="modal-unlock" class="modal" aria-hidden="true">
+<div class="modal-card">
+<h3 class="h2 center">Master Challenge Unlocked!</h3>
+<p class="center">Would you like to try <b>Timer Mode</b> or <b>Audio-Only Mode</b> next?</p>
+<div class="flow-row center">
+<button id="btnUnlockTimer" class="btn">Timer Mode</button>
+<button id="btnUnlockAudio" class="btn">Audio-Only</button>
+<button id="btnUnlockKeep" class="btn ghost">Keep Normal Mode</button>
+</div>
+</div>
+</div>
+
+<!-- Summary Screen -->
+<section id="screen-summary" class="screen">
+<div class="card">
+<h2 class="h2">Case File Summary</h2>
+<div id="summaryTableWrap" class="summary-wrap"></div>
+<p id="summaryPraise" class="center bigpraise"></p>
+<div class="flow-row center">
+<button id="btnPlayAgain" class="btn primary">Play Again</button>
+<button id="btnChooseLevel" class="btn">Choose Level</button>
+<button id="btnExit" class="btn ghost">Exit</button>
+</div>
+</div>
+</section>
+
+</main>
+
+<!-- Background Music (optional asset) -->
+<audio id="bgMusic" preload="auto" loop>
+<source src="sounds/background-loop.mp3" type="audio/mpeg" />
+</audio>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
