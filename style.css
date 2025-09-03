@@ -1,37 +1,63 @@
-
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f7ff;color:#222;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
-#app{width:100%;max-width:860px;padding:20px}
+:root{
+  --bg:#eef6ff;        /* softer pastel */
+  --primary:#0b4aa8;   /* dark blue */
+  --accent:#7bb6ff;    /* brighter buttons */
+  --warn:#b30000;      /* missing color */
+}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#222;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
+#app{width:100%;max-width:900px;padding:20px}
+
+/* Screens */
 .screen{display:none}.screen.active{display:block}
-h1,h2{margin:10px 0;text-align:center;color:#0b4aa8}
-.welcome-top{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px}
-#welcome-screen img{width:170px;height:auto;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.1)}
-.welcome-actions,.welcome-buttons{margin-top:14px;display:flex;justify-content:center;gap:12px}
-.quick-name{margin:18px auto 6px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
-.quick-name label{font-size:.95rem}
-.quick-name input{padding:8px 10px;font-size:1rem;border:2px solid #0b4aa8;border-radius:8px;min-width:240px;background:#fff}
-.quick-name button{padding:9px 14px}
-#parent-settings form{display:flex;flex-direction:column;gap:10px;max-width:520px;margin:0 auto}
-#parent-settings label{display:flex;flex-direction:column;font-size:.95rem}
-.settings-actions{display:flex;gap:10px;justify-content:center;margin-top:8px}
-.level-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.game-header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1,h2{margin:10px 0;text-align:center;color:var(--primary)}
+
+/* Welcome */
+.welcome-top{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px;flex-wrap:wrap}
+#welcome-screen img{width:180px;height:auto;border-radius:14px;box-shadow:0 8px 18px rgba(0,0,0,.1)}
+.welcome-actions,.welcome-buttons{margin-top:14px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.quick-name{margin:18px auto 6px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:640px}
+.quick-name label{font-size:1rem}
+.quick-name input{padding:10px 12px;font-size:1rem;border:2px solid var(--primary);border-radius:10px;min-width:260px;background:#fff}
+.quick-name button{padding:10px 14px}
+
+/* Parent settings */
+#parent-settings form{display:flex;flex-direction:column;gap:12px;max-width:580px;margin:0 auto}
+#parent-settings label{display:flex;flex-direction:column;font-size:1rem}
+.settings-actions{display:flex;gap:10px;justify-content:center;margin-top:10px}
+
+/* Returning */
+.returning-form{display:flex;flex-direction:column;gap:12px;max-width:520px;margin:0 auto}
+.level-choices{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+.choose-level{display:flex;gap:8px;align-items:center}
+
+/* Game */
+.game-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .labels span{margin-left:10px}
 .instruction{margin:14px 0;font-weight:700;text-align:center}
-.number-row{display:flex;justify-content:center;gap:10px;margin:14px 0}
-.num-box{width:46px;height:46px;border:2px solid #0b4aa8;display:flex;justify-content:center;align-items:center;font-weight:700;font-size:1.2rem;background:#fff;border-radius:10px}
-.missing{background:#ffe9a6;color:#b30000}
+.number-row{display:flex;justify-content:center;gap:10px;margin:14px 0;flex-wrap:wrap}
+.num-box{width:52px;height:52px;border:2px solid var(--primary);display:flex;justify-content:center;align-items:center;font-weight:700;font-size:1.25rem;background:#fff;border-radius:12px}
+.missing{background:#ffe9a6;color:var(--warn)}
 .timer{text-align:center;font-weight:700;margin:8px 0}.hidden{display:none}
 #answerForm{text-align:center;margin-top:6px}
-#answerInput{padding:8px 10px;width:240px;font-size:1rem;border:2px solid #0b4aa8;border-radius:8px}
+#answerInput{padding:10px 12px;width:260px;max-width:80vw;font-size:1rem;border:2px solid var(--primary);border-radius:10px;background:#fff}
 .feedback{margin-top:8px;text-align:center;font-size:1.05rem;font-weight:700}
-button{padding:8px 14px;border:0;border-radius:10px;background:#0b4aa8;color:#fff;font-size:.95rem;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.08)}
-button:hover{background:#0f63db}
+
+/* Buttons */
+button{padding:10px 14px;border:0;border-radius:12px;background:var(--primary);color:#fff;font-size:.98rem;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+button:hover{background:#104dbd}
+#welcome-screen button,#parent-settings button,#returning-screen button{background:var(--accent);color:#09234a}
+#welcome-screen button:hover,#parent-settings button:hover,#returning-screen button:hover{filter:brightness(0.95)}
+
+/* Modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center}
 .modal.hidden{display:none}
-.modal-content{background:#fff;padding:20px;border-radius:14px;text-align:center;max-width:420px;width:90%}
+.modal-content{background:#fff;padding:20px;border-radius:16px;text-align:center;max-width:440px;width:92%}
 .modal-actions{display:flex;justify-content:space-around;gap:10px;margin-top:12px}
+
+/* End */
 #end-screen{text-align:center}
 .end-actions{margin-top:16px;display:flex;justify-content:center;gap:12px}
-.visually-hidden{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 
+/* A11y */
+.visually-hidden{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
