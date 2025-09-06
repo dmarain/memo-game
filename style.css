@@ -1,10 +1,9 @@
-/* style.css */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
+  background: linear-gradient(to bottom right, #a2d2ff, #cdb4db);
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
 }
 
 .screen {
@@ -16,71 +15,23 @@ body {
   display: block;
 }
 
-.hidden {
-  display: none;
-}
-
-.memo-img {
-  width: 150px;
+.memo-image {
+  width: 200px;
   margin: 20px auto;
-  display: block;
-}
-
-h1, h2 {
-  color: #333;
-}
-
-#numberDisplay {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.number-box {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #333;
-  border-radius: 8px;
-  font-size: 20px;
-  background: #fff;
-}
-
-.number-missing {
-  background: #ffe6e6;
-  color: #999;
 }
 
 button {
-  margin: 10px;
   padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: none;
-  background-color: #4facfe;
-  color: #fff;
+  margin: 10px;
+  font-size: 1rem;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #3a8edb;
+#number-display {
+  font-size: 2rem;
+  margin: 20px 0;
 }
 
-#streakBadgeTracker {
-  margin-top: 15px;
-  font-size: 18px;
-}
-
-#summaryTable {
-  width: 80%;
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-
-#summaryTable th, #summaryTable td {
-  border: 1px solid #999;
-  padding: 8px;
+.hidden {
+  display: none;
 }
