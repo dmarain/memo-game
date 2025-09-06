@@ -1,63 +1,86 @@
-*{box-sizing:border-box}
-:root{
-  --bg:#eef6ff;        /* softer pastel */
-  --primary:#0b4aa8;   /* dark blue */
-  --accent:#7bb6ff;    /* brighter buttons */
-  --warn:#b30000;      /* missing color */
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
 }
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#222;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
-#app{width:100%;max-width:900px;padding:20px}
 
-/* Screens */
-.screen{display:none}.screen.active{display:block}
-h1,h2{margin:10px 0;text-align:center;color:var(--primary)}
+.screen {
+  display: none;
+  padding: 20px;
+}
 
-/* Welcome */
-.welcome-top{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px;flex-wrap:wrap}
-#welcome-screen img{width:180px;height:auto;border-radius:14px;box-shadow:0 8px 18px rgba(0,0,0,.1)}
-.welcome-actions,.welcome-buttons{margin-top:14px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.quick-name{margin:18px auto 6px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:640px}
-.quick-name label{font-size:1rem}
-.quick-name input{padding:10px 12px;font-size:1rem;border:2px solid var(--primary);border-radius:10px;min-width:260px;background:#fff}
-.quick-name button{padding:10px 14px}
+.screen.active {
+  display: block;
+}
 
-/* Parent settings */
-#parent-settings form{display:flex;flex-direction:column;gap:12px;max-width:580px;margin:0 auto}
-#parent-settings label{display:flex;flex-direction:column;font-size:1rem}
-.settings-actions{display:flex;gap:10px;justify-content:center;margin-top:10px}
+.hidden {
+  display: none;
+}
 
-/* Returning */
-.returning-form{display:flex;flex-direction:column;gap:12px;max-width:520px;margin:0 auto}
-.level-choices{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
-.choose-level{display:flex;gap:8px;align-items:center}
+.memo-img {
+  width: 150px;
+  margin: 20px auto;
+  display: block;
+}
 
-/* Game */
-.game-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.labels span{margin-left:10px}
-.instruction{margin:14px 0;font-weight:700;text-align:center}
-.number-row{display:flex;justify-content:center;gap:10px;margin:14px 0;flex-wrap:wrap}
-.num-box{width:52px;height:52px;border:2px solid var(--primary);display:flex;justify-content:center;align-items:center;font-weight:700;font-size:1.25rem;background:#fff;border-radius:12px}
-.missing{background:#ffe9a6;color:var(--warn)}
-.timer{text-align:center;font-weight:700;margin:8px 0}.hidden{display:none}
-#answerForm{text-align:center;margin-top:6px}
-#answerInput{padding:10px 12px;width:260px;max-width:80vw;font-size:1rem;border:2px solid var(--primary);border-radius:10px;background:#fff}
-.feedback{margin-top:8px;text-align:center;font-size:1.05rem;font-weight:700}
+h1, h2 {
+  color: #333;
+}
 
-/* Buttons */
-button{padding:10px 14px;border:0;border-radius:12px;background:var(--primary);color:#fff;font-size:.98rem;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-button:hover{background:#104dbd}
-#welcome-screen button,#parent-settings button,#returning-screen button{background:var(--accent);color:#09234a}
-#welcome-screen button:hover,#parent-settings button:hover,#returning-screen button:hover{filter:brightness(0.95)}
+#numberDisplay {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
 
-/* Modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center}
-.modal.hidden{display:none}
-.modal-content{background:#fff;padding:20px;border-radius:16px;text-align:center;max-width:440px;width:92%}
-.modal-actions{display:flex;justify-content:space-around;gap:10px;margin-top:12px}
+.number-box {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #333;
+  border-radius: 8px;
+  font-size: 20px;
+  background: #fff;
+}
 
-/* End */
-#end-screen{text-align:center}
-.end-actions{margin-top:16px;display:flex;justify-content:center;gap:12px}
+.number-missing {
+  background: #ffe6e6;
+  color: #999;
+}
 
-/* A11y */
-.visually-hidden{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: #4facfe;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3a8edb;
+}
+
+#streakBadgeTracker {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+#summaryTable {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+#summaryTable th, #summaryTable td {
+  border: 1px solid #999;
+  padding: 8px;
+}
