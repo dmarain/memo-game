@@ -35,3 +35,18 @@ button {
 .hidden {
   display: none;
 }
+
+#feedback {
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+#streak-display {
+  margin-top: 15px;
+  font-size: 1.2rem;
+}
+
+#summary-table {
+  margin-top: 20px;
+  font-size: 1.1rem;
+}
