@@ -12,7 +12,7 @@
     <img src="images/memo-fox.png" alt="Memo the Fox" class="memo-img">
     <h1>Welcome to MEMO'S Detective Agency!</h1>
     <p>Please enter your name to begin:</p>
-    <input type="text" id="childNameInput" placeholder="Enter your name">
+    <input type="text" id="nameInput" placeholder="Enter your name">
     <button id="firstTimeBtn">First-Time User</button>
     <button id="returningBtn">Returning User</button>
   </div>
@@ -43,19 +43,19 @@
   </div>
 
   <!-- Gameplay -->
-  <div id="gameplayScreen" class="screen hidden">
+  <div id="gameScreen" class="screen hidden">
     <h2 id="levelLabel">Level 1A</h2>
     <div id="instructionText"></div>
-    <div id="numberDisplay"></div>
+    <div id="numbersDisplay"></div>
     <input type="text" id="answerInput" placeholder="Type missing numbers">
     <button id="submitAnswerBtn">Submit</button>
     <div id="feedback"></div>
     <div id="streakBadgeTracker">
-      <span id="streakCount">Streak: 0</span>
-      <span id="badgeCount">Badges: 0</span>
+      <span id="streakDisplay">Current Streak: 0</span>
+      <span id="badgesDisplay">Badges: 0</span>
     </div>
-    <button id="nextRoundBtn" class="hidden">Next</button>
-    <button id="endRoundBtn" class="hidden">End – See Scores</button>
+    <button id="nextButton" class="hidden">Next</button>
+    <button id="endButton" class="hidden">End – See Scores</button>
   </div>
 
   <!-- Celebration -->
