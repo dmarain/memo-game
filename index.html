@@ -1,89 +1,15 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MEMO'S MEMORY MYSTERY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memo Test</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Welcome Screen -->
-  <div id="welcomeScreen" class="screen">
-    <img src="images/memo-fox.png" alt="Memo the Fox" class="memo-img">
-    <h1>Welcome to MEMO'S Detective Agency!</h1>
-    <p>Please enter your name to begin:</p>
-    <input type="text" id="nameInput" placeholder="Enter your name">
-    <button id="firstTimeBtn">First-Time User</button>
-    <button id="returningBtn">Returning User</button>
-  </div>
-
-  <!-- Parent Settings -->
-  <div id="parentSettings" class="screen hidden">
-    <h2>Parent Settings</h2>
-    <label>Starting Level:
-      <select id="startLevel">
-        <option value="1A">Level 1A</option>
-        <option value="1B">Level 1B</option>
-        <option value="1C">Level 1C</option>
-        <option value="2A">Level 2A</option>
-        <option value="2B">Level 2B</option>
-        <option value="2C">Level 2C</option>
-        <option value="3A">Level 3A</option>
-        <option value="3B">Level 3B</option>
-        <option value="3C">Level 3C</option>
-        <option value="4A">Level 4A</option>
-        <option value="4B">Level 4B</option>
-        <option value="4C">Level 4C</option>
-      </select>
-    </label>
-    <label><input type="checkbox" id="autoLevel"> Auto level-up after 5 correct</label>
-    <label><input type="checkbox" id="timerToggle"> Enable timer (5–15s)</label>
-    <label><input type="checkbox" id="audioOnlyToggle"> Enable audio-only mode</label>
-    <button id="saveSettingsBtn">Save Settings</button>
-  </div>
-
-  <!-- Gameplay -->
-  <div id="gameScreen" class="screen hidden">
-    <h2 id="levelLabel">Level 1A</h2>
-    <div id="instructionText"></div>
-    <div id="numbersDisplay"></div>
-    <input type="text" id="answerInput" placeholder="Type missing numbers">
-    <button id="submitAnswerBtn">Submit</button>
-    <div id="feedback"></div>
-    <div id="streakBadgeTracker">
-      <span id="streakDisplay">Current Streak: 0</span>
-      <span id="badgesDisplay">Badges: 0</span>
-    </div>
-    <button id="nextButton" class="hidden">Next</button>
-    <button id="endButton" class="hidden">End – See Scores</button>
-  </div>
-
-  <!-- Celebration -->
-  <div id="celebrationScreen" class="screen hidden">
-    <h2 id="celebrationText"></h2>
-    <div id="fireworks"></div>
-    <button id="stayLevelBtn">Stay on Level</button>
-    <button id="nextLevelBtn">Next Level</button>
-    <button id="endGameBtn">End Game</button>
-  </div>
-
-  <!-- Summary -->
-  <div id="summaryScreen" class="screen hidden">
-    <h2>Game Summary</h2>
-    <table id="summaryTable">
-      <thead>
-        <tr>
-          <th>Level</th>
-          <th>Correct/Total</th>
-          <th>Longest Streak</th>
-          <th>Badges Earned</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <p id="summaryMessage"></p>
-  </div>
-
+  <h1>Memo’s Memory Mystery Test</h1>
+  <p>If you see this text, Netlify is working and index.html is loading correctly.</p>
+  <img src="memo-fox.png" alt="Memo Test Image" width="200">
   <script src="script.js"></script>
 </body>
 </html>
