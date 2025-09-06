@@ -3,79 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memo’s Memory Mystery</title>
+  <title>Memo’s Memory Mystery (Test Build)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Welcome Screen -->
   <div id="welcome-screen" class="screen">
     <img src="memo-fox.png" alt="Memo the Fox" class="memo-image">
-    <h1>Welcome to Memo’s Detective Agency!</h1>
-    <button id="first-time-btn">First Time User</button>
-    <button id="returning-btn">Returning User</button>
-    <button id="hear-memo-btn">Hear Memo’s Voice</button>
+    <h1>Welcome to Memo’s Memory Mystery!</h1>
+    <button id="start-btn">Start Game</button>
   </div>
 
-  <!-- Parent Settings Screen -->
-  <div id="parent-settings" class="screen hidden">
-    <h2>Parent Settings</h2>
-    <label>Child’s Name: <input type="text" id="child-name-input"></label>
-    <label>Starting Level:
-      <select id="starting-level">
-        <option value="1A">Level 1A</option>
-        <option value="2A">Level 2A</option>
-        <option value="3A">Level 3A</option>
-        <option value="4A">Level 4A</option>
-      </select>
-    </label>
-    <label><input type="checkbox" id="auto-level-up"> Auto level-up after 5 correct</label>
-    <label><input type="checkbox" id="music-toggle"> Music On/Off</label>
-    <label><input type="checkbox" id="timer-toggle"> Enable Timer</label>
-    <label><input type="checkbox" id="celebration-toggle"> Celebrations On/Off</label>
-    <button id="save-settings">Save & Continue</button>
-  </div>
-
-  <!-- Theme Tester Screen -->
-  <div id="theme-tester" class="screen hidden">
-    <h2>Theme Tester</h2>
-    <div id="theme-preview">
-      <div class="number-box">1</div>
-      <div class="number-box">2</div>
-      <div class="number-box">?</div>
-      <div class="number-box">4</div>
-    </div>
-    <div id="badge-preview">🎖️</div>
-    <button id="toggle-theme">Toggle Theme</button>
-    <button id="proceed-game">Proceed to Game</button>
-  </div>
-
-  <!-- Gameplay Screen -->
+  <!-- Game Screen -->
   <div id="game-screen" class="screen hidden">
     <h2 id="level-label">Level 1A</h2>
     <div id="number-display"></div>
-    <input type="text" id="answer-input" placeholder="Enter missing numbers">
+    <input type="text" id="answer-input" placeholder="Enter missing number">
     <button id="submit-answer">Submit</button>
-    <button id="next-round" class="hidden">Next</button>
-    <button id="end-round" class="hidden">End – See Scores</button>
     <p id="feedback"></p>
-    <div id="streak-display"></div>
-    <div id="badge-display"></div>
-  </div>
-
-  <!-- Celebration Screen -->
-  <div id="celebration-screen" class="screen hidden">
-    <h2>Congratulations!</h2>
-    <div id="fireworks">🎆🎇</div>
-    <button id="stay-level">Stay on this Level</button>
-    <button id="next-level">Go to Next Level</button>
-    <button id="end-game">End Game</button>
   </div>
 
   <!-- Summary Screen -->
   <div id="summary-screen" class="screen hidden">
     <h2>Game Summary</h2>
-    <div id="summary-table"></div>
-    <p id="closing-message"></p>
+    <p id="summary-text"></p>
   </div>
 
   <script src="script.js"></script>
