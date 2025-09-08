@@ -6,17 +6,19 @@ let autoNext = false;
 let currentStreak = 0;
 let longestStreak = 0;
 
+let expectedAnswer = [];
+
 let levelStats = {
-  "1A": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 },
-  "1B": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 },
-  "1C": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 },
-  "1D": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 },
-  "2B": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 },
-  "2C": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 },
-  "2D": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 }
+  "1A": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "1B": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "1C": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "1D": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "2B": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "2C": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "2D": { correct: 0, incorrect: 0, longest: 0, total: 0 }
 };
 
-// ===== Helper Functions =====
+// ===== Helpers =====
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -25,12 +27,11 @@ function showScreen(id) {
 function speakText(text) {
   let utterance = new SpeechSynthesisUtterance(text);
   let voice = speechSynthesis.getVoices().find(v => v.name.includes("Samantha")) || null;
-  utterance.voice = voice;
+  if (voice) utterance.voice = voice;
   speechSynthesis.speak(utterance);
 }
 
 function formatName(name) {
-  if (!name) return "";
   return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 }
 
@@ -49,8 +50,7 @@ function getNextLevel(level) {
 
 // ===== Welcome Flow =====
 document.getElementById("hearMemoSpeak").addEventListener("click", () => {
-  let msg = "Welcome to Memo’s Detective Agency! To start the game, press First-Time User or Returning User.";
-  speakText(msg);
+  speakText("Welcome to Memo’s Detective Agency! To start the game, press First-Time User or Returning User.");
 });
 
 document.getElementById("firstTimeBtn").addEventListener("click", () => {
@@ -103,8 +103,6 @@ document.getElementById("nextLevelBtn").addEventListener("click", () => {
 });
 
 // ===== Gameplay =====
-let expectedAnswer = [];
-
 function startLevel(level) {
   showScreen("gameScreen");
   currentStreak = 0;
@@ -113,8 +111,8 @@ function startLevel(level) {
 }
 
 function generateRound(level) {
+  // Reset UI
   document.getElementById("answerInput").value = "";
-  document.getElementById("answerInput").focus();
   document.getElementById("feedback").innerText = "";
   document.getElementById("controlButtons").innerHTML = "";
 
@@ -126,14 +124,15 @@ function generateRound(level) {
     nums.sort(() => Math.random() - 0.5);
   }
 
+  // Pick missing numbers
   let missing = [];
   while (missing.length < missingCount) {
     let candidate = nums[Math.floor(Math.random() * nums.length)];
     if (!missing.includes(candidate)) missing.push(candidate);
   }
-  expectedAnswer = missing.sort((a, b) => a - b);
+  expectedAnswer = [...missing].sort((a, b) => a - b);
 
-  // Display numbers in boxes
+  // Render boxes
   let display = nums.map(n =>
     missing.includes(n)
       ? `<div class="numberBox missingBox">?</div>`
@@ -154,6 +153,7 @@ function generateRound(level) {
   speakText(instr);
 }
 
+// ===== Answer Checking =====
 document.getElementById("submitBtn").addEventListener("click", checkAnswer);
 document.getElementById("answerInput").addEventListener("keypress", e => {
   if (e.key === "Enter") checkAnswer();
@@ -162,6 +162,7 @@ document.getElementById("answerInput").addEventListener("keypress", e => {
 function checkAnswer() {
   let val = document.getElementById("answerInput").value.trim();
   if (!val) return;
+
   let parts = val.split(" ").map(x => parseInt(x)).filter(x => !isNaN(x));
   parts.sort((a, b) => a - b);
 
@@ -187,7 +188,7 @@ function checkAnswer() {
 
   updateStreakDisplay();
 
-  // Milestone check
+  // Milestones
   if (currentStreak > 0 && currentStreak % 5 === 0) {
     document.getElementById("controlButtons").innerHTML = `
       <button id="nextRoundBtn">NEXT</button>
@@ -202,7 +203,7 @@ function checkAnswer() {
     document.getElementById("nextRoundBtn").addEventListener("click", () => generateRound(currentLevel));
   }
 
-  // Auto-next logic
+  // Auto-next
   if (autoNext && currentStreak > 0 && currentStreak % 5 === 0) {
     let next = getNextLevel(currentLevel);
     if (next) {
@@ -225,7 +226,7 @@ function showSummary() {
       <td>${level}</td>
       <td>${s.correct}</td>
       <td>${s.incorrect}</td>
-      <td>${s.current}</td>
+      <td>${currentStreak}</td>
       <td>${s.longest}</td>
       <td>${s.total}</td>
     </tr>`;
@@ -240,23 +241,7 @@ function showSummary() {
 }
 
 function endGame() {
-  showScreen("summaryScreen");
-  let tbody = document.getElementById("summaryBody");
-  tbody.innerHTML = "";
-
-  Object.keys(levelStats).forEach(level => {
-    let s = levelStats[level];
-    let row = `<tr>
-      <td>${level}</td>
-      <td>${s.correct}</td>
-      <td>${s.incorrect}</td>
-      <td>${s.current}</td>
-      <td>${s.longest}</td>
-      <td>${s.total}</td>
-    </tr>`;
-    tbody.innerHTML += row;
-  });
-
+  showSummary();
   setTimeout(() => {
     showScreen("endGameScreen");
     let msg = "Great job, " + childName + ". Thanks for helping me find all the missing numbers! I’ll always be here waiting for you!";
