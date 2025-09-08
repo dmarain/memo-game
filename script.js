@@ -141,7 +141,12 @@ function generateRound(level) {
       ? `<div class="numberBox missingBox">?</div>`
       : `<div class="numberBox">${n}</div>`
   ).join("");
-  document.getElementById("numberDisplay").innerHTML = display;
+    let container = document.getElementById("numberDisplay");
+  if (container) {
+    container.innerHTML = display || "<div style='color:red;'>[No puzzle generated]</div>";
+  } else {
+    alert("numberDisplay not found in HTML!");
+  }8
 
   // Instructions
   let instr = "";
