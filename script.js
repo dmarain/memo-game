@@ -26,8 +26,11 @@ function showScreen(id) {
 
 function speakText(text) {
   let utterance = new SpeechSynthesisUtterance(text);
-  let voice = speechSynthesis.getVoices().find(v => v.name.includes("Samantha")) || null;
-  if (voice) utterance.voice = voice;
+  let voices = speechSynthesis.getVoices();
+  if (voices && voices.length > 0) {
+    let voice = voices.find(v => v.name.includes("Samantha"));
+    if (voice) utterance.voice = voice;
+  }
   speechSynthesis.speak(utterance);
 }
 
