@@ -7,17 +7,16 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Memo image (small on all screens, large at goodbye) -->
-  <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
-
   <!-- Welcome Screen -->
   <div id="welcomeScreen" class="screen active">
+    <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
+    <button id="hearMemoSpeak">Hear Memo Speak</button>
     <h1>Welcome to Memo’s Detective Agency!</h1>
     <button id="firstTimeBtn">First-Time User</button>
     <button id="returningBtn">Returning User</button>
   </div>
 
-  <!-- Name Entry (First Time) -->
+  <!-- Name Entry -->
   <div id="nameEntryScreen" class="screen">
     <h2>What’s your name?</h2>
     <input id="childNameInput" type="text" placeholder="Enter your name" />
@@ -27,23 +26,25 @@
   <!-- Parent Options -->
   <div id="parentOptionsScreen" class="screen">
     <h2>Parent Options</h2>
-    <label for="startingLevel">Choose Starting Level:</label>
-    <select id="startingLevel">
-      <option value="1A">Level 1A</option>
-      <option value="1B">Level 1B</option>
-      <option value="1C">Level 1C</option>
-      <option value="1D">Level 1D</option>
-    </select>
-    <br /><br />
-    <label>
-      <input type="checkbox" id="autoNextToggle" />
-      Auto-advance after five in a row
-    </label>
-    <br /><br />
+    <div class="optionBox">
+      <label for="startingLevel">Choose Starting Level:</label>
+      <select id="startingLevel">
+        <option value="1A">Level 1A</option>
+        <option value="1B">Level 1B</option>
+        <option value="1C">Level 1C</option>
+        <option value="1D">Level 1D</option>
+        <option value="2B">Level 2B</option>
+        <option value="2C">Level 2C</option>
+        <option value="2D">Level 2D</option>
+      </select>
+    </div>
+    <div class="optionBox">
+      <label><input type="checkbox" id="autoNextToggle" /> Auto-advance after five in a row</label>
+    </div>
     <button id="saveParentOptionsBtn">Save Settings</button>
   </div>
 
-  <!-- Returning User Screen -->
+  <!-- Returning User -->
   <div id="returningScreen" class="screen">
     <h2 id="returningHeading"></h2>
     <button id="sameLevelBtn">Same Level</button>
@@ -52,28 +53,27 @@
 
   <!-- Game Screen -->
   <div id="gameScreen" class="screen">
-    <h2 id="instructions"></h2>
+    <div id="instructionsBox" class="infoBox"></div>
     <div id="streakDisplay">
-      <p id="currentStreak">Current Streak: 0</p>
-      <p id="longestStreak">Longest Streak: 0</p>
+      <span id="currentStreak" class="streakBox current">Current Streak: 0</span>
+      <span id="longestStreak" class="streakBox longest">Longest Streak: 0</span>
     </div>
     <div id="numberDisplay"></div>
     <input id="answerInput" type="text" placeholder="Type missing number(s)" />
     <button id="submitBtn">Submit</button>
-    <div id="feedback"></div>
+    <div id="feedbackBox" class="infoBox"></div>
     <div id="controlButtons"></div>
   </div>
 
   <!-- Summary Screen -->
   <div id="summaryScreen" class="screen">
-    <h2>Summary Results</h2>
+    <h2>Progress Summary</h2>
     <table id="summaryTable">
       <thead>
         <tr>
           <th>Level</th>
           <th>Correct</th>
           <th>Incorrect</th>
-          <th>Current Streak</th>
           <th>Longest Streak</th>
           <th>Total Rounds</th>
         </tr>
@@ -81,8 +81,8 @@
       <tbody id="summaryBody"></tbody>
     </table>
     <div id="summaryButtons">
-      <button id="resumeBtn">Resume Game</button>
-      <button id="changeLevelBtn">Change Level</button>
+      <button id="resumeBtn">Resume Same Level</button>
+      <button id="changeLevelBtn">Choose Another Level</button>
       <button id="endGameBtn">End Game</button>
     </div>
   </div>
