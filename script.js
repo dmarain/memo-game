@@ -1,6 +1,4 @@
-// ===== Part 1: Setup, Voice, Welcome, Streaks =====
-
-// Global variables
+// ===== Global Setup =====
 let childName = "";
 let currentLevel = "1A";
 let autoNext = false;
@@ -18,52 +16,52 @@ let levelStats = {
   "2D": { correct: 0, incorrect: 0, current: 0, longest: 0, total: 0 }
 };
 
-// Show a screen
+// ===== Helper Functions =====
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-// Voice helper
 function speakText(text) {
   let utterance = new SpeechSynthesisUtterance(text);
-  utterance.voice = speechSynthesis.getVoices().find(v => v.name.includes("Samantha")) || null;
+  let voice = speechSynthesis.getVoices().find(v => v.name.includes("Samantha")) || null;
+  utterance.voice = voice;
   speechSynthesis.speak(utterance);
 }
 
-// Capitalize first letter of name
 function formatName(name) {
   if (!name) return "";
   return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 }
 
-// Update streak display
 function updateStreakDisplay() {
-  document.getElementById("currentStreak").innerHTML = 
+  document.getElementById("currentStreak").innerHTML =
     `<span class="streakBox currentStreak">Current: ${currentStreak}</span>`;
-  document.getElementById("longestStreak").innerHTML = 
+  document.getElementById("longestStreak").innerHTML =
     `<span class="streakBox longestStreak">Longest: ${longestStreak}</span>`;
 }
 
-// ===== Welcome Flow =====
+function getNextLevel(level) {
+  const order = ["1A", "1B", "1C", "1D", "2B", "2C", "2D"];
+  let idx = order.indexOf(level);
+  return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+}
 
-// Hear Memo Speak button
+// ===== Welcome Flow =====
 document.getElementById("hearMemoSpeak").addEventListener("click", () => {
   let msg = "Welcome to Memo’s Detective Agency! To start the game, press First-Time User or Returning User.";
   speakText(msg);
 });
 
-// First-Time User
 document.getElementById("firstTimeBtn").addEventListener("click", () => {
   showScreen("nameEntryScreen");
   speakText("Let's get started! Please enter your name.");
   document.getElementById("childNameInput").focus();
 });
 
-// Returning User
 document.getElementById("returningBtn").addEventListener("click", () => {
   if (!childName) {
-    speakText("I don't think I know you yet! Let's start by entering your name.");
+    speakText("Please enter your name to continue.");
     showScreen("nameEntryScreen");
   } else {
     document.getElementById("returningHeading").innerText = "Welcome back, " + childName + "!";
@@ -72,17 +70,15 @@ document.getElementById("returningBtn").addEventListener("click", () => {
   }
 });
 
-// Save name
 document.getElementById("saveNameBtn").addEventListener("click", () => {
   let nameVal = document.getElementById("childNameInput").value.trim();
   if (nameVal) {
     childName = formatName(nameVal);
-    speakText("Great to meet you, " + childName + "! Let's set up your game.");
+    speakText("Your name has been saved, " + childName + "! Let's set up your game.");
     showScreen("parentOptionsScreen");
   }
 });
 
-// Parent options save
 document.getElementById("saveParentOptionsBtn").addEventListener("click", () => {
   currentLevel = document.getElementById("startingLevel").value;
   autoNext = document.getElementById("autoNextToggle").checked;
@@ -90,7 +86,6 @@ document.getElementById("saveParentOptionsBtn").addEventListener("click", () => 
   startLevel(currentLevel);
 });
 
-// Returning user choices
 document.getElementById("sameLevelBtn").addEventListener("click", () => {
   speakText("Okay " + childName + ", let's continue with Level " + currentLevel);
   startLevel(currentLevel);
@@ -107,17 +102,9 @@ document.getElementById("nextLevelBtn").addEventListener("click", () => {
   }
 });
 
-// Helper: Get next level
-function getNextLevel(level) {
-  const order = ["1A", "1B", "1C", "1D", "2B", "2C", "2D"];
-  let idx = order.indexOf(level);
-  return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
-}
-// ===== Part 2: Gameplay, Levels, Summary, End Game =====
-
+// ===== Gameplay =====
 let expectedAnswer = [];
 
-// Start a level
 function startLevel(level) {
   showScreen("gameScreen");
   currentStreak = 0;
@@ -125,7 +112,6 @@ function startLevel(level) {
   generateRound(level);
 }
 
-// Generate puzzle
 function generateRound(level) {
   document.getElementById("answerInput").value = "";
   document.getElementById("answerInput").focus();
@@ -148,7 +134,7 @@ function generateRound(level) {
   expectedAnswer = missing.sort((a, b) => a - b);
 
   // Display numbers in boxes
-  let display = nums.map(n => 
+  let display = nums.map(n =>
     missing.includes(n)
       ? `<div class="numberBox missingBox">?</div>`
       : `<div class="numberBox">${n}</div>`
@@ -168,7 +154,6 @@ function generateRound(level) {
   speakText(instr);
 }
 
-// Submit answer
 document.getElementById("submitBtn").addEventListener("click", checkAnswer);
 document.getElementById("answerInput").addEventListener("keypress", e => {
   if (e.key === "Enter") checkAnswer();
@@ -217,7 +202,7 @@ function checkAnswer() {
     document.getElementById("nextRoundBtn").addEventListener("click", () => generateRound(currentLevel));
   }
 
-  // Auto-next logic (if enabled)
+  // Auto-next logic
   if (autoNext && currentStreak > 0 && currentStreak % 5 === 0) {
     let next = getNextLevel(currentLevel);
     if (next) {
@@ -228,7 +213,7 @@ function checkAnswer() {
   }
 }
 
-// Summary screen
+// ===== Summary & End Game =====
 function showSummary() {
   showScreen("summaryScreen");
   let tbody = document.getElementById("summaryBody");
@@ -254,7 +239,6 @@ function showSummary() {
   document.getElementById("endGameBtn").onclick = () => endGame();
 }
 
-// End game
 function endGame() {
   showScreen("summaryScreen");
   let tbody = document.getElementById("summaryBody");
@@ -273,11 +257,10 @@ function endGame() {
     tbody.innerHTML += row;
   });
 
-  // After showing summary, go to goodbye
   setTimeout(() => {
     showScreen("endGameScreen");
     let msg = "Great job, " + childName + ". Thanks for helping me find all the missing numbers! I’ll always be here waiting for you!";
     document.getElementById("goodbyeMessage").innerText = msg;
     speakText(msg);
-  }, 4000); // Show summary for a few seconds first
+  }, 4000);
 }
