@@ -123,6 +123,11 @@ function startGame() {
   currentLevel = $("levelSelect").value;
   currentStreak = 0;
   roundCount = 0;
+
+>>> $("displayBox").innerHTML = "";   // clear old numbers when starting
+>>> $("feedback").textContent = "";   // clear old feedback
+>>> $("controlButtons").innerHTML = ""; // clear old buttons
+
   generateRound(currentLevel);
 }
 
