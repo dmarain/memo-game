@@ -1,97 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Memo's Memory Mystery</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEMO’s Memory Mystery — Debug Build</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Welcome Screen -->
-  <div id="welcomeScreen" class="screen active">
-    <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
-    <button id="hearMemoSpeak">Hear Memo Speak</button>
-    <h1>Welcome to Memo’s Detective Agency!</h1>
-    <button id="firstTimeBtn">First-Time User</button>
-    <button id="returningBtn">Returning User</button>
-  </div>
+  <header id="appHeader">
+    <h1>MEMO’S DETECTIVE AGENCY</h1>
+  </header>
 
-  <!-- Name Entry -->
-  <div id="nameEntryScreen" class="screen">
-    <h2>What’s your name?</h2>
-    <input id="childNameInput" type="text" placeholder="Enter your name" />
-    <button id="saveNameBtn">Save</button>
-  </div>
+  <main id="game">
+    <!-- Controls -->
+    <section id="controlsBar">
+      <label>
+        Name:
+        <input id="childName" type="text" placeholder="ENTER NAME" autocomplete="off" />
+      </label>
+      <label>
+        Level:
+        <select id="levelSelect">
+          <option value="1A">1A (range 1–3, one missing)</option>
+          <option value="1B">1B (range 1–3, two missing)</option>
+          <option value="2A">2A (range 1–4, one missing)</option>
+        </select>
+      </label>
+      <button id="startBtn" type="button">Start</button>
+    </section>
 
-  <!-- Parent Options -->
-  <div id="parentOptionsScreen" class="screen">
-    <h2>Parent Options</h2>
-    <div class="optionBox">
-      <label for="startingLevel">Choose Starting Level:</label>
-      <select id="startingLevel">
-        <option value="1A">Level 1A</option>
-        <option value="1B">Level 1B</option>
-        <option value="1C">Level 1C</option>
-        <option value="1D">Level 1D</option>
-        <option value="2B">Level 2B</option>
-        <option value="2C">Level 2C</option>
-        <option value="2D">Level 2D</option>
-      </select>
-    </div>
-    <div class="optionBox">
-      <label><input type="checkbox" id="autoNextToggle" /> Auto-advance after five in a row</label>
-    </div>
-    <button id="saveParentOptionsBtn">Save Settings</button>
-  </div>
+    <!-- Number display -->
+    <section id="displayBox" aria-live="polite"></section>
 
-  <!-- Returning User -->
-  <div id="returningScreen" class="screen">
-    <h2 id="returningHeading"></h2>
-    <button id="sameLevelBtn">Same Level</button>
-    <button id="nextLevelBtn">Next Level</button>
-  </div>
+    <!-- Prompt + answer -->
+    <section id="prompt">
+      <div id="instruction">Press Start to begin.</div>
+      <form id="answerForm" autocomplete="off">
+        <input id="answerInput" type="text" inputmode="numeric"
+               placeholder="Type answer(s), space-separated" />
+        <button id="submitBtn" type="submit">Submit</button>
+      </form>
+      <div id="feedback" role="status"></div>
+    </section>
 
-  <!-- Game Screen -->
-  <div id="gameScreen" class="screen">
-    <div id="instructionsBox" class="infoBox"></div>
-    <div id="streakDisplay">
-      <span id="currentStreak" class="streakBox current">Current Streak: 0</span>
-      <span id="longestStreak" class="streakBox longest">Longest Streak: 0</span>
-    </div>
-    <div id="numberDisplay"></div>
-    <input id="answerInput" type="text" placeholder="Type missing number(s)" />
-    <button id="submitBtn">Submit</button>
-    <div id="feedbackBox" class="infoBox"></div>
-    <div id="controlButtons"></div>
-  </div>
+    <!-- Status -->
+    <section id="statusLine">
+      <span id="roundLabel">Round: 0</span>
+      <span id="streakLabel">Streak: 0</span>
+      <span id="expectLabel">Expected: —</span>
+    </section>
 
-  <!-- Summary Screen -->
-  <div id="summaryScreen" class="screen">
-    <h2>Progress Summary</h2>
-    <table id="summaryTable">
-      <thead>
-        <tr>
-          <th>Level</th>
-          <th>Correct</th>
-          <th>Incorrect</th>
-          <th>Longest Streak</th>
-          <th>Total Rounds</th>
-        </tr>
-      </thead>
-      <tbody id="summaryBody"></tbody>
-    </table>
-    <div id="summaryButtons">
-      <button id="resumeBtn">Resume Same Level</button>
-      <button id="changeLevelBtn">Choose Another Level</button>
-      <button id="endGameBtn">End Game</button>
-    </div>
-  </div>
+    <!-- End of round actions -->
+    <section id="controlButtons"></section>
+  </main>
 
-  <!-- End Game Screen -->
-  <div id="endGameScreen" class="screen">
-    <img id="memoGoodbye" src="memo-fox.png" alt="Memo Goodbye" />
-    <h2 id="goodbyeMessage"></h2>
-  </div>
+  <footer id="appFooter">
+    <small>Debug Build v7.0.1 • 2025-09-08</small>
+  </footer>
 
   <script src="script.js"></script>
 </body>
