@@ -1,5 +1,5 @@
-// ===== Debug Build v7.0.2 (2025-09-09) =====
-// Adds debug to confirm Submit handler is firing.
+// ===== Debug Build • 2025-09-09 HH:MM =====
+// Adds dual binding to guarantee Submit works on iOS.
 
 let childName = "";
 let currentLevel = "1A";
@@ -9,12 +9,7 @@ let expectedAnswer = [];
 
 // --- Helpers ---
 const $ = (id) => document.getElementById(id);
-function setText(id, text) { $(id).textContent = text; }
-
-// Show sanity check immediately
-document.addEventListener("DOMContentLoaded", () => {
-  setText("feedback", "JS connected ✅");
-});
+function setText(id, text) { if ($(id)) $(id).textContent = text; }
 
 // --- Status rendering ---
 function renderStatus() {
@@ -93,8 +88,8 @@ function answersEqual(arr1, arr2) {
 }
 
 function submitAnswer(e) {
-  e.preventDefault(); // stop page reload
-  setText("feedback", "Submit clicked ✅"); // debug line
+  if (e) e.preventDefault();
+  setText("feedback", "Submit fired ✅"); // debug marker
 
   const userAns = parseAnswer($("answerInput").value);
 
@@ -128,8 +123,18 @@ function startGame() {
   generateRound(currentLevel);
 }
 
-// Bind events
+// Event binding
+function bindEvents() {
+  if ($("startBtn")) $("startBtn").onclick = startGame;
+  if ($("submitBtn")) $("submitBtn").onclick = submitAnswer;
+}
+
+// Bind twice for safety
 document.addEventListener("DOMContentLoaded", () => {
-  $("startBtn").addEventListener("click", startGame);
-  $("answerForm").addEventListener("submit", submitAnswer);
+  setText("feedback", "JS connected ✅ (DOM ready)");
+  bindEvents();
+});
+window.addEventListener("load", () => {
+  setText("feedback", "JS connected ✅ (Window loaded)");
+  bindEvents();
 });
