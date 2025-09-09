@@ -1,5 +1,5 @@
-// ===== Debug Build • 2025-09-09 HH:MM =====
-// Adds dual binding to guarantee Submit works on iOS.
+// ===== Debug Build • 2025-09-09 14:45 EDT =====
+// Incremental fixes: text input + disable Submit after answer.
 
 let childName = "";
 let currentLevel = "1A";
@@ -69,6 +69,7 @@ function generateRound(level) {
   $("feedback").className = "";
   setText("feedback", "");
   $("answerInput").value = "";
+  $("submitBtn").disabled = false; // re-enable Submit
   $("controlButtons").innerHTML = "";
 
   renderStatus();
@@ -87,8 +88,7 @@ function answersEqual(arr1, arr2) {
   return true;
 }
 
-function submitAnswer(e) {
-  if (e) e.preventDefault();
+function submitAnswer() {
   setText("feedback", "Submit fired ✅"); // debug marker
 
   const userAns = parseAnswer($("answerInput").value);
@@ -109,6 +109,9 @@ function submitAnswer(e) {
     setText("feedback", `Try again. Correct was: ${expectedAnswer.join(" ")}`);
   }
 
+  // Disable Submit after use
+  $("submitBtn").disabled = true;
+
   renderStatus();
   $("controlButtons").innerHTML = `<button type="button" id="nextRoundBtn">Next Round</button>`;
   $("nextRoundBtn").onclick = () => generateRound(currentLevel);
@@ -123,18 +126,13 @@ function startGame() {
   generateRound(currentLevel);
 }
 
-// Event binding
+// Bind events
 function bindEvents() {
-  if ($("startBtn")) $("startBtn").onclick = startGame;
-  if ($("submitBtn")) $("submitBtn").onclick = submitAnswer;
+  $("startBtn").addEventListener("click", startGame);
+  $("submitBtn").addEventListener("click", submitAnswer);
 }
 
-// Bind twice for safety
 document.addEventListener("DOMContentLoaded", () => {
-  setText("feedback", "JS connected ✅ (DOM ready)");
-  bindEvents();
-});
-window.addEventListener("load", () => {
-  setText("feedback", "JS connected ✅ (Window loaded)");
+  setText("feedback", "JS connected ✅");
   bindEvents();
 });
