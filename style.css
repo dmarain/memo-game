@@ -1,138 +1,97 @@
-// ===== Debug Build • 2025-09-09 14:45 EDT =====
-// Incremental fixes: text input + disable Submit after answer.
+/* ===== Debug Build • 2025-09-09 19:05 EDT ===== */
+/* Clean reset for Memo’s Memory Mystery testing */
 
-let childName = "";
-let currentLevel = "1A";
-let currentStreak = 0;
-let roundCount = 0;
-let expectedAnswer = [];
-
-// --- Helpers ---
-const $ = (id) => document.getElementById(id);
-function setText(id, text) { if ($(id)) $(id).textContent = text; }
-
-// --- Status rendering ---
-function renderStatus() {
-  setText("roundLabel", `Round: ${roundCount}`);
-  setText("streakLabel", `Streak: ${currentStreak}`);
-  setText("expectLabel", `Expected: ${expectedAnswer.length ? expectedAnswer.join(" ") : "—"}`);
+/* --- General layout --- */
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #111;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
-// --- Box rendering ---
-function renderBoxes(rangeMax, missingSet) {
-  const box = $("displayBox");
-  box.innerHTML = "";
-  for (let n = 1; n <= rangeMax; n++) {
-    const div = document.createElement("div");
-    div.className = "numBox";
-    if (missingSet.has(n)) {
-      div.classList.add("missing");
-      div.textContent = "?";
-    } else {
-      div.textContent = String(n);
-    }
-    box.appendChild(div);
-  }
+header {
+  background: #4169e1;
+  color: white;
+  padding: 20px;
 }
 
-// Level specs
-function levelSpec(level) {
-  switch (level) {
-    case "1A": return [3, 1];
-    case "1B": return [3, 2];
-    case "2A": return [4, 1];
-    default: return [3, 1];
-  }
+header h1 {
+  margin: 0;
 }
 
-function pickMissing(rangeMax, countMissing) {
-  const pool = Array.from({ length: rangeMax }, (_, i) => i + 1);
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return pool.slice(0, countMissing).sort((a, b) => a - b);
+footer {
+  margin-top: 40px;
+  font-size: 0.8rem;
+  color: #555;
 }
 
-// Generate a round
-function generateRound(level) {
-  roundCount++;
-  const [rangeMax, countMissing] = levelSpec(level);
-  const missing = pickMissing(rangeMax, countMissing);
-  expectedAnswer = missing.slice();
-
-  renderBoxes(rangeMax, new Set(missing));
-
-  const plural = missing.length === 1 ? "number" : "numbers";
-  setText("instruction", `Find the ${plural} missing from 1–${rangeMax}.`);
-
-  $("feedback").className = "";
-  setText("feedback", "");
-  $("answerInput").value = "";
-  $("submitBtn").disabled = false; // re-enable Submit
-  $("controlButtons").innerHTML = "";
-
-  renderStatus();
-  $("answerInput").focus();
+/* --- Controls --- */
+#controlsBar {
+  margin: 15px 0;
 }
 
-// Parse + check answers
-function parseAnswer(input) {
-  const cleaned = input.trim().replace(/,/g, " ").split(/\s+/).filter(Boolean);
-  return cleaned.map(s => Number(s)).filter(n => Number.isInteger(n)).sort((a, b) => a - b);
+input, select, button {
+  font-size: 1rem;
+  padding: 5px 8px;
+  margin: 4px;
 }
 
-function answersEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false;
-  for (let i = 0; i < arr1.length; i++) if (arr1[i] !== arr2[i]) return false;
-  return true;
+/* --- Number display --- */
+#displayBox {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+  flex-wrap: wrap;
 }
 
-function submitAnswer() {
-  setText("feedback", "Submit fired ✅"); // debug marker
-
-  const userAns = parseAnswer($("answerInput").value);
-
-  if (!userAns.length) {
-    setText("feedback", "Please enter your answer.");
-    $("feedback").className = "bad";
-    return;
-  }
-
-  if (answersEqual(userAns, expectedAnswer)) {
-    currentStreak++;
-    $("feedback").className = "good";
-    setText("feedback", `Great job${childName ? ", " + childName.toUpperCase() : ""}!`);
-  } else {
-    currentStreak = 0;
-    $("feedback").className = "bad";
-    setText("feedback", `Try again. Correct was: ${expectedAnswer.join(" ")}`);
-  }
-
-  // Disable Submit after use
-  $("submitBtn").disabled = true;
-
-  renderStatus();
-  $("controlButtons").innerHTML = `<button type="button" id="nextRoundBtn">Next Round</button>`;
-  $("nextRoundBtn").onclick = () => generateRound(currentLevel);
+.numBox {
+  border: 2px solid #333;
+  padding: 10px 15px;
+  font-size: 1.5rem;
+  border-radius: 6px;
+  min-width: 40px;
+  text-align: center;
+  background: white;
 }
 
-// Start game
-function startGame() {
-  childName = $("childName").value.trim();
-  currentLevel = $("levelSelect").value;
-  currentStreak = 0;
-  roundCount = 0;
-  generateRound(currentLevel);
+.numBox.missing {
+  border: 2px dashed #666;
+  color: #666;
+  background: #f0f0f0;
 }
 
-// Bind events
-function bindEvents() {
-  $("startBtn").addEventListener("click", startGame);
-  $("submitBtn").addEventListener("click", submitAnswer);
+/* --- Feedback --- */
+#feedback.good {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  setText("feedback", "JS connected ✅");
-  bindEvents();
-});
+#feedback.bad {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* --- Buttons --- */
+button {
+  border: none;
+  border-radius: 5px;
+  background: #4169e1;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #aaa;
+  cursor: default;
+}
+
+#controlButtons button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+}
