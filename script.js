@@ -1,5 +1,5 @@
-// ===== Debug Build v7.0.1 (2025-09-08) =====
-// Adds startup sanity message so we know if JS is connected.
+// ===== Debug Build v7.0.2 (2025-09-09) =====
+// Adds debug to confirm Submit handler is firing.
 
 let childName = "";
 let currentLevel = "1A";
@@ -93,7 +93,9 @@ function answersEqual(arr1, arr2) {
 }
 
 function submitAnswer(e) {
-  e.preventDefault();
+  e.preventDefault(); // stop page reload
+  setText("feedback", "Submit clicked ✅"); // debug line
+
   const userAns = parseAnswer($("answerInput").value);
 
   if (!userAns.length) {
