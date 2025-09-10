@@ -3,44 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MEMO’s Memory Mystery — Debug Build</title>
+  <title>MEMO’s Memory Mystery</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header id="appHeader">
+  <header>
     <h1>MEMO’S DETECTIVE AGENCY</h1>
   </header>
 
-  <main id="game">
-    <!-- Controls -->
+  <main>
+    <!-- Memo image -->
+    <img src="images/memo-fox.png" id="memoFox" alt="Memo the Fox" />
+
+    <!-- Welcome / controls -->
     <section id="controlsBar">
       <label>
         Name:
-        <input id="childName" type="text" placeholder="ENTER NAME" autocomplete="off" />
+        <input id="childName" type="text" placeholder="ENTER NAME" />
       </label>
       <label>
         Level:
         <select id="levelSelect">
-          <option value="1A">1A (range 1–3, one missing)</option>
-          <option value="1B">1B (range 1–3, two missing)</option>
-          <option value="2A">2A (range 1–4, one missing)</option>
+          <option value="1A">1A (1–3, one missing)</option>
+          <option value="1B">1B (1–3, two missing)</option>
+          <option value="2A">2A (1–4, one missing)</option>
+          <option value="2B">2B (1–4, two missing)</option>
         </select>
       </label>
       <button id="startBtn" type="button">Start</button>
+      <button id="hearMemo" type="button">Hear Memo Speak</button>
     </section>
 
     <!-- Number display -->
-    <section id="displayBox" aria-live="polite"></section>
+    <section id="displayBox"></section>
 
-    <!-- Prompt + answer -->
+    <!-- Instructions + input -->
     <section id="prompt">
       <div id="instruction">Press Start to begin.</div>
       <div id="answerForm">
-        <input id="answerInput" type="text"
-               placeholder="Type answer(s), space-separated" />
+        <input id="answerInput" type="text" placeholder="Type answer(s), space-separated" />
         <button id="submitBtn" type="button">Submit</button>
       </div>
-      <div id="feedback" role="status"></div>
+      <div id="feedback"></div>
     </section>
 
     <!-- Status -->
@@ -50,12 +54,15 @@
       <span id="expectLabel">Expected: —</span>
     </section>
 
-    <!-- End of round actions -->
+    <!-- Control buttons (Next Round, End Game) -->
     <section id="controlButtons"></section>
+
+    <!-- Summary -->
+    <section id="summary"></section>
   </main>
 
-  <footer id="appFooter">
-    <small>Debug Build • 2025-09-09 14:45 EDT</small>
+  <footer>
+    <small>Major Build • 2025-09-09 18:30 EDT</small>
   </footer>
 
   <script src="script.js"></script>
