@@ -1,11 +1,21 @@
-// ===== Debug Build • 2025-09-09 14:45 EDT =====
-// Incremental fixes: text input + disable Submit after answer.
+// ===== Major Build • 2025-09-09 =====
+// Includes Memo image, voice, random phrases, streaks, promotions, summary, diagnostics
 
 let childName = "";
 let currentLevel = "1A";
 let currentStreak = 0;
 let roundCount = 0;
 let expectedAnswer = [];
+let levelStats = {};
+
+// --- Speech ---
+function memoSpeak(text) {
+  const utter = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  utter.voice = voices.find(v => v.name.includes("Samantha")) || voices[0];
+  speechSynthesis.speak(utter);
+  console.log("Memo speaks:", text);
+}
 
 // --- Helpers ---
 const $ = (id) => document.getElementById(id);
@@ -35,12 +45,13 @@ function renderBoxes(rangeMax, missingSet) {
   }
 }
 
-// Level specs
+// --- Level specs ---
 function levelSpec(level) {
   switch (level) {
     case "1A": return [3, 1];
     case "1B": return [3, 2];
     case "2A": return [4, 1];
+    case "2B": return [4, 2];
     default: return [3, 1];
   }
 }
@@ -54,7 +65,7 @@ function pickMissing(rangeMax, countMissing) {
   return pool.slice(0, countMissing).sort((a, b) => a - b);
 }
 
-// Generate a round
+// --- Generate round ---
 function generateRound(level) {
   roundCount++;
   const [rangeMax, countMissing] = levelSpec(level);
@@ -64,80 +75,128 @@ function generateRound(level) {
   renderBoxes(rangeMax, new Set(missing));
 
   const plural = missing.length === 1 ? "number" : "numbers";
-  setText("instruction", `Find the ${plural} missing from 1–${rangeMax}.`);
+  const instr = `${childName}, find the ${plural} missing from 1–${rangeMax}.`;
+  setText("instruction", instr);
+  memoSpeak("Diagnostic: generateRound triggered. " + instr);
 
   $("feedback").className = "";
   setText("feedback", "");
   $("answerInput").value = "";
-  $("submitBtn").disabled = false; // re-enable Submit
+  $("submitBtn").disabled = false;
   $("controlButtons").innerHTML = "";
 
   renderStatus();
   $("answerInput").focus();
 }
 
-// Parse + check answers
+// --- Parse + check answers ---
 function parseAnswer(input) {
   const cleaned = input.trim().replace(/,/g, " ").split(/\s+/).filter(Boolean);
   return cleaned.map(s => Number(s)).filter(n => Number.isInteger(n)).sort((a, b) => a - b);
 }
-
 function answersEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) return false;
   for (let i = 0; i < arr1.length; i++) if (arr1[i] !== arr2[i]) return false;
   return true;
 }
 
+// --- Submit handler ---
 function submitAnswer() {
-  setText("feedback", "Submit fired ✅"); // debug marker
-
+  memoSpeak("Diagnostic: Submit button fired.");
   const userAns = parseAnswer($("answerInput").value);
 
   if (!userAns.length) {
     setText("feedback", "Please enter your answer.");
     $("feedback").className = "bad";
+    memoSpeak(`Please enter your answer, ${childName}.`);
     return;
   }
 
   if (answersEqual(userAns, expectedAnswer)) {
     currentStreak++;
     $("feedback").className = "good";
-    setText("feedback", `Great job${childName ? ", " + childName.toUpperCase() : ""}!`);
+
+    // Random encouragement
+    const phrases = [
+      `Great job, ${childName}! That's ${currentStreak} in a row.`,
+      `Well done, Detective ${childName} — ${currentStreak} correct so far.`,
+      `You’re on the case, ${childName}! ${currentStreak} in a row and climbing.`,
+      `Nice work, ${childName}. You’re becoming a junior detective!`
+    ];
+    const msg = phrases[Math.floor(Math.random() * phrases.length)];
+    setText("feedback", msg);
+    memoSpeak(msg);
+
+    if (currentStreak === 5) {
+      const streakMsgs = [
+        `Congratulations, ${childName}! Five in a row — case closed!`,
+        `Mystery solved, Detective ${childName}! Five in a row.`,
+        `Another win for the agency, ${childName}! Five correct.`,
+      ];
+      const streakMsg = streakMsgs[Math.floor(Math.random() * streakMsgs.length)];
+      setText("feedback", streakMsg);
+      memoSpeak(streakMsg);
+    }
   } else {
     currentStreak = 0;
     $("feedback").className = "bad";
-    setText("feedback", `Try again. Correct was: ${expectedAnswer.join(" ")}`);
+
+    const wrongPhrases = [
+      `Not quite, ${childName}. Try again.`,
+      `Almost there, Detective ${childName}. Keep going!`,
+      `Don’t give up, ${childName}. You can crack this case.`,
+      `Hmm, not the right number, ${childName}. Take another shot.`
+    ];
+    const msg = wrongPhrases[Math.floor(Math.random() * wrongPhrases.length)];
+    setText("feedback", msg);
+    memoSpeak(msg);
   }
 
-  // Disable Submit after use
   $("submitBtn").disabled = true;
-
   renderStatus();
-  $("controlButtons").innerHTML = `<button type="button" id="nextRoundBtn">Next Round</button>`;
+
+  $("controlButtons").innerHTML = `
+    <button type="button" id="nextRoundBtn">Next Round</button>
+    <button type="button" id="endGameBtn">End Game</button>
+  `;
   $("nextRoundBtn").onclick = () => generateRound(currentLevel);
+  $("endGameBtn").onclick = () => showSummary();
 }
 
-// Start game
+// --- Start game ---
 function startGame() {
-  childName = $("childName").value.trim();
+  childName = $("childName").value.trim() || "Detective";
   currentLevel = $("levelSelect").value;
   currentStreak = 0;
   roundCount = 0;
-
->>> $("displayBox").innerHTML = "";   // clear old numbers when starting
->>> $("feedback").textContent = "";   // clear old feedback
->>> $("controlButtons").innerHTML = ""; // clear old buttons
-
+  memoSpeak(`Diagnostic: Start button pressed. Welcome, Detective ${childName}.`);
   generateRound(currentLevel);
 }
 
-// Bind events
+// --- Summary ---
+function showSummary() {
+  const summary = $("summary");
+  summary.innerHTML = `
+    <h2>Case Report for ${childName}</h2>
+    <table>
+      <tr><th>Level</th><th>Rounds</th><th>Correct</th><th>Incorrect</th><th>Longest Streak</th></tr>
+      <tr><td>${currentLevel}</td><td>${roundCount}</td><td>-</td><td>-</td><td>${currentStreak}</td></tr>
+    </table>
+  `;
+  memoSpeak(`Detective ${childName}, here is your report. You played ${roundCount} rounds. Longest streak ${currentStreak}.`);
+}
+
+// --- Bind events ---
 function bindEvents() {
   $("startBtn").addEventListener("click", startGame);
   $("submitBtn").addEventListener("click", submitAnswer);
+  $("hearMemo").addEventListener("click", () => {
+    memoSpeak("Welcome to MEMO’s Detective Agency!");
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setText("feedback", "JS connected ✅");
+  setText("feedback", "JS connected ✅ (DOM ready)");
+  memoSpeak("Diagnostic: DOM ready.");
   bindEvents();
 });
