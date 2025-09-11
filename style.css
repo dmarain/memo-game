@@ -73,3 +73,6 @@ input, select, button {
   border: 1px solid #333;
   padding: 8px 12px;
 }
+.hidden {
+  display: none;
+}
