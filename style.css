@@ -1,4 +1,4 @@
-/* ===== Major Build • 2025-09-09 ===== */
+/* ===== Clean Build • 2025-09-11 ===== */
 
 body {
   font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@ header {
 }
 
 #memoFox {
-  max-width: 150px;
+  max-width: 180px;
   margin: 15px auto;
   display: block;
 }
