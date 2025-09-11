@@ -1,70 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MEMO’S Memory Mystery</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memo’s Detective Agency</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>MEMO’S DETECTIVE AGENCY</h1>
-  </header>
-
-  <!-- Memo image -->
-  <img src="images/memo-fox.png" id="memoFox" alt="Memo the Fox" />
-
-  <main>
-    <!-- Controls -->
-    <section id="controlsBar">
-      <label>
-        Name:
-        <input id="childName" type="text" placeholder="ENTER NAME" />
-      </label>
-      <label>
-        Level:
-        <select id="levelSelect">
-          <option value="1A">1A (1–3, one missing)</option>
-          <option value="1B">1B (1–3, two missing)</option>
-          <option value="2A">2A (1–4, one missing)</option>
-          <option value="2B">2B (1–4, two missing)</option>
-          <option value="3A">3A (1–5, one missing)</option>
-          <option value="3B">3B (1–5, two missing)</option>
-        </select>
-      </label>
-      <button id="startBtn" type="button">Start</button>
-      <button id="hearMemo" type="button">Hear Memo Speak</button>
+  <div id="app">
+    <!-- Banner -->
+    <header id="banner">
+      <h1>MEMO’S DETECTIVE AGENCY</h1>
+    </header>
+8 
+    08
+    <!-- Name entry -->
+    <section id="nameEntry" class="screen">
+      <label for="childNameInput">Name:</label>
+      <input id="childNameInput" type="text" placeholder="ENTER NAME" />
+      <label for="levelSelect">Level:</label>
+      <select id="levelSelect">
+        <option value="1A">1A (1–3, one missing)</option>
+        <option value="1B">1B (1–3, two missing)</option>
+        <option value="2A">2A (1–4, one missing)</option>
+        <option value="2B">2B (1–4, two missing)</option>
+        <option value="3A">3A (1–5, one missing)</option>
+        <option value="3B">3B (1–5, two missing)</option>
+      </select>
+      <button id="startBtn">Start</button>
+      <button id="hearMemo">Hear Memo Speak</button>
     </section>
 
-    <!-- Number display -->
-    <section id="displayBox"></section>
-
-    <!-- Instructions + input -->
-    <section id="prompt">
-      <div id="instruction">Press Start to begin.</div>
-      <div id="answerForm">
-        <input id="answerInput" type="text" placeholder="Type answer(s), space-separated" />
-        <button id="submitBtn" type="button">Submit</button>
-      </div>
+    <!-- Gameplay -->
+    <section id="gameplay" class="screen hidden">
+      <div id="displayBox"></div>
+      <p id="instructionText">Press Start to begin.</p>
+      <input
+        id="answerInput"
+        type="text"
+        placeholder="Type answer(s), space-separated"
+      />
+      <button id="submitBtn" disabled>Submit</button>
       <div id="feedback"></div>
+      <div id="status">
+        <span id="roundLabel">Round: 0</span>
+        <span id="streakLabel">Streak: 0</span>
+        <span id="expectLabel">Expected: —</span>
+      </div>
+      <div id="controlButtons">
+        <button id="nextBtn" class="hidden">Next Round</button>
+        <button id="endBtn" class="hidden">End Game</button>
+      </div>
     </section>
-
-    <!-- Status -->
-    <section id="statusLine">
-      <span id="roundLabel">Round: 0</span>
-      <span id="streakLabel">Streak: 0</span>
-      <span id="expectLabel">Expected: —</span>
-    </section>
-
-    <!-- Control buttons -->
-    <section id="controlButtons"></section>
 
     <!-- Summary -->
-    <section id="summary"></section>
-  </main>
+    <section id="summary" class="screen hidden">
+      <h2 id="summaryTitle">Case Report</h2>
+      <table id="summaryTable">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Rounds</th>
+            <th>Correct</th>
+            <th>Incorrect</th>
+            <th>Longest Streak</th>
+          </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+      <p id="overallStreak"></p>
+      <div id="summaryControls">
+        <button id="resumeBtn">Play Next Level</button>
+        <button id="quitBtn">Quit</button>
+      </div>
+    </section>
+  </div>
 
   <footer>
-    <small>Clean Build • 2025-09-11 Morning</small>
+    <p>Clean Build • 2025-09-11 Morning</p>
   </footer>
 
   <script src="script.js"></script>
