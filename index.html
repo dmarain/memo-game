@@ -1,3 +1,4 @@
+<!-- ===== index.html START ===== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +13,10 @@
     <header id="banner">
       <h1>MEMO’S DETECTIVE AGENCY</h1>
     </header>
-8 
-    08
+
+    <!-- Memo image -->
+    <img src="images/memo-fox.png" id="memoFox" alt="Memo the Fox" />
+
     <!-- Name entry -->
     <section id="nameEntry" class="screen">
       <label for="childNameInput">Name:</label>
@@ -42,15 +45,13 @@
       />
       <button id="submitBtn" disabled>Submit</button>
       <div id="feedback"></div>
+      <div id="diagnostic"></div>
       <div id="status">
         <span id="roundLabel">Round: 0</span>
         <span id="streakLabel">Streak: 0</span>
         <span id="expectLabel">Expected: —</span>
       </div>
-      <div id="controlButtons">
-        <button id="nextBtn" class="hidden">Next Round</button>
-        <button id="endBtn" class="hidden">End Game</button>
-      </div>
+      <div id="controlButtons"></div>
     </section>
 
     <!-- Summary -->
@@ -70,16 +71,18 @@
       </table>
       <p id="overallStreak"></p>
       <div id="summaryControls">
-        <button id="resumeBtn">Play Next Level</button>
+        <button id="resumeBtn">Resume</button>
+        <button id="nextLvlBtn" class="hidden">Next Level</button>
         <button id="quitBtn">Quit</button>
       </div>
     </section>
   </div>
 
   <footer>
-    <p>Clean Build • 2025-09-11 Morning</p>
+    <p>Clean Build • 2025-09-11</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
+<!-- ===== index.html END ===== -->
