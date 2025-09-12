@@ -1,5 +1,6 @@
-// ===== Clean Build • 2025-09-11 =====
+// ===== script.js START =====
 
+// --- Globals ---
 let childName = "";
 let currentLevel = "1A";
 let currentStreak = 0;
@@ -7,20 +8,28 @@ let roundCount = 0;
 let expectedAnswer = [];
 let levelStats = {};
 
+// --- Helpers ---
+const $ = (id) => document.getElementById(id);
+function setText(id, text) {
+  if ($(id)) $(id).textContent = text;
+}
+
+// --- Diagnostics ---
+function showDiagnostic(text) {
+  setText("diagnostic", `[⚙️] Diagnostic: ${text}`);
+  memoSpeak(`Diagnostic: ${text}`);
+}
+
 // --- Speech ---
 function memoSpeak(text) {
   const utter = new SpeechSynthesisUtterance(text);
   const voices = speechSynthesis.getVoices();
   utter.voice = voices.find(v => v.name.includes("Samantha")) || voices[0];
-  utter.onstart = () => $("answerInput").disabled = true;
-  utter.onend = () => $("answerInput").disabled = false;
+  utter.onstart = () => { if ($("answerInput")) $("answerInput").disabled = true; };
+  utter.onend = () => { if ($("answerInput")) $("answerInput").disabled = false; };
   speechSynthesis.speak(utter);
   console.log("Memo speaks:", text);
 }
-
-// --- Helpers ---
-const $ = (id) => document.getElementById(id);
-function setText(id, text) { if ($(id)) $(id).textContent = text; }
 
 // --- Level specs ---
 function levelSpec(level) {
@@ -51,13 +60,12 @@ function generateRound(level) {
   const missing = pickMissing(rangeMax, countMissing);
   expectedAnswer = missing.slice();
 
-  // init stats if not exist
   if (!levelStats[level]) {
-    levelStats[level] = { correct: 0, incorrect: 0, rounds: 0, longest: 0 };
+    levelStats[level] = { rounds: 0, correct: 0, incorrect: 0, longest: 0 };
   }
   levelStats[level].rounds++;
 
-  // Display numbers
+  // Render boxes
   const box = $("displayBox");
   box.innerHTML = "";
   for (let n = 1; n <= rangeMax; n++) {
@@ -74,10 +82,12 @@ function generateRound(level) {
 
   // Instruction
   const plural = missing.length === 1 ? "number" : "numbers";
-  const instr = `${childName}, type the ${plural} missing from 1–${rangeMax}. (Use spaces between answers)`;
-  setText("instruction", instr);
-  memoSpeak("Diagnostic: generateRound triggered. " + instr);
+  const instr = `${childName}, find the ${plural} missing from 1 to ${rangeMax}. Type answer${plural === "numbers" ? "s" : ""} with spaces between.`;
+  setText("instructionText", instr);
+  memoSpeak(instr);
+  showDiagnostic("generateRound triggered");
 
+  $("feedback").className = "";
   setText("feedback", "");
   $("answerInput").value = "";
   $("submitBtn").disabled = false;
@@ -85,14 +95,15 @@ function generateRound(level) {
 
   setText("roundLabel", `Round: ${roundCount}`);
   setText("streakLabel", `Streak: ${currentStreak}`);
-  setText("expectLabel", `Expected: ${expectedAnswer.length ? expectedAnswer.join(" ") : "—"}`);
+  setText("expectLabel", `Expected: ${expectedAnswer.join(" ")}`);
 }
 
-// --- Parse + check answers ---
+// --- Answer checking ---
 function parseAnswer(input) {
   const cleaned = input.trim().replace(/,/g, " ").split(/\s+/).filter(Boolean);
   return cleaned.map(s => Number(s)).filter(n => Number.isInteger(n)).sort((a, b) => a - b);
 }
+
 function answersEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) return false;
   for (let i = 0; i < arr1.length; i++) if (arr1[i] !== arr2[i]) return false;
@@ -101,7 +112,7 @@ function answersEqual(arr1, arr2) {
 
 // --- Submit ---
 function submitAnswer() {
-  memoSpeak("Diagnostic: Submit fired.");
+  showDiagnostic("Submit fired");
   const userAns = parseAnswer($("answerInput").value);
 
   if (!userAns.length) {
@@ -118,25 +129,29 @@ function submitAnswer() {
       levelStats[currentLevel].longest = currentStreak;
     }
 
-    const phrases = [
-      `Great job, ${childName}! That's ${currentStreak} in a row.`,
-      `Well done, Detective ${childName} — ${currentStreak} correct.`,
-      `That's ${currentStreak} in a row, ${childName}.`,
-      `Nice work, ${childName}. Keep it up!`
-    ];
-    const msg = phrases[Math.floor(Math.random() * phrases.length)];
+    let msg = "";
+    if (currentStreak < 5) {
+      const phrases = [
+        `Great job, ${childName}! That's ${currentStreak} in a row.`,
+        `Well done, Detective ${childName} — ${currentStreak} correct so far.`,
+        `That's ${currentStreak} in a row, ${childName}.`,
+        `Nice work, ${childName}! Keep going.`
+      ];
+      msg = phrases[Math.floor(Math.random() * phrases.length)];
+    } else if (currentStreak === 5) {
+      msg = `Congratulations, Detective ${childName} — five in a row on Level ${currentLevel}!`;
+    }
+
     setText("feedback", msg);
+    $("feedback").className = "good";
     memoSpeak(msg);
 
     if (currentStreak === 5) {
-      const streakMsg = `Congratulations, Detective ${childName} — five in a row on Level ${currentLevel}!`;
-      setText("feedback", streakMsg);
-      memoSpeak(streakMsg);
       $("submitBtn").disabled = true;
       $("controlButtons").innerHTML = `
-        <button type="button" id="stayBtn">Stay on this level</button>
-        <button type="button" id="nextBtn">Next level</button>
-        <button type="button" id="endBtn">End game</button>
+        <button id="stayBtn">Stay on this level</button>
+        <button id="nextBtn">Next level</button>
+        <button id="endBtn">End game</button>
       `;
       $("stayBtn").onclick = () => { currentStreak = 0; generateRound(currentLevel); };
       $("nextBtn").onclick = () => {
@@ -149,22 +164,22 @@ function submitAnswer() {
       return;
     }
   } else {
-    levelStats[currentLevel].incorrect++;
     currentStreak = 0;
-
+    levelStats[currentLevel].incorrect++;
     const wrongPhrases = [
       `Not quite, ${childName}. Try again.`,
       `Almost there, Detective ${childName}.`,
       `Don’t give up, ${childName}.`,
-      `Hmm, not right, ${childName}.`
+      `Hmm, not the right answer, ${childName}.`
     ];
     const msg = wrongPhrases[Math.floor(Math.random() * wrongPhrases.length)];
     setText("feedback", msg);
+    $("feedback").className = "bad";
     memoSpeak(msg);
   }
 
   $("submitBtn").disabled = true;
-  $("controlButtons").innerHTML = `<button type="button" id="nextRoundBtn">Next Round</button>`;
+  $("controlButtons").innerHTML = `<button id="nextRoundBtn">Next Round</button>`;
   $("nextRoundBtn").onclick = () => generateRound(currentLevel);
 }
 
@@ -178,11 +193,12 @@ function nextLevel(level) {
 
 // --- Start game ---
 function startGame() {
-  childName = $("childName").value.trim().toUpperCase() || "DETECTIVE";
+  childName = $("childNameInput").value.trim().toUpperCase() || "DETECTIVE";
   currentLevel = $("levelSelect").value;
   currentStreak = 0;
   roundCount = 0;
-  memoSpeak(`Diagnostic: Start pressed. Welcome, Detective ${childName}.`);
+  memoSpeak(`Welcome to MEMO’S Detective Agency, Detective ${childName}.`);
+  showDiagnostic("Start pressed");
   generateRound(currentLevel);
 }
 
@@ -207,30 +223,20 @@ function showSummary() {
     return acc;
   }, {rounds:0, correct:0, incorrect:0});
 
-  $("summary").innerHTML = `
-    <h2>Case Report for Detective ${childName}</h2>
-    <table>
-      <tr><th>Level</th><th>Rounds</th><th>Correct</th><th>Incorrect</th><th>Longest Streak</th></tr>
-      ${rows}
-      <tr><td><strong>Total</strong></td>
-          <td>${totals.rounds}</td>
-          <td>${totals.correct}</td>
-          <td>${totals.incorrect}</td>
-          <td>${longestOverall}</td></tr>
-    </table>
-    <p>Detective ${childName}’s longest streak overall: ${longestOverall}</p>
-    <button id="resumeBtn">Resume play</button>
-    ${nextLevel(currentLevel) ? `<button id="nextLvlBtn">Next level</button>` : ""}
-    <button id="endBtn">End game</button>
-  `;
+  $("summaryBody").innerHTML = rows;
+  setText("overallStreak", `Detective ${childName}’s longest streak overall: ${longestOverall}`);
 
   $("resumeBtn").onclick = () => generateRound(currentLevel);
-  if ($("nextLvlBtn")) $("nextLvlBtn").onclick = () => {
-    currentLevel = nextLevel(currentLevel);
-    generateRound(currentLevel);
-  };
-  $("endBtn").onclick = () => memoSpeak(`Excellent work, Detective ${childName}. The agency is proud of you!`);
+  const nxt = nextLevel(currentLevel);
+  if (nxt) {
+    $("nextLvlBtn").classList.remove("hidden");
+    $("nextLvlBtn").onclick = () => { currentLevel = nxt; generateRound(currentLevel); };
+  } else {
+    $("nextLvlBtn").classList.add("hidden");
+  }
+  $("quitBtn").onclick = () => memoSpeak(`Excellent work, Detective ${childName}. The agency is proud of you!`);
 
+  showDiagnostic("Summary displayed");
   memoSpeak(`Well done, Detective ${childName}. Excellent progress today!`);
 }
 
@@ -242,4 +248,8 @@ function bindEvents() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setText
+  showDiagnostic("DOM ready");
+  bindEvents();
+});
+
+// ===== script.js END =====
