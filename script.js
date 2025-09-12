@@ -1,4 +1,4 @@
-// ===== script.js START =====
+// ===== script.js • Clean Build 2025-09-12 =====
 
 // --- Globals ---
 let childName = "";
@@ -14,21 +14,20 @@ function setText(id, text) {
   if ($(id)) $(id).textContent = text;
 }
 
-// --- Diagnostics ---
-function showDiagnostic(text) {
-  setText("diagnostic", `[⚙️] Diagnostic: ${text}`);
-  memoSpeak(`Diagnostic: ${text}`);
-}
-
 // --- Speech ---
 function memoSpeak(text) {
   const utter = new SpeechSynthesisUtterance(text);
   const voices = speechSynthesis.getVoices();
   utter.voice = voices.find(v => v.name.includes("Samantha")) || voices[0];
-  utter.onstart = () => { if ($("answerInput")) $("answerInput").disabled = true; };
-  utter.onend = () => { if ($("answerInput")) $("answerInput").disabled = false; };
   speechSynthesis.speak(utter);
-  console.log("Memo speaks:", text);
+}
+
+// --- Screen toggle ---
+function showScreen(id) {
+  ["nameEntry", "gameplay", "summary"].forEach(sec => {
+    if ($(sec)) $(sec).classList.add("hidden");
+  });
+  if ($(id)) $(id).classList.remove("hidden");
 }
 
 // --- Level specs ---
@@ -65,7 +64,7 @@ function generateRound(level) {
   }
   levelStats[level].rounds++;
 
-  // Render boxes
+  // Render numbers
   const box = $("displayBox");
   box.innerHTML = "";
   for (let n = 1; n <= rangeMax; n++) {
@@ -82,10 +81,9 @@ function generateRound(level) {
 
   // Instruction
   const plural = missing.length === 1 ? "number" : "numbers";
-  const instr = `${childName}, find the ${plural} missing from 1 to ${rangeMax}. Type answer${plural === "numbers" ? "s" : ""} with spaces between.`;
+  const instr = `${childName}, find the ${plural} missing from 1 to ${rangeMax}. Type your answer${plural === "numbers" ? "s" : ""} with spaces between.`;
   setText("instructionText", instr);
   memoSpeak(instr);
-  showDiagnostic("generateRound triggered");
 
   $("feedback").className = "";
   setText("feedback", "");
@@ -95,7 +93,6 @@ function generateRound(level) {
 
   setText("roundLabel", `Round: ${roundCount}`);
   setText("streakLabel", `Streak: ${currentStreak}`);
-  setText("expectLabel", `Expected: ${expectedAnswer.join(" ")}`);
 }
 
 // --- Answer checking ---
@@ -112,7 +109,6 @@ function answersEqual(arr1, arr2) {
 
 // --- Submit ---
 function submitAnswer() {
-  showDiagnostic("Submit fired");
   const userAns = parseAnswer($("answerInput").value);
 
   if (!userAns.length) {
@@ -131,13 +127,7 @@ function submitAnswer() {
 
     let msg = "";
     if (currentStreak < 5) {
-      const phrases = [
-        `Great job, ${childName}! That's ${currentStreak} in a row.`,
-        `Well done, Detective ${childName} — ${currentStreak} correct so far.`,
-        `That's ${currentStreak} in a row, ${childName}.`,
-        `Nice work, ${childName}! Keep going.`
-      ];
-      msg = phrases[Math.floor(Math.random() * phrases.length)];
+      msg = `Great job, ${childName}! That’s ${currentStreak} in a row.`;
     } else if (currentStreak === 5) {
       msg = `Congratulations, Detective ${childName} — five in a row on Level ${currentLevel}!`;
     }
@@ -166,13 +156,7 @@ function submitAnswer() {
   } else {
     currentStreak = 0;
     levelStats[currentLevel].incorrect++;
-    const wrongPhrases = [
-      `Not quite, ${childName}. Try again.`,
-      `Almost there, Detective ${childName}.`,
-      `Don’t give up, ${childName}.`,
-      `Hmm, not the right answer, ${childName}.`
-    ];
-    const msg = wrongPhrases[Math.floor(Math.random() * wrongPhrases.length)];
+    const msg = `Not quite, ${childName}. Try again.`;
     setText("feedback", msg);
     $("feedback").className = "bad";
     memoSpeak(msg);
@@ -197,13 +181,15 @@ function startGame() {
   currentLevel = $("levelSelect").value;
   currentStreak = 0;
   roundCount = 0;
-  memoSpeak(`Welcome to MEMO’S Detective Agency, Detective ${childName}.`);
-  showDiagnostic("Start pressed");
+  showScreen("gameplay");
+  memoSpeak(`Welcome to MEMO’S Detective Agency, Detective ${childName}. Starting at Level ${currentLevel}.`);
   generateRound(currentLevel);
 }
 
 // --- Summary ---
 function showSummary() {
+  showScreen("summary");
+
   let longestOverall = 0;
   let rows = "";
   for (const [lvl, stats] of Object.entries(levelStats)) {
@@ -216,28 +202,12 @@ function showSummary() {
       <td>${stats.longest}</td>
     </tr>`;
   }
-  const totals = Object.values(levelStats).reduce((acc, s) => {
-    acc.rounds += s.rounds;
-    acc.correct += s.correct;
-    acc.incorrect += s.incorrect;
-    return acc;
-  }, {rounds:0, correct:0, incorrect:0});
 
   $("summaryBody").innerHTML = rows;
   setText("overallStreak", `Detective ${childName}’s longest streak overall: ${longestOverall}`);
 
-  $("resumeBtn").onclick = () => generateRound(currentLevel);
-  const nxt = nextLevel(currentLevel);
-  if (nxt) {
-    $("nextLvlBtn").classList.remove("hidden");
-    $("nextLvlBtn").onclick = () => { currentLevel = nxt; generateRound(currentLevel); };
-  } else {
-    $("nextLvlBtn").classList.add("hidden");
-  }
+  $("resumeBtn").onclick = () => { showScreen("gameplay"); generateRound(currentLevel); };
   $("quitBtn").onclick = () => memoSpeak(`Excellent work, Detective ${childName}. The agency is proud of you!`);
-
-  showDiagnostic("Summary displayed");
-  memoSpeak(`Well done, Detective ${childName}. Excellent progress today!`);
 }
 
 // --- Bind events ---
@@ -245,15 +215,14 @@ function bindEvents() {
   $("startBtn").addEventListener("click", startGame);
   $("submitBtn").addEventListener("click", submitAnswer);
   $("speakBtn").addEventListener("click", () => {
-  memoSpeak("Welcome to MEMO’s Detective Agency! Type your name and pick a level to begin.");
-});
+    memoSpeak("Welcome to MEMO’s Detective Agency. Type your name and pick a level to begin.");
+  });
 }
 
 // --- Initialize ---
 document.addEventListener("DOMContentLoaded", () => {
-  showDiagnostic("DOM ready");   // diagnostic helper
-  bindEvents();                  // hook up all buttons
-  showScreen("nameEntry");       // show the welcome screen first
+  bindEvents();
+  showScreen("nameEntry");
 });
 
 // ===== script.js END =====
