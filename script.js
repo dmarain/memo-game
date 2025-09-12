@@ -247,9 +247,11 @@ function bindEvents() {
   $("hearMemo").addEventListener("click", () => memoSpeak("Welcome to MEMO’s Detective Agency!"));
 }
 
+// --- Initialize ---
 document.addEventListener("DOMContentLoaded", () => {
-  showDiagnostic("DOM ready");
-  bindEvents();
+  showDiagnostic("DOM ready");   // diagnostic helper
+  bindEvents();                  // hook up all buttons
+  showScreen("nameEntry");       // show the welcome screen first
 });
 
 // ===== script.js END =====
