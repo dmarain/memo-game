@@ -1,5 +1,4 @@
-/* ===== Clean Build • 2025-09-11 ===== */
-
+/* ===== style.css START ===== */
 body {
   font-family: Arial, sans-serif;
   background: #f9f9f9;
@@ -58,6 +57,13 @@ input, select, button {
 #feedback.good { color: green; font-weight: bold; }
 #feedback.bad { color: red; font-weight: bold; }
 
+#diagnostic {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #555;
+  margin-top: 5px;
+}
+
 #controlButtons button {
   margin-top: 15px;
   padding: 10px 20px;
@@ -73,6 +79,8 @@ input, select, button {
   border: 1px solid #333;
   padding: 8px 12px;
 }
+
 .hidden {
   display: none;
 }
+/* ===== style.css END ===== */
