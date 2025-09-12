@@ -244,7 +244,9 @@ function showSummary() {
 function bindEvents() {
   $("startBtn").addEventListener("click", startGame);
   $("submitBtn").addEventListener("click", submitAnswer);
-  $("hearMemo").addEventListener("click", () => memoSpeak("Welcome to MEMO’s Detective Agency!"));
+  $("speakBtn").addEventListener("click", () => {
+  memoSpeak("Welcome to MEMO’s Detective Agency! Type your name and pick a level to begin.");
+});
 }
 
 // --- Initialize ---
