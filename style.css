@@ -1,3 +1,4 @@
+/* style.css */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -38,10 +39,16 @@ button:hover {
   background: #45a049;
 }
 
-#memoImage {
-  width: 200px;
+#memoImageWelcome {
+  width: 220px;
   height: auto;
   margin: 20px 0;
+}
+
+.memoImage {
+  width: 160px;
+  height: auto;
+  margin: 15px 0;
 }
 
 #numberDisplay {
