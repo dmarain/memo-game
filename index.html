@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,9 @@
 </head>
 <body>
   <!-- Welcome Screen -->
-  <div id="welcomeScreen" class="screen">
+  <div id="welcomeScreen" class="screen active">
     <h1>MEMO'S DETECTIVE AGENCY</h1>
-    <img id="memoImage" src="images/memo-fox.png" alt="Memo the Fox">
+    <img id="memoImageWelcome" src="memo-fox.png" alt="Memo the Fox">
     <div id="welcomeButtons">
       <button id="hearMemoBtn">Hear Memo’s Voice</button>
       <button id="firstTimeBtn">First-Time User</button>
@@ -21,6 +22,7 @@
   <!-- Parent Settings -->
   <div id="parentSettings" class="screen hidden">
     <h2>Parent Settings</h2>
+    <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <label>Child's Name: <input type="text" id="childNameInput"></label><br>
     <label>Starting Level:
       <select id="startLevel">
@@ -41,6 +43,7 @@
   <!-- Returning User Screen -->
   <div id="returningScreen" class="screen hidden">
     <h2>Welcome Back!</h2>
+    <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <p id="lastLevelMsg"></p>
     <button id="resumeBtn">Resume Last Level</button>
     <button id="nextLevelBtn">Go to Next Level</button>
@@ -49,6 +52,7 @@
   <!-- Game Screen -->
   <div id="gameScreen" class="screen hidden">
     <h2 id="levelDisplay"></h2>
+    <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <div id="instructionText"></div>
     <div id="numberDisplay"></div>
     <input type="text" id="answerInput" placeholder="Type missing numbers here">
@@ -61,6 +65,7 @@
   <!-- Celebration Screen -->
   <div id="celebrationScreen" class="screen hidden">
     <h2 id="celebrationMsg"></h2>
+    <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <button id="stayBtn">Stay on this Level</button>
     <button id="nextBtn">Next Level</button>
     <button id="endBtn">End Game</button>
@@ -69,6 +74,7 @@
   <!-- End Screen -->
   <div id="endScreen" class="screen hidden">
     <h2>Game Summary</h2>
+    <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <p id="summaryText"></p>
     <button id="restartBtn">Play Again</button>
   </div>
