@@ -1,228 +1,231 @@
-// ===== script.js • Clean Build 2025-09-12 =====
-
-// --- Globals ---
+// ===== Global Setup =====
 let childName = "";
 let currentLevel = "1A";
+let autoNext = false;
+
 let currentStreak = 0;
-let roundCount = 0;
+let longestStreak = 0;
 let expectedAnswer = [];
-let levelStats = {};
 
-// --- Helpers ---
-const $ = (id) => document.getElementById(id);
-function setText(id, text) {
-  if ($(id)) $(id).textContent = text;
-}
+let levelStats = {
+  "1A": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "1B": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "1C": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "2A": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "2B": { correct: 0, incorrect: 0, longest: 0, total: 0 },
+  "3A": { correct: 0, incorrect: 0, longest: 0, total: 0 }
+};
 
-// --- Speech ---
-function memoSpeak(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  const voices = speechSynthesis.getVoices();
-  utter.voice = voices.find(v => v.name.includes("Samantha")) || voices[0];
-  speechSynthesis.speak(utter);
-}
-
-// --- Screen toggle ---
+// ===== Screen Control =====
 function showScreen(id) {
-  ["nameEntry", "gameplay", "summary"].forEach(sec => {
-    if ($(sec)) $(sec).classList.add("hidden");
+  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  document.getElementById(id).classList.add("active");
+}
+
+// ===== Speech Setup =====
+function speak(text) {
+  return new Promise(resolve => {
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    const femaleVoice = voices.find(v => v.name.includes("Samantha") || v.name.includes("Female")) || voices[0];
+    utter.voice = femaleVoice;
+    utter.onend = resolve;
+    speechSynthesis.speak(utter);
   });
-  if ($(id)) $(id).classList.remove("hidden");
 }
 
-// --- Level specs ---
-function levelSpec(level) {
-  switch (level) {
-    case "1A": return [3, 1];
-    case "1B": return [3, 2];
-    case "2A": return [4, 1];
-    case "2B": return [4, 2];
-    case "3A": return [5, 1];
-    case "3B": return [5, 2];
-    default: return [3, 1];
-  }
-}
+// ===== Music Control =====
+let musicOn = false;
+let bgMusic = new Audio("sounds/background-loop.mp3");
+bgMusic.loop = true;
 
-function pickMissing(rangeMax, countMissing) {
-  const pool = Array.from({ length: rangeMax }, (_, i) => i + 1);
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return pool.slice(0, countMissing).sort((a, b) => a - b);
-}
-
-// --- Generate round ---
-function generateRound(level) {
-  roundCount++;
-  const [rangeMax, countMissing] = levelSpec(level);
-  const missing = pickMissing(rangeMax, countMissing);
-  expectedAnswer = missing.slice();
-
-  if (!levelStats[level]) {
-    levelStats[level] = { rounds: 0, correct: 0, incorrect: 0, longest: 0 };
-  }
-  levelStats[level].rounds++;
-
-  // Render numbers
-  const box = $("displayBox");
-  box.innerHTML = "";
-  for (let n = 1; n <= rangeMax; n++) {
-    const div = document.createElement("div");
-    div.className = "numBox";
-    if (missing.includes(n)) {
-      div.classList.add("missing");
-      div.textContent = "?";
-    } else {
-      div.textContent = String(n);
-    }
-    box.appendChild(div);
-  }
-
-  // Instruction
-  const plural = missing.length === 1 ? "number" : "numbers";
-  const instr = `${childName}, find the ${plural} missing from 1 to ${rangeMax}. Type your answer${plural === "numbers" ? "s" : ""} with spaces between.`;
-  setText("instructionText", instr);
-  memoSpeak(instr);
-
-  $("feedback").className = "";
-  setText("feedback", "");
-  $("answerInput").value = "";
-  $("submitBtn").disabled = false;
-  $("controlButtons").innerHTML = "";
-
-  setText("roundLabel", `Round: ${roundCount}`);
-  setText("streakLabel", `Streak: ${currentStreak}`);
-}
-
-// --- Answer checking ---
-function parseAnswer(input) {
-  const cleaned = input.trim().replace(/,/g, " ").split(/\s+/).filter(Boolean);
-  return cleaned.map(s => Number(s)).filter(n => Number.isInteger(n)).sort((a, b) => a - b);
-}
-
-function answersEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false;
-  for (let i = 0; i < arr1.length; i++) if (arr1[i] !== arr2[i]) return false;
-  return true;
-}
-
-// --- Submit ---
-function submitAnswer() {
-  const userAns = parseAnswer($("answerInput").value);
-
-  if (!userAns.length) {
-    setText("feedback", "Please enter your answer.");
-    $("feedback").className = "bad";
-    memoSpeak(`Please enter your answer, ${childName}.`);
-    return;
-  }
-
-  if (answersEqual(userAns, expectedAnswer)) {
-    currentStreak++;
-    levelStats[currentLevel].correct++;
-    if (currentStreak > levelStats[currentLevel].longest) {
-      levelStats[currentLevel].longest = currentStreak;
-    }
-
-    let msg = "";
-    if (currentStreak < 5) {
-      msg = `Great job, ${childName}! That’s ${currentStreak} in a row.`;
-    } else if (currentStreak === 5) {
-      msg = `Congratulations, Detective ${childName} — five in a row on Level ${currentLevel}!`;
-    }
-
-    setText("feedback", msg);
-    $("feedback").className = "good";
-    memoSpeak(msg);
-
-    if (currentStreak === 5) {
-      $("submitBtn").disabled = true;
-      $("controlButtons").innerHTML = `
-        <button id="stayBtn">Stay on this level</button>
-        <button id="nextBtn">Next level</button>
-        <button id="endBtn">End game</button>
-      `;
-      $("stayBtn").onclick = () => { currentStreak = 0; generateRound(currentLevel); };
-      $("nextBtn").onclick = () => {
-        currentStreak = 0;
-        let next = nextLevel(currentLevel);
-        if (next) currentLevel = next;
-        generateRound(currentLevel);
-      };
-      $("endBtn").onclick = showSummary;
-      return;
-    }
+document.getElementById("musicToggle").addEventListener("click", () => {
+  if (musicOn) {
+    bgMusic.pause();
+    musicOn = false;
+    document.getElementById("musicToggle").innerText = "Music is OFF. Click to turn it ON";
   } else {
-    currentStreak = 0;
-    levelStats[currentLevel].incorrect++;
-    const msg = `Not quite, ${childName}. Try again.`;
-    setText("feedback", msg);
-    $("feedback").className = "bad";
-    memoSpeak(msg);
+    bgMusic.play();
+    musicOn = true;
+    document.getElementById("musicToggle").innerText = "Music is ON. Click to turn it OFF";
   }
+});
 
-  $("submitBtn").disabled = true;
-  $("controlButtons").innerHTML = `<button id="nextRoundBtn">Next Round</button>`;
-  $("nextRoundBtn").onclick = () => generateRound(currentLevel);
-}
+// ===== Welcome Buttons =====
+document.getElementById("hearMemoBtn").addEventListener("click", () => {
+  speak("Welcome to Memo's Detective Agency. I need your help to find the missing numbers.");
+});
 
-// --- Next level helper ---
-function nextLevel(level) {
-  const order = ["1A","1B","2A","2B","3A","3B"];
-  const idx = order.indexOf(level);
-  if (idx >= 0 && idx < order.length-1) return order[idx+1];
-  return null;
-}
+document.getElementById("firstTimeBtn").addEventListener("click", () => {
+  showScreen("parentSettings");
+});
 
-// --- Start game ---
-function startGame() {
-  childName = $("childNameInput").value.trim().toUpperCase() || "DETECTIVE";
-  currentLevel = $("levelSelect").value;
-  currentStreak = 0;
-  roundCount = 0;
-  showScreen("gameplay");
-  memoSpeak(`Welcome to MEMO’S Detective Agency, Detective ${childName}. Starting at Level ${currentLevel}.`);
+document.getElementById("returningBtn").addEventListener("click", () => {
+  showScreen("returningScreen");
+  document.getElementById("lastLevelMsg").innerText = `Last completed: ${currentLevel}`;
+});
+
+// ===== Parent Settings =====
+document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+  childName = document.getElementById("childNameInput").value.trim().toUpperCase();
+  currentLevel = document.getElementById("startLevel").value;
+  autoNext = document.getElementById("autoNext").checked;
+  showScreen("gameScreen");
+  startRound();
+});
+
+// ===== Returning User =====
+document.getElementById("resumeBtn").addEventListener("click", () => {
+  showScreen("gameScreen");
+  startRound();
+});
+
+document.getElementById("nextLevelBtn").addEventListener("click", () => {
+  currentLevel = getNextLevel(currentLevel);
+  showScreen("gameScreen");
+  startRound();
+});
+
+// ===== Gameplay =====
+function startRound() {
+  document.getElementById("levelDisplay").innerText = `Level ${currentLevel}`;
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("controlButtons").innerHTML = "";
+  document.getElementById("answerInput").value = "";
+  document.getElementById("streakInfo").innerText = `Streak: ${currentStreak} | Longest: ${longestStreak}`;
+
   generateRound(currentLevel);
 }
 
-// --- Summary ---
-function showSummary() {
-  showScreen("summary");
+function generateRound(level) {
+  let maxNum = 3;
+  if (level.startsWith("2")) maxNum = 4;
+  if (level.startsWith("3")) maxNum = 5;
 
-  let longestOverall = 0;
-  let rows = "";
-  for (const [lvl, stats] of Object.entries(levelStats)) {
-    if (stats.longest > longestOverall) longestOverall = stats.longest;
-    rows += `<tr>
-      <td>${lvl}</td>
-      <td>${stats.rounds}</td>
-      <td>${stats.correct}</td>
-      <td>${stats.incorrect}</td>
-      <td>${stats.longest}</td>
-    </tr>`;
+  let numbers = Array.from({ length: maxNum }, (_, i) => i + 1);
+
+  let missingCount = 1;
+  if (level.endsWith("B")) missingCount = 2;
+  if (level.endsWith("C")) missingCount = 2;
+
+  let missing = [];
+  while (missing.length < missingCount) {
+    let rand = numbers[Math.floor(Math.random() * numbers.length)];
+    if (!missing.includes(rand)) missing.push(rand);
   }
+  expectedAnswer = missing.sort((a, b) => a - b);
 
-  $("summaryBody").innerHTML = rows;
-  setText("overallStreak", `Detective ${childName}’s longest streak overall: ${longestOverall}`);
+  // Display numbers
+  let display = document.getElementById("numberDisplay");
+  display.innerHTML = "";
+  numbers.forEach(num => {
+    let box = document.createElement("div");
+    box.className = "number-box";
+    box.innerText = missing.includes(num) ? "?" : num;
+    if (missing.includes(num)) box.classList.add("missing");
+    display.appendChild(box);
+  });
 
-  $("resumeBtn").onclick = () => { showScreen("gameplay"); generateRound(currentLevel); };
-  $("quitBtn").onclick = () => memoSpeak(`Excellent work, Detective ${childName}. The agency is proud of you!`);
-}
+  let instruct = `Find the ${missingCount === 1 ? "missing number" : "two missing numbers"} from one to ${maxNum}. Enter numbers separated by spaces.`;
+  document.getElementById("instructionText").innerText = instruct;
 
-// --- Bind events ---
-function bindEvents() {
-  $("startBtn").addEventListener("click", startGame);
-  $("submitBtn").addEventListener("click", submitAnswer);
-  $("speakBtn").addEventListener("click", () => {
-    memoSpeak("Welcome to MEMO’s Detective Agency. Type your name and pick a level to begin.");
+  // Speak then allow input
+  document.getElementById("answerInput").disabled = true;
+  document.getElementById("submitBtn").disabled = true;
+  speak(instruct).then(() => {
+    document.getElementById("answerInput").disabled = false;
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById("answerInput").focus();
   });
 }
 
-// --- Initialize ---
-document.addEventListener("DOMContentLoaded", () => {
-  bindEvents();
-  showScreen("nameEntry");
+document.getElementById("submitBtn").addEventListener("click", checkAnswer);
+document.getElementById("answerInput").addEventListener("keypress", e => {
+  if (e.key === "Enter") checkAnswer();
 });
 
-// ===== script.js END =====
+function checkAnswer() {
+  let input = document.getElementById("answerInput").value.trim();
+  if (!input) {
+    document.getElementById("feedback").innerText = "Please input a number before submitting.";
+    return;
+  }
+  let userAns = input.split(" ").map(x => parseInt(x)).filter(x => !isNaN(x)).sort((a, b) => a - b);
+
+  levelStats[currentLevel].total++;
+
+  if (JSON.stringify(userAns) === JSON.stringify(expectedAnswer)) {
+    document.getElementById("feedback").innerText = "Great job!";
+    currentStreak++;
+    levelStats[currentLevel].correct++;
+    if (currentStreak > longestStreak) longestStreak = currentStreak;
+
+    if (currentStreak % 5 === 0) {
+      showCelebration();
+      return;
+    }
+    setTimeout(startRound, 1500);
+  } else {
+    document.getElementById("feedback").innerText = "Try again!";
+    currentStreak = 0;
+    levelStats[currentLevel].incorrect++;
+    setTimeout(startRound, 1500);
+  }
+}
+
+// ===== Celebration =====
+function showCelebration() {
+  showScreen("celebrationScreen");
+  document.getElementById("celebrationMsg").innerText =
+    `Congratulations ${childName}! Five in a row — you're becoming a first-class detective!`;
+}
+
+document.getElementById("stayBtn").addEventListener("click", () => {
+  showScreen("gameScreen");
+  startRound();
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  currentLevel = getNextLevel(currentLevel);
+  showScreen("gameScreen");
+  startRound();
+});
+
+document.getElementById("endBtn").addEventListener("click", () => {
+  showSummary();
+});
+
+// ===== End Screen =====
+function showSummary() {
+  showScreen("endScreen");
+  let summary = `Summary for ${childName}:\n\n`;
+  for (let lvl in levelStats) {
+    if (levelStats[lvl].total > 0) {
+      summary += `${lvl} - Correct: ${levelStats[lvl].correct}, Incorrect: ${levelStats[lvl].incorrect}, Longest Streak: ${levelStats[lvl].longest}, Total: ${levelStats[lvl].total}\n`;
+    }
+  }
+  summary += `\nOverall Longest Streak: ${longestStreak}`;
+  document.getElementById("summaryText").innerText = summary;
+}
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  currentStreak = 0;
+  longestStreak = 0;
+  for (let key in levelStats) {
+    levelStats[key] = { correct: 0, incorrect: 0, longest: 0, total: 0 };
+  }
+  showScreen("welcomeScreen");
+});
+
+// ===== Helpers =====
+function getNextLevel(level) {
+  const order = ["1A","1B","1C","2A","2B","3A"];
+  let idx = order.indexOf(level);
+  return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : level;
+}
+
+// ===== Initialize =====
+window.onload = () => {
+  showScreen("welcomeScreen");
+};y 
