@@ -1,86 +1,80 @@
-/* ===== style.css START ===== */
 body {
   font-family: Arial, sans-serif;
-  background: #f9f9f9;
-  color: #111;
+  text-align: center;
+  background: #f0f8ff;
   margin: 0;
   padding: 0;
-  text-align: center;
 }
 
-header {
-  background: #4169e1;
-  color: white;
+h1, h2 {
+  color: #2a4d69;
+}
+
+.screen {
+  display: none;
   padding: 20px;
 }
 
-#memoFox {
-  max-width: 180px;
-  margin: 15px auto;
+.screen.active {
   display: block;
-}
-
-#controlsBar {
-  margin: 10px 0;
-}
-
-input, select, button {
-  font-size: 1rem;
-  padding: 5px 8px;
-  margin: 4px;
-}
-
-#displayBox {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 15px 0;
-  flex-wrap: wrap;
-}
-
-.numBox {
-  border: 2px solid #333;
-  padding: 10px 15px;
-  font-size: 1.5rem;
-  border-radius: 6px;
-  min-width: 40px;
-  text-align: center;
-  background: white;
-}
-
-.numBox.missing {
-  border: 2px dashed #666;
-  color: #666;
-  background: #f0f0f0;
-}
-
-#feedback.good { color: green; font-weight: bold; }
-#feedback.bad { color: red; font-weight: bold; }
-
-#diagnostic {
-  font-size: 0.9rem;
-  font-style: italic;
-  color: #555;
-  margin-top: 5px;
-}
-
-#controlButtons button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-}
-
-#summary table {
-  border-collapse: collapse;
-  margin: 20px auto;
-}
-
-#summary th, #summary td {
-  border: 1px solid #333;
-  padding: 8px 12px;
 }
 
 .hidden {
   display: none;
 }
-/* ===== style.css END ===== */
+
+button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #45a049;
+}
+
+#memoImage {
+  width: 200px;
+  height: auto;
+  margin: 20px 0;
+}
+
+#numberDisplay {
+  margin: 20px 0;
+  font-size: 28px;
+  letter-spacing: 10px;
+}
+
+.number-box {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border: 2px solid #333;
+  border-radius: 6px;
+  line-height: 50px;
+  font-size: 24px;
+  background: #fff;
+}
+
+.missing {
+  background: #ffd966;
+  color: #333;
+}
+
+#feedback {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+#streakInfo {
+  font-size: 18px;
+  color: #444;
+  margin-top: 10px;
+}
