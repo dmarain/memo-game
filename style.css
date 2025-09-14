@@ -1,27 +1,18 @@
-/* style.css */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
+  background: #f0f8ff;
   margin: 0;
   padding: 0;
 }
 
-/* Background colors for each screen */
-.welcome-bg { background: #d9fdd3; }
-.settings-bg { background: #fff8c4; }
-.game-bg { background: #d3f9f5; }
-.celebration-bg { background: #c8facc; }
-.end-bg { background: #ffe5b4; }
-
 h1, h2 {
   color: #2a4d69;
-  font-weight: bold;
 }
 
 .screen {
   display: none;
   padding: 20px;
-  min-height: 100vh;
 }
 
 .screen.active {
@@ -47,39 +38,16 @@ button:hover {
   background: #45a049;
 }
 
-/* Special button colors */
-#endBtn, #restartBtn {
-  background: #e67e22; /* orange for progress/end */
-}
-#endBtn:hover, #restartBtn:hover {
-  background: #d35400;
-}
-
-#memoImageWelcome {
-  width: 220px;
+#memoImage {
+  width: 200px;
   height: auto;
   margin: 20px 0;
 }
 
-.memoImage {
-  width: 160px;
-  height: auto;
-  margin: 15px 0;
-}
-
-/* Number display area */
 #numberDisplay {
-  margin: 20px auto;
+  margin: 20px 0;
   font-size: 28px;
   letter-spacing: 10px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  border: 2px solid #b0bec5;
-  border-radius: 12px;
-  padding: 10px;
-  background: #f9ffff;
-  max-width: 90%;
 }
 
 .number-box {
@@ -91,37 +59,12 @@ button:hover {
   border-radius: 6px;
   line-height: 50px;
   font-size: 24px;
-  background: #cce5ff; /* light blue */
+  background: #fff;
 }
 
 .missing {
-  background: #ffd966; /* yellow for missing numbers */
+  background: #ffd966;
   color: #333;
-}
-
-#instructionText {
-  font-size: 20px;
-  color: #00695c;
-  margin: 10px 0;
-}
-
-#answerInput {
-  width: 70%;
-  height: 50px;
-  font-size: 22px;
-  text-align: center;
-  border: 2px solid #333;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-#submitBtn {
-  display: block;
-  width: 70%;
-  height: 50px;
-  font-size: 22px;
-  margin: 12px auto;
-  border-radius: 8px;
 }
 
 #feedback {
@@ -134,32 +77,4 @@ button:hover {
   font-size: 18px;
   color: #444;
   margin-top: 10px;
-}
-
-/* Debug panel */
-#debugPanel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  overflow-y: auto;
-  background: #f0f0f0;
-  border-top: 2px solid #333;
-  font-family: monospace;
-  font-size: 12px;
-  text-align: left;
-  padding: 4px;
-  color: #000;
-  z-index: 1000;
-}
-
-/* Responsive tweaks for mobile */
-@media (max-width: 600px) {
-  h1 { font-size: 6vw; }
-  h2 { font-size: 5vw; }
-  #numberDisplay { font-size: 8vw; }
-  .number-box { width: 14vw; height: 14vw; font-size: 6vw; }
-  #answerInput { width: 80%; height: 12vw; font-size: 6vw; }
-  #submitBtn { width: 80%; height: 12vw; font-size: 6vw; }
 }
