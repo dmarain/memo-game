@@ -1,5 +1,17 @@
 // script.js
 
+// ===== Debug Helper =====
+function logDebug(message) {
+  console.log(message);
+  const panel = document.getElementById("debugPanel");
+  if (panel) {
+    const p = document.createElement("div");
+    p.textContent = `[DEBUG] ${message}`;
+    panel.appendChild(p);
+    panel.scrollTop = panel.scrollHeight; // auto-scroll
+  }
+}
+
 // ===== Global Setup =====
 let childName = "";
 let currentLevel = "1A";
@@ -11,19 +23,23 @@ let expectedAnswer = [];
 let lastProblem = null;
 
 let levelStats = {
-  "1A": { correct: 0, incorrect: 0, longest: 0, total: 0 },
-  "1B": { correct: 0, incorrect: 0, longest: 0, total: 0 },
-  "1C": { correct: 0, incorrect: 0, longest: 0, total: 0 },
-  "2A": { correct: 0, incorrect: 0, longest: 0, total: 0 },
-  "2B": { correct: 0, incorrect: 0, longest: 0, total: 0 },
-  "3A": { correct: 0, incorrect: 0, longest: 0, total: 0 }
+  "1A": { correct: 0, incorrect: 0, total: 0 },
+  "1B": { correct: 0, incorrect: 0, total: 0 },
+  "1C": { correct: 0, incorrect: 0, total: 0 },
+  "2A": { correct: 0, incorrect: 0, total: 0 },
+  "2B": { correct: 0, incorrect: 0, total: 0 },
+  "3A": { correct: 0, incorrect: 0, total: 0 }
 };
 
 // ===== Screen Control =====
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  document.getElementById(id).classList.add("active");
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.remove("hidden");
+    el.classList.add("active");
+    logDebug(`Switched to ${id}`);
+  }
 }
 
 // ===== Speech Setup =====
@@ -35,7 +51,11 @@ function speak(text) {
       voices.find(v => v.name.includes("Samantha") || v.name.includes("Female")) ||
       voices[0];
     utter.voice = femaleVoice;
-    utter.onend = resolve;
+    utter.onstart = () => logDebug(`Memo speaking: "${text}"`);
+    utter.onend = () => {
+      logDebug("Memo finished speaking");
+      resolve();
+    };
     speechSynthesis.speak(utter);
   });
 }
@@ -51,11 +71,13 @@ document.getElementById("musicToggle").addEventListener("click", () => {
     musicOn = false;
     document.getElementById("musicToggle").innerText =
       "Music is OFF. Click to turn it ON";
+    logDebug("Music turned OFF");
   } else {
     bgMusic.play();
     musicOn = true;
     document.getElementById("musicToggle").innerText =
       "Music is ON. Click to turn it OFF";
+    logDebug("Music turned ON");
   }
 });
 
@@ -114,8 +136,7 @@ function generateRound(level, repeatSame = false) {
   let numbers = Array.from({ length: maxNum }, (_, i) => i + 1);
 
   let missingCount = 1;
-  if (level.endsWith("B")) missingCount = 2;
-  if (level.endsWith("C")) missingCount = 2;
+  if (level.endsWith("B") || level.endsWith("C")) missingCount = 2;
 
   let missing;
   if (repeatSame && lastProblem) {
@@ -126,14 +147,12 @@ function generateRound(level, repeatSame = false) {
       let rand = numbers[Math.floor(Math.random() * numbers.length)];
       if (!missing.includes(rand)) missing.push(rand);
     }
-    // Shuffle numbers for Level C
-    if (level.endsWith("C")) {
-      numbers.sort(() => Math.random() - 0.5);
-    }
+    if (level.endsWith("C")) numbers.sort(() => Math.random() - 0.5);
     lastProblem = missing;
   }
 
   expectedAnswer = [...missing].sort((a, b) => a - b);
+  logDebug(`Expected answer: ${expectedAnswer.join(" ")}`);
 
   // Display numbers
   let display = document.getElementById("numberDisplay");
@@ -146,16 +165,27 @@ function generateRound(level, repeatSame = false) {
     display.appendChild(box);
   });
 
-  let instruct = `Find the ${missingCount === 1 ? "missing number" : "two missing numbers"} from one to ${maxNum}. Enter numbers separated by spaces.`;
+  // Instruction text
+  let instruct =
+    missingCount === 1
+      ? `Find the missing number from 1 to ${maxNum}. Enter the number and press Submit.`
+      : `Find the ${missingCount} missing numbers from 1 to ${maxNum}. Enter the numbers separated by spaces and press Submit.`;
   document.getElementById("instructionText").innerText = instruct;
 
-  // Speak then allow input
+  // Placeholder update
+  document.getElementById("answerInput").placeholder =
+    missingCount === 1 ? "Type the missing number" : "Type missing numbers separated by spaces";
+
+  // Lock input
   document.getElementById("answerInput").disabled = true;
   document.getElementById("submitBtn").disabled = true;
-  speak(instruct).then(() => {
+
+  // Speak then unlock input
+  speak(instruct + " Type your answer here and press Submit, or press the Return key.").then(() => {
     document.getElementById("answerInput").disabled = false;
     document.getElementById("submitBtn").disabled = false;
     document.getElementById("answerInput").focus();
+    logDebug("Input unlocked and auto-focused");
   });
 }
 
@@ -168,10 +198,11 @@ function checkAnswer() {
   let input = document.getElementById("answerInput").value.trim();
   if (!input) {
     document.getElementById("feedback").innerText = "Please input a number before submitting.";
+    logDebug("Empty input submitted");
     return;
   }
 
-  // Disable submit after click until next round
+  // Disable submit
   document.getElementById("submitBtn").disabled = true;
 
   let userAns = input.split(" ").map(x => parseInt(x)).filter(x => !isNaN(x)).sort((a, b) => a - b);
@@ -192,6 +223,8 @@ function checkAnswer() {
     levelStats[currentLevel].correct++;
     if (currentStreak > longestStreak) longestStreak = currentStreak;
 
+    logDebug(`Correct answer. Streak=${currentStreak}, Longest=${longestStreak}`);
+
     if (currentStreak % 5 === 0) {
       showCelebration();
       return;
@@ -208,6 +241,7 @@ function checkAnswer() {
 
     currentStreak = 0;
     levelStats[currentLevel].incorrect++;
+    logDebug("Incorrect answer. Streak reset to 0");
 
     // Clear and refocus input, repeat same problem
     setTimeout(() => {
@@ -223,6 +257,7 @@ function showCelebration() {
   showScreen("celebrationScreen");
   document.getElementById("celebrationMsg").innerText =
     `Congratulations ${childName}! Five in a row — you're becoming a first-class detective!`;
+  logDebug("Celebration triggered (5 in a row)");
   currentStreak = 0; // reset streak after celebration
 }
 
@@ -244,25 +279,17 @@ document.getElementById("endBtn").addEventListener("click", () => {
 // ===== End Screen =====
 function showSummary(fromEndGame = false) {
   showScreen("endScreen");
-  let summary = `Summary for ${childName}:\n\n`;
+  let summary = `Progress for ${childName}:\n\n`;
   for (let lvl in levelStats) {
     if (levelStats[lvl].total > 0) {
       summary += `${lvl} - Correct: ${levelStats[lvl].correct}, Incorrect: ${levelStats[lvl].incorrect}, Total: ${levelStats[lvl].total}\n`;
     }
   }
   summary += `\nOverall Longest Streak: ${longestStreak}`;
+  document.getElementById("summaryText").innerText = summary;
+
   if (fromEndGame) {
-    summary += `\n\nYou ended mid-level. You can resume your progress.`;
-    let resumeBtn = document.createElement("button");
-    resumeBtn.innerText = "Resume Current Level";
-    resumeBtn.onclick = () => {
-      showScreen("gameScreen");
-      startRound(true);
-    };
-    document.getElementById("summaryText").innerText = summary;
-    document.getElementById("summaryText").appendChild(resumeBtn);
-  } else {
-    document.getElementById("summaryText").innerText = summary;
+    logDebug("End game screen shown (from mid-level)");
   }
 }
 
@@ -270,14 +297,15 @@ document.getElementById("restartBtn").addEventListener("click", () => {
   currentStreak = 0;
   longestStreak = 0;
   for (let key in levelStats) {
-    levelStats[key] = { correct: 0, incorrect: 0, longest: 0, total: 0 };
+    levelStats[key] = { correct: 0, incorrect: 0, total: 0 };
   }
   showScreen("welcomeScreen");
+  logDebug("Game restarted");
 });
 
 // ===== Helpers =====
 function getNextLevel(level) {
-  const order = ["1A","1B","1C","2A","2B","3A"];
+  const order = ["1A", "1B", "1C", "2A", "2B", "3A"];
   let idx = order.indexOf(level);
   return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : level;
 }
@@ -285,4 +313,5 @@ function getNextLevel(level) {
 // ===== Initialize =====
 window.onload = () => {
   showScreen("welcomeScreen");
+  logDebug("App started, welcome screen active");
 };
