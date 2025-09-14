@@ -1,4 +1,4 @@
-// script.js (09-14-25b)
+// script.js (09-14-25c)
 
 // ===== Debug Helper =====
 function logDebug(message) {
@@ -6,9 +6,23 @@ function logDebug(message) {
   const panel = document.getElementById("debugPanel");
   if (panel) {
     const p = document.createElement("div");
-    p.textContent = `[DEBUG] ${message}`;
+    const now = new Date().toLocaleTimeString();
+    p.textContent = `[${now}] ${message}`;
     panel.appendChild(p);
     panel.scrollTop = panel.scrollHeight; // auto-scroll
+  }
+}
+
+// ===== Clear Logs =====
+function setupClearLogs() {
+  const clearBtn = document.getElementById("clearLogsBtn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      const panel = document.getElementById("debugPanel");
+      panel.innerHTML = '<button id="clearLogsBtn">Clear Logs</button>';
+      logDebug("Logs cleared");
+      setupClearLogs(); // rebind after wiping
+    });
   }
 }
 
@@ -65,63 +79,116 @@ let musicOn = false;
 let bgMusic = new Audio("sounds/background-loop.mp3");
 bgMusic.loop = true;
 
-document.getElementById("musicToggle").addEventListener("click", () => {
-  logDebug("Music toggle clicked (Welcome Screen)");
-  if (musicOn) {
-    bgMusic.pause();
-    musicOn = false;
-    document.getElementById("musicToggle").innerText =
-      "Music is OFF. Click to turn it ON";
-    logDebug("Music turned OFF");
-  } else {
-    bgMusic.play();
-    musicOn = true;
-    document.getElementById("musicToggle").innerText =
-      "Music is ON. Click to turn it OFF";
-    logDebug("Music turned ON");
-  }
-});
+// ===== Main Init =====
+window.onload = () => {
+  showScreen("welcomeScreen");
+  logDebug("App started, welcome screen active");
 
-// ===== Welcome Buttons =====
-document.getElementById("hearMemoBtn").addEventListener("click", () => {
-  logDebug("Hear Memo button clicked (Welcome Screen)");
-  speak("Welcome to Memo's Detective Agency. I need your help to find the missing numbers.");
-});
+  // Bind Clear Logs
+  setupClearLogs();
 
-document.getElementById("firstTimeBtn").addEventListener("click", () => {
-  logDebug("First-Time User button clicked (Welcome Screen)");
-  showScreen("parentSettings");
-});
+  // Welcome Screen
+  document.getElementById("musicToggle").addEventListener("click", () => {
+    logDebug("Music toggle clicked");
+    if (musicOn) {
+      bgMusic.pause();
+      musicOn = false;
+      document.getElementById("musicToggle").innerText =
+        "Music is OFF. Click to turn it ON";
+      logDebug("Music turned OFF");
+    } else {
+      bgMusic.play();
+      musicOn = true;
+      document.getElementById("musicToggle").innerText =
+        "Music is ON. Click to turn it OFF";
+      logDebug("Music turned ON");
+    }
+  });
 
-document.getElementById("returningBtn").addEventListener("click", () => {
-  logDebug("Returning User button clicked (Welcome Screen)");
-  showScreen("returningScreen");
-  document.getElementById("lastLevelMsg").innerText = `Last completed: ${currentLevel}`;
-});
+  document.getElementById("hearMemoBtn").addEventListener("click", () => {
+    logDebug("Hear Memo clicked");
+    speak("Welcome to Memo's Detective Agency. I need your help to find the missing numbers.");
+  });
 
-// ===== Parent Settings =====
-document.getElementById("saveSettingsBtn").addEventListener("click", () => {
-  childName = document.getElementById("childNameInput").value.trim().toUpperCase();
-  logDebug(`Save Settings button clicked (Parent Settings) – Child: ${childName}`);
-  currentLevel = document.getElementById("startLevel").value;
-  autoNext = document.getElementById("autoNext").checked;
-  showScreen("gameScreen");
-  startRound();
-});
+  document.getElementById("firstTimeBtn").addEventListener("click", () => {
+    logDebug("First-Time clicked");
+    showScreen("parentSettings");
+  });
 
-// ===== Returning User =====
-document.getElementById("resumeBtn").addEventListener("click", () => {
-  logDebug(`Resume button clicked (Returning Screen) – Child: ${childName}`);
-  showScreen("gameScreen");
-  startRound();
-});
+  document.getElementById("returningBtn").addEventListener("click", () => {
+    logDebug("Returning clicked");
+    showScreen("returningScreen");
+    document.getElementById("lastLevelMsg").innerText =
+      `Last completed: ${currentLevel}`;
+  });
 
-document.getElementById("nextLevelBtn").addEventListener("click", () => {
-  logDebug(`Next Level button clicked (Returning Screen) – Child: ${childName}`);
-  currentLevel = getNextLevel(currentLevel);
-  showScreen("gameScreen");
-  startRound();
-});
+  // Parent Settings
+  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+    childName = document.getElementById("childNameInput").value.trim().toUpperCase();
+    logDebug(`Save Settings clicked – Child: ${childName}`);
+    currentLevel = document.getElementById("startLevel").value;
+    autoNext = document.getElementById("autoNext").checked;
+    showScreen("gameScreen");
+    startRound();
+  });
+
+  // Returning Screen
+  document.getElementById("resumeBtn").addEventListener("click", () => {
+    logDebug("Resume clicked");
+    showScreen("gameScreen");
+    startRound();
+  });
+
+  document.getElementById("nextLevelBtn").addEventListener("click", () => {
+    logDebug("Next Level clicked");
+    currentLevel = getNextLevel(currentLevel);
+    showScreen("gameScreen");
+    startRound();
+  });
+
+  // Game Screen
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    logDebug("Submit clicked");
+    checkAnswer();
+  });
+
+  document.getElementById("answerInput").addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+      logDebug("Enter pressed");
+      checkAnswer();
+    }
+  });
+
+  // Celebration Screen
+  document.getElementById("stayBtn").addEventListener("click", () => {
+    logDebug("Stay clicked");
+    showScreen("gameScreen");
+    startRound();
+  });
+
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    logDebug("Next clicked");
+    currentLevel = getNextLevel(currentLevel);
+    showScreen("gameScreen");
+    startRound();
+  });
+
+  document.getElementById("endBtn").addEventListener("click", () => {
+    logDebug("End Game clicked");
+    showSummary(true);
+  });
+
+  // End Screen
+  document.getElementById("restartBtn").addEventListener("click", () => {
+    logDebug("Restart clicked");
+    currentStreak = 0;
+    longestStreak = 0;
+    for (let key in levelStats) {
+      levelStats[key] = { correct: 0, incorrect: 0, total: 0 };
+    }
+    showScreen("welcomeScreen");
+  });
+};
 
 // ===== Gameplay =====
 function startRound(repeatSame = false) {
@@ -174,14 +241,14 @@ function generateRound(level, repeatSame = false) {
     display.appendChild(box);
   });
 
-  // Instruction text
+  // Instruction
   let instruct =
     missingCount === 1
       ? `Find the missing number from 1 to ${maxNum}.`
       : `Find the ${missingCount} missing numbers from 1 to ${maxNum}.`;
   document.getElementById("instructionText").innerText = instruct;
 
-  // Placeholder update
+  // Placeholder
   document.getElementById("answerInput").placeholder =
     missingCount === 1 ? "Type the missing number" : "Type missing numbers separated by spaces";
 
@@ -189,7 +256,7 @@ function generateRound(level, repeatSame = false) {
   document.getElementById("answerInput").disabled = true;
   document.getElementById("submitBtn").disabled = true;
 
-  // Speak introduction + instructions
+  // Speak
   const introLine = `Detective ${childName}, here is your next challenge. `;
   speak(introLine + instruct + " Type your answer here and press Submit, or press the Return key.")
     .then(() => {
@@ -200,18 +267,6 @@ function generateRound(level, repeatSame = false) {
     });
 }
 
-document.getElementById("submitBtn").addEventListener("click", () => {
-  logDebug(`Submit button clicked (Game Screen) – Child: ${childName}`);
-  checkAnswer();
-});
-
-document.getElementById("answerInput").addEventListener("keypress", e => {
-  if (e.key === "Enter") {
-    logDebug(`Enter key pressed (Game Screen) – Child: ${childName}`);
-    checkAnswer();
-  }
-});
-
 function checkAnswer() {
   let input = document.getElementById("answerInput").value.trim();
   if (!input) {
@@ -220,7 +275,6 @@ function checkAnswer() {
     return;
   }
 
-  // Disable submit
   document.getElementById("submitBtn").disabled = true;
 
   let userAns = input.split(" ").map(x => parseInt(x)).filter(x => !isNaN(x)).sort((a, b) => a - b);
@@ -279,24 +333,6 @@ function showCelebration() {
   currentStreak = 0;
 }
 
-document.getElementById("stayBtn").addEventListener("click", () => {
-  logDebug(`Stay button clicked (Celebration) – Child: ${childName}`);
-  showScreen("gameScreen");
-  startRound();
-});
-
-document.getElementById("nextBtn").addEventListener("click", () => {
-  logDebug(`Next button clicked (Celebration) – Child: ${childName}`);
-  currentLevel = getNextLevel(currentLevel);
-  showScreen("gameScreen");
-  startRound();
-});
-
-document.getElementById("endBtn").addEventListener("click", () => {
-  logDebug(`View Progress/End Game button clicked (Celebration) – Child: ${childName}`);
-  showSummary(true);
-});
-
 // ===== End Screen =====
 function showSummary(fromEndGame = false) {
   showScreen("endScreen");
@@ -316,26 +352,9 @@ function showSummary(fromEndGame = false) {
   }
 }
 
-document.getElementById("restartBtn").addEventListener("click", () => {
-  logDebug(`Restart button clicked (End Screen) – Child: ${childName}`);
-  currentStreak = 0;
-  longestStreak = 0;
-  for (let key in levelStats) {
-    levelStats[key] = { correct: 0, incorrect: 0, total: 0 };
-  }
-  showScreen("welcomeScreen");
-});
-
 // ===== Helpers =====
 function getNextLevel(level) {
   const order = ["1A", "1B", "1C", "2A", "2B", "3A"];
   let idx = order.indexOf(level);
   return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : level;
 }
-
-// ===== Initialize =====
-window.onload = () => {
-  showScreen("welcomeScreen");
-  logDebug("App started, welcome screen active");
-  logDebug("Welcome buttons ready: Hear Memo, First-Time, Returning");
-};
