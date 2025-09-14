@@ -8,7 +8,7 @@
 </head>
 <body>
   <!-- Welcome Screen -->
-  <div id="welcomeScreen" class="screen active">
+  <div id="welcomeScreen" class="screen active welcome-bg">
     <h1>MEMO'S DETECTIVE AGENCY</h1>
     <img id="memoImageWelcome" src="memo-fox.png" alt="Memo the Fox">
     <div id="welcomeButtons">
@@ -20,7 +20,7 @@
   </div>
 
   <!-- Parent Settings -->
-  <div id="parentSettings" class="screen hidden">
+  <div id="parentSettings" class="screen hidden settings-bg">
     <h2>Parent Settings</h2>
     <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <label>Child's Name: <input type="text" id="childNameInput"></label><br>
@@ -37,11 +37,11 @@
     <label><input type="checkbox" id="autoNext"> Auto Level-Up after 5 correct</label><br>
     <label><input type="checkbox" id="useTimer"> Use Timer (5–15s)</label><br>
     <label>Timer Seconds: <input type="number" id="timerSeconds" value="10" min="5" max="15"></label><br>
-    <button id="saveSettingsBtn">Save Settings</button>
+    <button id="saveSettingsBtn">Save Settings & Start</button>
   </div>
 
   <!-- Returning User Screen -->
-  <div id="returningScreen" class="screen hidden">
+  <div id="returningScreen" class="screen hidden settings-bg">
     <h2>Welcome Back!</h2>
     <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <p id="lastLevelMsg"></p>
@@ -50,12 +50,12 @@
   </div>
 
   <!-- Game Screen -->
-  <div id="gameScreen" class="screen hidden">
+  <div id="gameScreen" class="screen hidden game-bg">
     <h2 id="levelDisplay"></h2>
     <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <div id="instructionText"></div>
     <div id="numberDisplay"></div>
-    <input type="text" id="answerInput" placeholder="Type missing numbers here">
+    <input type="text" id="answerInput" placeholder="Type answer here">
     <button id="submitBtn">Submit</button>
     <p id="feedback"></p>
     <div id="controlButtons"></div>
@@ -63,21 +63,24 @@
   </div>
 
   <!-- Celebration Screen -->
-  <div id="celebrationScreen" class="screen hidden">
+  <div id="celebrationScreen" class="screen hidden celebration-bg">
     <h2 id="celebrationMsg"></h2>
     <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <button id="stayBtn">Stay on this Level</button>
     <button id="nextBtn">Next Level</button>
-    <button id="endBtn">End Game</button>
+    <button id="endBtn">View Progress / End Game</button>
   </div>
 
   <!-- End Screen -->
-  <div id="endScreen" class="screen hidden">
-    <h2>Game Summary</h2>
+  <div id="endScreen" class="screen hidden end-bg">
+    <h2>Progress Chart</h2>
     <img class="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <p id="summaryText"></p>
     <button id="restartBtn">Play Again</button>
   </div>
+
+  <!-- Debug Panel -->
+  <div id="debugPanel"></div>
 
   <script src="script.js"></script>
 </body>
