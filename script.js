@@ -1,4 +1,4 @@
-// script.js (09-14-25c)
+// script.js (09-14-25d)
 
 // ===== Debug Helper =====
 function logDebug(message) {
@@ -21,7 +21,7 @@ function setupClearLogs() {
       const panel = document.getElementById("debugPanel");
       panel.innerHTML = '<button id="clearLogsBtn">Clear Logs</button>';
       logDebug("Logs cleared");
-      setupClearLogs(); // rebind after wiping
+      setupClearLogs(); // rebind after wipe
     });
   }
 }
@@ -35,14 +35,12 @@ let currentStreak = 0;
 let longestStreak = 0;
 let expectedAnswer = [];
 let lastProblem = null;
+let firstRound = true;
 
 let levelStats = {
   "1A": { correct: 0, incorrect: 0, total: 0 },
   "1B": { correct: 0, incorrect: 0, total: 0 },
-  "1C": { correct: 0, incorrect: 0, total: 0 },
-  "2A": { correct: 0, incorrect: 0, total: 0 },
-  "2B": { correct: 0, incorrect: 0, total: 0 },
-  "3A": { correct: 0, incorrect: 0, total: 0 }
+  "1C": { correct: 0, incorrect: 0, total: 0 }
 };
 
 // ===== Screen Control =====
@@ -51,7 +49,6 @@ function showScreen(id) {
   const el = document.getElementById(id);
   if (el) {
     el.classList.remove("hidden");
-    el.classList.add("active");
     logDebug(`Switched to ${id} for child ${childName || "N/A"}`);
   }
 }
@@ -74,37 +71,14 @@ function speak(text) {
   });
 }
 
-// ===== Music Control =====
-let musicOn = false;
-let bgMusic = new Audio("sounds/background-loop.mp3");
-bgMusic.loop = true;
-
 // ===== Main Init =====
 window.onload = () => {
   showScreen("welcomeScreen");
   logDebug("App started, welcome screen active");
 
-  // Bind Clear Logs
   setupClearLogs();
 
-  // Welcome Screen
-  document.getElementById("musicToggle").addEventListener("click", () => {
-    logDebug("Music toggle clicked");
-    if (musicOn) {
-      bgMusic.pause();
-      musicOn = false;
-      document.getElementById("musicToggle").innerText =
-        "Music is OFF. Click to turn it ON";
-      logDebug("Music turned OFF");
-    } else {
-      bgMusic.play();
-      musicOn = true;
-      document.getElementById("musicToggle").innerText =
-        "Music is ON. Click to turn it OFF";
-      logDebug("Music turned ON");
-    }
-  });
-
+  // Welcome buttons
   document.getElementById("hearMemoBtn").addEventListener("click", () => {
     logDebug("Hear Memo clicked");
     speak("Welcome to Memo's Detective Agency. I need your help to find the missing numbers.");
@@ -117,36 +91,33 @@ window.onload = () => {
 
   document.getElementById("returningBtn").addEventListener("click", () => {
     logDebug("Returning clicked");
-    showScreen("returningScreen");
-    document.getElementById("lastLevelMsg").innerText =
-      `Last completed: ${currentLevel}`;
+    showScreen("progressScreen");
+    updateProgress();
   });
 
-  // Parent Settings
-  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+  document.getElementById("saveSettings").addEventListener("click", () => {
     childName = document.getElementById("childNameInput").value.trim().toUpperCase();
-    logDebug(`Save Settings clicked – Child: ${childName}`);
-    currentLevel = document.getElementById("startLevel").value;
-    autoNext = document.getElementById("autoNext").checked;
+    currentLevel = document.getElementById("startingLevel").value;
+    autoNext = document.getElementById("autoLevelUp").checked;
+    firstRound = true;
+    logDebug(`Settings saved for child ${childName}, level ${currentLevel}`);
     showScreen("gameScreen");
     startRound();
   });
 
-  // Returning Screen
+  // Resume / End buttons
   document.getElementById("resumeBtn").addEventListener("click", () => {
     logDebug("Resume clicked");
     showScreen("gameScreen");
     startRound();
   });
 
-  document.getElementById("nextLevelBtn").addEventListener("click", () => {
-    logDebug("Next Level clicked");
-    currentLevel = getNextLevel(currentLevel);
-    showScreen("gameScreen");
-    startRound();
+  document.getElementById("endBtn").addEventListener("click", () => {
+    logDebug("End Game clicked");
+    resetGame();
   });
 
-  // Game Screen
+  // Submit
   document.getElementById("submitBtn").addEventListener("click", () => {
     logDebug("Submit clicked");
     checkAnswer();
@@ -158,43 +129,14 @@ window.onload = () => {
       checkAnswer();
     }
   });
-
-  // Celebration Screen
-  document.getElementById("stayBtn").addEventListener("click", () => {
-    logDebug("Stay clicked");
-    showScreen("gameScreen");
-    startRound();
-  });
-
-  document.getElementById("nextBtn").addEventListener("click", () => {
-    logDebug("Next clicked");
-    currentLevel = getNextLevel(currentLevel);
-    showScreen("gameScreen");
-    startRound();
-  });
-
-  document.getElementById("endBtn").addEventListener("click", () => {
-    logDebug("End Game clicked");
-    showSummary(true);
-  });
-
-  // End Screen
-  document.getElementById("restartBtn").addEventListener("click", () => {
-    logDebug("Restart clicked");
-    currentStreak = 0;
-    longestStreak = 0;
-    for (let key in levelStats) {
-      levelStats[key] = { correct: 0, incorrect: 0, total: 0 };
-    }
-    showScreen("welcomeScreen");
-  });
 };
 
 // ===== Gameplay =====
 function startRound(repeatSame = false) {
-  document.getElementById("levelDisplay").innerText = `Detective ${childName} – Level ${currentLevel}`;
+  document.getElementById("levelLabel").innerText =
+    `Detective ${childName} – Level ${currentLevel}`;
   document.getElementById("feedback").innerText = "";
-  document.getElementById("controlButtons").innerHTML = "";
+  document.getElementById("celebration").innerText = "";
   document.getElementById("answerInput").value = "";
   document.getElementById("streakInfo").innerText =
     `Streak: ${currentStreak} | Longest: ${longestStreak}`;
@@ -210,9 +152,7 @@ function generateRound(level, repeatSame = false) {
   if (level.startsWith("3")) maxNum = 5;
 
   let numbers = Array.from({ length: maxNum }, (_, i) => i + 1);
-
-  let missingCount = 1;
-  if (level.endsWith("B") || level.endsWith("C")) missingCount = 2;
+  let missingCount = (level.endsWith("B") || level.endsWith("C")) ? 2 : 1;
 
   let missing;
   if (repeatSame && lastProblem) {
@@ -230,7 +170,6 @@ function generateRound(level, repeatSame = false) {
   expectedAnswer = [...missing].sort((a, b) => a - b);
   logDebug(`Expected answer: ${expectedAnswer.join(" ")}`);
 
-  // Display numbers
   let display = document.getElementById("numberDisplay");
   display.innerHTML = "";
   numbers.forEach(num => {
@@ -241,59 +180,55 @@ function generateRound(level, repeatSame = false) {
     display.appendChild(box);
   });
 
-  // Instruction
   let instruct =
     missingCount === 1
       ? `Find the missing number from 1 to ${maxNum}.`
       : `Find the ${missingCount} missing numbers from 1 to ${maxNum}.`;
-  document.getElementById("instructionText").innerText = instruct;
+  document.getElementById("instruction").innerText = instruct;
 
-  // Placeholder
-  document.getElementById("answerInput").placeholder =
-    missingCount === 1 ? "Type the missing number" : "Type missing numbers separated by spaces";
+  let speechLine;
+  if (firstRound) {
+    speechLine = `Detective ${childName}, here is your next challenge. ${instruct} Type your answer here and press Submit, or press the Return key.`;
+    firstRound = false;
+  } else {
+    speechLine = `Detective ${childName}, ${instruct}`;
+  }
 
-  // Lock input
   document.getElementById("answerInput").disabled = true;
   document.getElementById("submitBtn").disabled = true;
 
-  // Speak
-  const introLine = `Detective ${childName}, here is your next challenge. `;
-  speak(introLine + instruct + " Type your answer here and press Submit, or press the Return key.")
-    .then(() => {
-      document.getElementById("answerInput").disabled = false;
-      document.getElementById("submitBtn").disabled = false;
-      document.getElementById("answerInput").focus();
-      logDebug("Input unlocked and auto-focused");
-    });
+  speak(speechLine).then(() => {
+    document.getElementById("answerInput").disabled = false;
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById("answerInput").focus();
+    logDebug("Input unlocked and auto-focused");
+  });
 }
 
 function checkAnswer() {
   let input = document.getElementById("answerInput").value.trim();
   if (!input) {
-    document.getElementById("feedback").innerText = "Please input a number before submitting.";
+    document.getElementById("feedback").innerText =
+      "Please input a number before submitting.";
     logDebug("Empty input submitted");
     return;
   }
 
-  document.getElementById("submitBtn").disabled = true;
+  let userAns = input
+    .split(" ")
+    .map(x => parseInt(x))
+    .filter(x => !isNaN(x))
+    .sort((a, b) => a - b);
 
-  let userAns = input.split(" ").map(x => parseInt(x)).filter(x => !isNaN(x)).sort((a, b) => a - b);
   levelStats[currentLevel].total++;
 
   if (JSON.stringify(userAns) === JSON.stringify(expectedAnswer)) {
-    let praise = [
-      `Great job, ${childName}!`,
-      `Nice work, ${childName}!`,
-      `That’s correct, ${childName}!`,
-      `Awesome, ${childName}!`
-    ];
-    let streakMsg = currentStreak > 0 ? ` That’s ${currentStreak + 1} in a row!` : "";
-    document.getElementById("feedback").innerText = "Correct!";
-    speak(praise[Math.floor(Math.random() * praise.length)] + streakMsg);
-
     currentStreak++;
     levelStats[currentLevel].correct++;
     if (currentStreak > longestStreak) longestStreak = currentStreak;
+
+    document.getElementById("feedback").innerText = "Correct!";
+    speak(`Great job, ${childName}! That’s ${currentStreak} in a row.`);
 
     logDebug(`Correct answer. Streak=${currentStreak}, Longest=${longestStreak}`);
 
@@ -301,18 +236,15 @@ function checkAnswer() {
       showCelebration();
       return;
     }
+
     setTimeout(() => startRound(false), 1500);
   } else {
-    let encouragement = [
-      `Not quite, ${childName}. Try again!`,
-      `Almost, ${childName}. Let’s give it another shot.`,
-      `Keep going, ${childName}, you can do it!`
-    ];
-    document.getElementById("feedback").innerText = "Try again!";
-    speak(encouragement[Math.floor(Math.random() * encouragement.length)]);
-
     currentStreak = 0;
     levelStats[currentLevel].incorrect++;
+
+    document.getElementById("feedback").innerText = "Try again!";
+    speak(`Not quite, Detective ${childName}. Try again with the same problem.`);
+
     logDebug("Incorrect answer. Streak reset to 0");
 
     setTimeout(() => {
@@ -325,36 +257,43 @@ function checkAnswer() {
 
 // ===== Celebration =====
 function showCelebration() {
-  showScreen("celebrationScreen");
-  document.getElementById("celebrationMsg").innerText =
-    `Congratulations ${childName}! Five in a row — you're becoming a first-class detective!`;
+  document.getElementById("celebration").innerText =
+    `🎉 Congratulations ${childName}! Five in a row — you're becoming a first-class detective! 🎉`;
   speak(`Congratulations ${childName}! Five in a row — you're becoming a first-class detective!`);
   logDebug("Celebration triggered (5 in a row)");
+
+  updateProgress();
+  showScreen("progressScreen");
+
   currentStreak = 0;
 }
 
-// ===== End Screen =====
-function showSummary(fromEndGame = false) {
-  showScreen("endScreen");
-  let summary = `Progress for ${childName}:\n\n`;
+// ===== Progress =====
+function updateProgress() {
+  document.getElementById("progressTitle").innerText =
+    `Detective ${childName}'s Progress`;
+
+  let tableHTML = "<table><tr><th>Level</th><th>Correct</th><th>Incorrect</th><th>Total</th></tr>";
   for (let lvl in levelStats) {
     if (levelStats[lvl].total > 0) {
-      summary += `${lvl} - Correct: ${levelStats[lvl].correct}, Incorrect: ${levelStats[lvl].incorrect}, Total: ${levelStats[lvl].total}\n`;
+      tableHTML += `<tr><td>${lvl}</td><td>${levelStats[lvl].correct}</td><td>${levelStats[lvl].incorrect}</td><td>${levelStats[lvl].total}</td></tr>`;
     }
   }
-  summary += `\nOverall Longest Streak: ${longestStreak}`;
-  document.getElementById("summaryText").innerText = summary;
+  tableHTML += "</table>";
+  document.getElementById("progressTable").innerHTML = tableHTML;
 
-  speak(`Here is your progress, ${childName}.`);
-
-  if (fromEndGame) {
-    logDebug(`End game screen shown for ${childName}`);
-  }
+  document.getElementById("overallStreak").innerText =
+    `Overall Longest Streak: ${longestStreak}`;
+  logDebug("Progress chart updated");
 }
 
 // ===== Helpers =====
-function getNextLevel(level) {
-  const order = ["1A", "1B", "1C", "2A", "2B", "3A"];
-  let idx = order.indexOf(level);
-  return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : level;
+function resetGame() {
+  currentStreak = 0;
+  longestStreak = 0;
+  for (let key in levelStats) {
+    levelStats[key] = { correct: 0, incorrect: 0, total: 0 };
+  }
+  logDebug("Game reset");
+  showScreen("welcomeScreen");
 }
