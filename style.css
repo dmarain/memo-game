@@ -19,7 +19,7 @@ h2 {
 }
 
 .memo-img {
-  max-width: 180px;
+  max-width: 140px;
   height: auto;
   margin: 15px auto;
   display: block;
@@ -51,15 +51,15 @@ button:hover {
 }
 
 .number-box {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5em;
   border: 2px solid #333;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: #fff;
 }
 
@@ -69,10 +69,10 @@ button:hover {
 
 #answerInput {
   margin-top: 10px;
-  padding: 12px;
+  padding: 10px;
   font-size: 1.2em;
-  width: 200px;
-  height: 45px;
+  width: 220px;
+  height: 42px;
   text-align: center;
   border-radius: 6px;
   border: 2px solid #555;
@@ -87,8 +87,33 @@ button:hover {
   font-weight: bold;
 }
 
+#celebration {
+  margin: 15px 0;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: darkgreen;
+}
+
 .screen.hidden {
   display: none;
+}
+
+/* ===== Progress Table ===== */
+#progressTable {
+  margin: 15px auto;
+  border-collapse: collapse;
+}
+
+#progressTable table {
+  width: 90%;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+#progressTable th,
+#progressTable td {
+  border: 1px solid #333;
+  padding: 6px 10px;
 }
 
 /* ===== Debug Panel ===== */
@@ -108,7 +133,7 @@ button:hover {
   text-align: left;
 }
 
-/* Clear Logs button inside debug panel */
+/* Clear Logs button */
 #debugPanel button {
   background: #444;
   color: #fff;
