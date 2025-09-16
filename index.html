@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Memo's Memory Mystery</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MEMO’s Memory Mystery</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- Welcome Screen -->
   <div id="welcomeScreen" class="screen">
-    <h1>MEMO'S DETECTIVE AGENCY</h1>
-    <img src="memo-fox.png" alt="Memo the Fox" class="memo-img">
-    <div class="button-row">
-      <button id="hearMemoBtn">Hear Memo’s Voice</button>
+    <h1>MEMO’S DETECTIVE AGENCY</h1>
+    <img id="memoImage" src="images/memo-fox.png" alt="Memo the Fox" />
+    <button id="hearMemoBtn">Hear Memo’s Voice</button>
+    <div id="welcomeButtons">
       <button id="firstTimeBtn">First-Time User</button>
       <button id="returningBtn">Returning User</button>
     </div>
@@ -21,46 +22,68 @@
   <!-- Parent Settings -->
   <div id="parentSettings" class="screen hidden">
     <h2>Parent Settings</h2>
-    <label>Child's Name: <input type="text" id="childNameInput"></label><br>
+    <label>Child’s Name:
+      <input type="text" id="childNameInput" placeholder="ENTER NAME" />
+    </label>
+    <br />
     <label>Starting Level:
       <select id="startingLevel">
         <option value="1A">Level 1A</option>
         <option value="1B">Level 1B</option>
         <option value="1C">Level 1C</option>
+        <option value="2A">Level 2A</option>
+        <option value="3A">Level 3A</option>
       </select>
-    </label><br>
-    <label><input type="checkbox" id="autoLevelUp"> Auto Level-Up after 5 correct</label><br>
-    <label><input type="checkbox" id="useTimer"> Use Timer (5–15s)</label>
-    <input type="number" id="timerSeconds" min="5" max="15" value="10"> seconds<br>
-    <button id="saveSettings">Save Settings</button>
+    </label>
+    <br />
+    <label>
+      <input type="checkbox" id="autoLevelUp" /> Auto level-up after 5 correct
+    </label>
+    <br />
+    <label>
+      <input type="checkbox" id="useTimer" /> Enable Timer (choose seconds)
+      <select id="timerSeconds">
+        <option value="5">5s</option>
+        <option value="10">10s</option>
+        <option value="12">12s</option>
+        <option value="15">15s</option>
+      </select>
+    </label>
+    <br />
+    <button id="saveSettingsBtn">Save & Start</button>
   </div>
 
-  <!-- Game Screen -->
+  <!-- Returning User Screen -->
+  <div id="returningScreen" class="screen hidden">
+    <h2>Welcome Back!</h2>
+    <p id="lastLevelInfo"></p>
+    <button id="resumeBtn">Start</button>
+  </div>
+
+  <!-- Gameplay Screen -->
   <div id="gameScreen" class="screen hidden">
-    <h2 id="levelLabel"></h2>
-    <img src="memo-fox.png" alt="Memo the Fox" class="memo-img">
-    <p id="instruction"></p>
+    <h2 id="levelTitle"></h2>
+    <p id="instructions"></p>
     <div id="numberDisplay"></div>
-    <input type="text" id="answerInput" placeholder="Type the missing number(s)">
-    <button id="submitBtn">Submit</button>
-    <p id="feedback"></p>
-    <p id="streakInfo"></p>
-    <div id="celebration"></div>
+    <div id="timerDisplay" class="hidden"></div>
+    <input type="text" id="answerInput" placeholder="Type missing numbers..." />
+    <div id="feedback"></div>
     <div id="controlButtons"></div>
   </div>
 
-  <!-- Progress Screen -->
-  <div id="progressScreen" class="screen hidden">
-    <h2 id="progressTitle"></h2>
-    <div id="progressTable"></div>
-    <p id="overallStreak"></p>
-    <button id="resumeBtn">Resume Game</button>
-    <button id="endBtn">End Game</button>
+  <!-- Celebration Screen -->
+  <div id="celebrationScreen" class="screen hidden">
+    <h2 id="celebrationMessage"></h2>
+    <button id="stayLevelBtn">Stay on this Level</button>
+    <button id="nextLevelBtn">Go to Next Level</button>
+    <button id="endGameBtn">End Game</button>
   </div>
 
-  <!-- Debug Panel -->
-  <div id="debugPanel">
-    <button id="clearLogsBtn">Clear Logs</button>
+  <!-- End Game Screen -->
+  <div id="endScreen" class="screen hidden">
+    <h2>Great Work, Detective!</h2>
+    <p id="summaryStats"></p>
+    <button id="playAgainBtn">Play Again</button>
   </div>
 
   <script src="script.js"></script>
