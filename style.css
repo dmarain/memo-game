@@ -89,6 +89,12 @@ button:hover {
   color: #2b4a6f;
 }
 
+#streakDisplay {
+  margin: 10px;
+  font-size: 1rem;
+  color: #333;
+}
+
 @keyframes pop {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
