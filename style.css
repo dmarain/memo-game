@@ -1,150 +1,95 @@
 body {
   font-family: Arial, sans-serif;
+  background: #f0f8ff;
   text-align: center;
   margin: 0;
   padding: 0;
-  background-color: #d4f7d4; /* light green */
 }
 
-h1 {
-  margin-top: 20px;
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #1a3d1a;
+h1, h2 {
+  color: #2b4a6f;
 }
 
-h2 {
-  font-size: 1.4em;
-  color: #2a4a2a;
+.screen {
+  display: none;
+  padding: 20px;
 }
 
-.memo-img {
-  max-width: 140px;
-  height: auto;
-  margin: 15px auto;
+.screen.active {
   display: block;
 }
 
-.button-row {
-  margin: 10px 0;
-}
-
-button {
-  margin: 6px;
-  padding: 10px 18px;
-  font-size: 1em;
-  border: none;
-  border-radius: 6px;
-  background-color: #2a7a2a;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #256425;
-}
-
-#numberDisplay {
-  display: flex;
-  justify-content: center;
-  margin: 15px 0;
-}
-
-.number-box {
-  width: 55px;
-  height: 55px;
-  margin: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5em;
-  border: 2px solid #333;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
-.number-box.missing {
-  background-color: #ffeb99;
-}
-
-#answerInput {
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 1.2em;
-  width: 220px;
-  height: 42px;
-  text-align: center;
-  border-radius: 6px;
-  border: 2px solid #555;
-}
-
-#feedback {
-  font-size: 1.2em;
-  margin: 10px 0;
-}
-
-#streakInfo {
-  font-weight: bold;
-}
-
-#celebration {
-  margin: 15px 0;
-  font-size: 1.4em;
-  font-weight: bold;
-  color: darkgreen;
-}
-
-.screen.hidden {
+.hidden {
   display: none;
 }
 
-/* ===== Progress Table ===== */
-#progressTable {
-  margin: 15px auto;
-  border-collapse: collapse;
-}
-
-#progressTable table {
-  width: 90%;
-  margin: 0 auto;
-  border-collapse: collapse;
-}
-
-#progressTable th,
-#progressTable td {
-  border: 1px solid #333;
-  padding: 6px 10px;
-}
-
-/* ===== Debug Panel ===== */
-#debugPanel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.9);
-  color: #00ff00;
-  font-family: monospace;
-  font-size: 14px;
-  max-height: 140px;
-  overflow-y: auto;
-  z-index: 9999;
-  padding: 6px;
-  text-align: left;
-}
-
-/* Clear Logs button */
-#debugPanel button {
-  background: #444;
-  color: #fff;
-  font-size: 12px;
-  padding: 2px 6px;
-  margin-bottom: 4px;
+button {
+  margin: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 6px;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
+  background-color: #4caf50;
+  color: white;
 }
 
-#debugPanel button:hover {
-  background: #666;
+button:hover {
+  background-color: #45a049;
+}
+
+#memoImage {
+  width: 180px;
+  height: auto;
+  margin: 20px auto;
+  display: block;
+  animation: pop 2s infinite;
+}
+
+#numberDisplay {
+  margin: 20px 0;
+  font-size: 2rem;
+  letter-spacing: 10px;
+}
+
+#numberDisplay span {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  line-height: 40px;
+  font-size: 1.5rem;
+  background: white;
+}
+
+#numberDisplay .missing {
+  background: #ffebcd;
+  color: #999;
+}
+
+#answerInput {
+  font-size: 1.2rem;
+  padding: 5px;
+  width: 250px;
+  margin-top: 10px;
+}
+
+#timerDisplay {
+  font-size: 1.5rem;
+  color: #d9534f;
+  margin: 10px 0;
+}
+
+#feedback {
+  margin: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #2b4a6f;
+}
+
+@keyframes pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
