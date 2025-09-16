@@ -7,6 +7,7 @@ window.onload = function () {
   let timerSeconds = 10;
 
   let currentStreak = 0;
+  let longestStreak = 0;
   let expectedAnswer = [];
   let lastCompletedLevel = "1A";
 
@@ -29,6 +30,7 @@ window.onload = function () {
     if (memoVoice) {
       const utter = new SpeechSynthesisUtterance(text);
       utter.voice = memoVoice;
+      utter.rate = 1;
       speechSynthesis.cancel();
       speechSynthesis.speak(utter);
     }
@@ -36,9 +38,13 @@ window.onload = function () {
 
   // ===== Screen Control =====
   function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-    document.getElementById(id).classList.remove("hidden");
-    document.getElementById(id).classList.add("active");
+    document.querySelectorAll(".screen").forEach(s => {
+      s.classList.add("hidden");
+      s.classList.remove("active");
+    });
+    const target = document.getElementById(id);
+    target.classList.remove("hidden");
+    target.classList.add("active");
   }
 
   // ===== Welcome Screen =====
@@ -71,7 +77,7 @@ window.onload = function () {
   document.getElementById("saveSettingsBtn").addEventListener("click", () => {
     const nameInput = document.getElementById("childNameInput").value.trim();
     if (nameInput) {
-      childName = nameInput.toUpperCase();
+      childName = nameInput; // keep case for pronunciation
     }
     currentLevel = document.getElementById("startingLevel").value;
     autoNext = document.getElementById("autoLevelUp").checked;
@@ -96,7 +102,8 @@ window.onload = function () {
   function generateRound(level) {
     document.getElementById("answerInput").value = "";
     document.getElementById("feedback").innerText = "";
-    document.getElementById("controlButtons").innerHTML = "";
+    document.getElementById("streakDisplay").innerText =
+      `Current streak: ${currentStreak} | Longest streak: ${longestStreak}`;
     document.getElementById("timerDisplay").classList.add("hidden");
 
     let rangeEnd = 3;
@@ -111,10 +118,12 @@ window.onload = function () {
     }
 
     expectedAnswer = [];
-    for (let i = 0; i < missingCount; i++) {
-      const idx = Math.floor(Math.random() * numbers.length);
-      expectedAnswer.push(numbers[idx]);
-      numbers[idx] = "?";
+    while (expectedAnswer.length < missingCount) {
+      const idx = Math.floor(Math.random() * rangeEnd);
+      if (!expectedAnswer.includes(numbers[idx])) {
+        expectedAnswer.push(numbers[idx]);
+        numbers[idx] = "?";
+      }
     }
 
     const numberDisplay = document.getElementById("numberDisplay");
@@ -129,36 +138,12 @@ window.onload = function () {
     let instructionText = `Find the ${missingCount} missing number${missingCount > 1 ? "s" : ""} from 1 to ${rangeEnd}. Enter them separated by a space.`;
     document.getElementById("instructions").innerText = instructionText;
     speak(`${childName}, ${instructionText}`);
-
-    if (useTimer) {
-      let timeLeft = timerSeconds;
-      const timerDisplay = document.getElementById("timerDisplay");
-      timerDisplay.innerText = `Memorize... ${timeLeft}`;
-      timerDisplay.classList.remove("hidden");
-      const countdown = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-          timerDisplay.innerText = `Memorize... ${timeLeft}`;
-        } else {
-          clearInterval(countdown);
-          numberDisplay.innerHTML = "";
-          timerDisplay.innerText = "Go!";
-          setTimeout(() => {
-            timerDisplay.classList.add("hidden");
-            document.getElementById("answerInput").focus();
-          }, 1000);
-        }
-      }, 1000);
-    } else {
-      document.getElementById("answerInput").focus();
-    }
   }
 
   // ===== Answer Submission =====
+  document.getElementById("submitBtn").addEventListener("click", submitAnswer);
   document.getElementById("answerInput").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      submitAnswer();
-    }
+    if (e.key === "Enter") submitAnswer();
   });
 
   function submitAnswer() {
@@ -173,6 +158,7 @@ window.onload = function () {
 
     if (correct) {
       currentStreak++;
+      if (currentStreak > longestStreak) longestStreak = currentStreak;
       document.getElementById("feedback").innerText =
         `Great job, ${childName}! That’s ${currentStreak} in a row.`;
       speak(`Great job, ${childName}! That’s ${currentStreak} in a row.`);
@@ -225,7 +211,7 @@ window.onload = function () {
   function showEndScreen() {
     showScreen("endScreen");
     document.getElementById("summaryStats").innerText =
-      `You finished at Level ${currentLevel}. Longest streak: ${currentStreak}.`;
+      `You finished at Level ${currentLevel}. Longest streak: ${longestStreak}.`;
   }
 
   document.getElementById("playAgainBtn").addEventListener("click", () => {
