@@ -268,7 +268,13 @@ window.onload = function () {
       $("feedback").innerText = "Please enter your answer before tapping Submit.";
       return;
     }
-
+if (expectedAnswer.length > 1 && !raw.includes(" ")) {
+  $("feedback").innerText = "Please put a space between the missing numbers.";
+  speak("Please put a space between the missing numbers.");
+  $("answerInput").value = "";
+  $("answerInput").focus();
+  return;
+}
     const parts = raw.split(/\s+/).map(x=> Number(x)).filter(x=> Number.isInteger(x));
     // Correct if every expected number is included (order doesn't matter)
     const ok = expectedAnswer.every(n => parts.includes(n)) && parts.length >= expectedAnswer.length;
