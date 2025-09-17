@@ -7,25 +7,27 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Welcome Screen -->
+  <!-- ========== WELCOME SCREEN ========== -->
   <div id="welcomeScreen" class="screen active">
     <h1>MEMO’S DETECTIVE AGENCY</h1>
+    <!-- Memo image now loads from root -->
     <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
     <button id="hearMemoBtn" class="primary">Hear Memo’s Voice</button>
     <div id="welcomeButtons">
-      <button id="firstTimeBtn">First-Time User</button>
+      <!-- Both buttons styled equally -->
+      <button id="firstTimeBtn" class="outline">First-Time User</button>
       <button id="returningBtn" class="outline">Returning User</button>
     </div>
     <button id="musicToggle" class="linklike">Music is OFF. Tap to turn it ON</button>
   </div>
 
-  <!-- Parent Settings (First-Time User) -->
+  <!-- ========== PARENT SETTINGS ========== -->
   <div id="parentSettings" class="screen hidden">
     <div class="card">
       <h2>Parent Settings</h2>
-
       <label class="form-label" for="childNameInput">Child’s Name</label>
-      <input type="text" id="childNameInput" class="form-input" placeholder="Type the child’s name" inputmode="latin-name" />
+      <!-- Autofocus will be handled by JS -->
+      <input type="text" id="childNameInput" class="form-input" placeholder="Type the child’s name" inputmode="text" />
 
       <label class="form-label" for="startingLevel">Starting Level</label>
       <select id="startingLevel" class="form-select">
@@ -60,7 +62,7 @@
     </div>
   </div>
 
-  <!-- Returning User Screen -->
+  <!-- ========== RETURNING USER ========== -->
   <div id="returningScreen" class="screen hidden">
     <div class="card">
       <h2>Welcome Back!</h2>
@@ -69,27 +71,24 @@
     </div>
   </div>
 
-  <!-- Gameplay Screen -->
+  <!-- ========== GAMEPLAY ========== -->
   <div id="gameScreen" class="screen hidden">
     <div class="game-wrap">
       <h2 id="levelTitle"></h2>
       <p id="instructions" class="instructions"></p>
-
       <div id="numberDisplay" class="grid"></div>
-
       <div id="timerDisplay" class="timer hidden"></div>
-
       <div class="answer-row">
+        <!-- Left-aligned text, normal keyboard w/ space bar -->
         <input type="text" id="answerInput" class="form-input answer" placeholder="Type answer here…" inputmode="text" />
         <button id="submitBtn" class="primary">Submit</button>
       </div>
-
       <div id="feedback" class="feedback"></div>
       <div id="streakDisplay" class="streaks"></div>
     </div>
   </div>
 
-  <!-- Celebration Screen -->
+  <!-- ========== CELEBRATION ========== -->
   <div id="celebrationScreen" class="screen hidden">
     <div class="card">
       <h2 id="celebrationMessage"></h2>
@@ -102,7 +101,7 @@
     </div>
   </div>
 
-  <!-- End Game Screen -->
+  <!-- ========== END SCREEN ========== -->
   <div id="endScreen" class="screen hidden">
     <div class="card">
       <h2>Great Work, Detective!</h2>
