@@ -1,102 +1,244 @@
-// Debug: confirm JS loads
-alert("✅ Script loaded");
+// ======= GLOBAL STATE =======
+let currentLevel = "1A";
+let childName = "";
+let autoLevelUp = false;
+let timerSetting = "off";
+let streak = 0;
+let progress = [];
+let musicOn = false;
 
-window.onload = function () {
-  // ===== GLOBAL STATE =====
-  let childName = "";
-  let currentLevel = "1A";
-  let autoNext = false;
-  let useTimer = false;
-  let timerSeconds = 10;
-  let currentStreak = 0;
-  let longestStreak = 0;
-  let expectedAnswer = [];
-  let lastCompletedLevel = "1A";
-  let inputLocked = false;
+// ======= DOM ELEMENTS =======
+const screens = document.querySelectorAll(".screen");
+const welcomeScreen = document.getElementById("welcome-screen");
+const parentSettings = document.getElementById("parent-settings");
+const gameScreen = document.getElementById("game-screen");
+const celebrationScreen = document.getElementById("celebration-screen");
+const progressScreen = document.getElementById("progress-screen");
 
-  // ===== HELPER SHORTCUT =====
-  function $(id){ return document.getElementById(id); }
+const firstTimeBtn = document.getElementById("first-time-btn");
+const returningBtn = document.getElementById("returning-btn");
+const hearMemoBtn = document.getElementById("hear-memo-btn");
+const musicToggleBtn = document.getElementById("music-toggle");
 
-  // ===== SCREEN SWITCHING =====
-  function showScreen(id){
-    document.querySelectorAll(".screen").forEach(s=>{
-      s.classList.add("hidden"); s.classList.remove("active");
-    });
-    $(id).classList.remove("hidden"); $(id).classList.add("active");
+const saveStartBtn = document.getElementById("save-start");
 
-    if (id==="parentSettings"){ setTimeout(()=>{$("childNameInput").focus();},50); }
-    if (id==="gameScreen" && !inputLocked){ setTimeout(()=>{$("answerInput").focus();},80); }
+const levelLabel = document.getElementById("level-label");
+const numbersDisplay = document.getElementById("numbers-display");
+const answerInput = document.getElementById("answer-input");
+const submitAnswerBtn = document.getElementById("submit-answer");
+const feedback = document.getElementById("feedback");
+const streakCounter = document.getElementById("streak-counter");
+const timerDisplay = document.getElementById("timer-display");
+
+const celebrationMessage = document.getElementById("celebration-message");
+const stayLevelBtn = document.getElementById("stay-level");
+const nextLevelBtn = document.getElementById("next-level");
+const endGameBtn = document.getElementById("end-game");
+
+const progressGrid = document.getElementById("progress-grid");
+const backToWelcomeBtn = document.getElementById("back-to-welcome");
+
+// ======= UTILITIES =======
+function showScreen(screen) {
+  screens.forEach(s => s.classList.remove("active"));
+  screen.classList.add("active");
+}
+
+function speak(text) {
+  const synth = window.speechSynthesis;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = synth.getVoices().find(v => v.name.includes("Samantha")) || synth.getVoices()[0];
+  synth.cancel();
+  synth.speak(utter);
+}
+
+// ======= WELCOME SCREEN =======
+firstTimeBtn.addEventListener("click", () => {
+  showScreen(parentSettings);
+});
+
+returningBtn.addEventListener("click", () => {
+  buildProgressChart();
+  showScreen(progressScreen);
+});
+
+hearMemoBtn.addEventListener("click", () => {
+  speak("Welcome to MEMO’s Detective Agency. I need your help to find the missing numbers.");
+});
+
+musicToggleBtn.addEventListener("click", () => {
+  musicOn = !musicOn;
+  musicToggleBtn.textContent = musicOn ? "Music: ON" : "Music: OFF";
+  // For now, no background audio file linked.
+});
+
+// ======= PARENT SETTINGS =======
+saveStartBtn.addEventListener("click", () => {
+  childName = document.getElementById("child-name").value.trim().toUpperCase();
+  currentLevel = document.getElementById("start-level").value;
+  autoLevelUp = document.getElementById("auto-level-up").checked;
+  musicOn = document.getElementById("music-on").checked;
+  timerSetting = document.getElementById("timer-select").value;
+
+  streak = 0;
+  startLevel(currentLevel);
+});
+
+// ======= GAMEPLAY =======
+function startLevel(level) {
+  currentLevel = level;
+  levelLabel.textContent = `Level ${level}`;
+  feedback.textContent = "";
+  streakCounter.textContent = "";
+  answerInput.value = "";
+  answerInput.focus();
+  showScreen(gameScreen);
+
+  generateProblem(level);
+}
+
+function generateProblem(level) {
+  numbersDisplay.innerHTML = "";
+  let rangeEnd = 3;
+  if (level.startsWith("2")) rangeEnd = 4;
+  if (level.startsWith("3")) rangeEnd = 5;
+
+  let numbers = Array.from({ length: rangeEnd }, (_, i) => i + 1);
+  let missingCount = 1;
+  if (level.endsWith("B")) missingCount = 2;
+  if (level.endsWith("C")) missingCount = 2; // random order also
+  if (level.endsWith("E")) missingCount = 2; // future audio-only variation
+
+  let missing = [];
+  while (missing.length < missingCount) {
+    let candidate = numbers[Math.floor(Math.random() * numbers.length)];
+    if (!missing.includes(candidate)) missing.push(candidate);
   }
 
-  // ===== WELCOME SCREEN EVENTS =====
-  $("hearMemoBtn").addEventListener("click", ()=>{ alert("Memo’s voice test working"); });
+  let displayNumbers = numbers.map(n =>
+    missing.includes(n) ? "?" : n
+  );
 
-  $("firstTimeBtn").addEventListener("click", ()=>{ showScreen("parentSettings"); });
+  if (level.endsWith("C")) {
+    displayNumbers = displayNumbers.sort(() => Math.random() - 0.5);
+  }
 
-  $("returningBtn").addEventListener("click", ()=>{
-    $("lastLevelInfo").innerText = `You last completed Level ${lastCompletedLevel}.`;
-    showScreen("returningScreen");
+  displayNumbers.forEach(n => {
+    const div = document.createElement("div");
+    div.classList.add("number-box");
+    div.textContent = n;
+    numbersDisplay.appendChild(div);
   });
 
-  $("musicToggle").addEventListener("click", ()=>{ alert("Music toggle clicked"); });
+  // Timer logic
+  if (timerSetting !== "off") {
+    let seconds = parseInt(timerSetting, 10);
+    timerDisplay.textContent = `Visible for ${seconds} seconds...`;
+    setTimeout(() => {
+      numbersDisplay.innerHTML = "";
+      timerDisplay.textContent = "Now enter the missing numbers.";
+      answerInput.focus();
+    }, seconds * 1000);
+  } else {
+    timerDisplay.textContent = "";
+    answerInput.focus();
+  }
 
-  // ===== PARENT SETTINGS =====
-  $("saveSettingsBtn").addEventListener("click", ()=>{
-    childName = $("childNameInput").value.trim();
-    currentLevel = $("startingLevel").value;
-    autoNext = $("autoLevelUp").checked;
-    useTimer = $("useTimer").checked;
-    timerSeconds = parseInt($("timerSeconds").value,10);
-    startGame();
+  // Store missing in element for checking
+  submitAnswerBtn.dataset.missing = missing.join(" ");
+}
+
+submitAnswerBtn.addEventListener("click", checkAnswer);
+
+function checkAnswer() {
+  const userAnswer = answerInput.value.trim();
+  const correctAnswer = submitAnswerBtn.dataset.missing;
+
+  if (userAnswer === correctAnswer) {
+    streak++;
+    feedback.textContent = `Great job, ${childName}!`;
+    speak(`Great job, ${childName}!`);
+  } else {
+    streak = 0;
+    feedback.textContent = `Try again, ${childName}. Missing: ${correctAnswer}`;
+    speak(`Try again, ${childName}.`);
+  }
+
+  streakCounter.textContent = `Current Streak: ${streak}`;
+
+  if (streak > 0 && streak % 5 === 0) {
+    celebrate();
+  } else {
+    setTimeout(() => {
+      answerInput.value = "";
+      generateProblem(currentLevel);
+    }, 1500);
+  }
+}
+
+// ======= CELEBRATION =======
+function celebrate() {
+  showScreen(celebrationScreen);
+  celebrationMessage.textContent = "Congratulations! Five in a row!";
+  speak("Congratulations — five in a row! You’re becoming a first class detective!");
+}
+
+stayLevelBtn.addEventListener("click", () => {
+  streak = 0;
+  startLevel(currentLevel);
+});
+
+nextLevelBtn.addEventListener("click", () => {
+  streak = 0;
+  let next = nextLevel(currentLevel);
+  startLevel(next);
+});
+
+endGameBtn.addEventListener("click", () => {
+  addProgress(currentLevel);
+  buildProgressChart();
+  showScreen(progressScreen);
+});
+
+// ======= LEVEL LOGIC =======
+function nextLevel(level) {
+  let base = parseInt(level[0], 10);
+  let suffix = level[1];
+  if (suffix === "A") return `${base}B`;
+  if (suffix === "B") return `${base}C`;
+  if (suffix === "C") return `${base + 1}A`;
+  return `${base}A`;
+}
+
+// ======= PROGRESS CHART =======
+function addProgress(level) {
+  if (!progress.includes(level)) {
+    progress.push(level);
+  }
+}
+
+function buildProgressChart() {
+  progressGrid.innerHTML = "";
+
+  let currentBase = null;
+  progress.forEach(level => {
+    const div = document.createElement("div");
+    div.classList.add("progress-level");
+    div.textContent = level;
+    progressGrid.appendChild(div);
+
+    let base = parseInt(level[0], 10);
+    if (currentBase === null) currentBase = base;
+
+    if (base !== currentBase) {
+      const sep = document.createElement("div");
+      sep.classList.add("separator");
+      progressGrid.appendChild(sep);
+      currentBase = base;
+    }
   });
+}
 
-  // ===== RETURNING USER =====
-  $("resumeBtn").addEventListener("click", ()=>{ startGame(); });
-
-  // ===== GAME FLOW =====
-  function startGame(){
-    currentStreak=0;
-    $("levelTitle").innerText = `Level ${currentLevel}`;
-    showScreen("gameScreen");
-    generateRound(currentLevel);
-  }
-
-  function generateRound(level){
-    $("answerInput").value="";
-    $("feedback").innerText="";
-    $("streakDisplay").innerText=`Current: ${currentStreak} | Longest: ${longestStreak}`;
-    $("numberDisplay").innerHTML="";
-    const end=level==="2A"?4:3; // simplified
-    let arr=[...Array(end).keys()].map(i=>i+1);
-    expectedAnswer=[arr[Math.floor(Math.random()*arr.length)]];
-    arr=arr.map(n=> expectedAnswer.includes(n)?"?":n);
-    arr.forEach(num=>{
-      const cell=document.createElement("div");
-      cell.className="cell"+(num==="?"?" missing":"");
-      cell.textContent=num;
-      $("numberDisplay").appendChild(cell);
-    });
-    $("instructions").innerText=`Find the missing number from 1 to ${end}. Enter it.`;
-  }
-
-  // ===== ANSWER SUBMISSION =====
-  $("submitBtn").addEventListener("click", submitAnswer);
-  $("answerInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") submitAnswer(); });
-
-  function submitAnswer(){
-    const raw=$("answerInput").value.trim();
-    if(!raw){$("feedback").innerText="Please enter your answer.";return;}
-    if(expectedAnswer.length>1 && !raw.includes(" ")){
-      $("feedback").innerText="Please put a space between the missing numbers.";
-      $("answerInput").value=""; $("answerInput").focus(); return;
-    }
-    const num=parseInt(raw,10);
-    if(expectedAnswer.includes(num)){
-      currentStreak++; longestStreak=Math.max(longestStreak,currentStreak);
-      $("feedback").innerText=`Great job, ${childName||"Detective"}!`;
-      setTimeout(()=>generateRound(currentLevel),1200);
-    } else {
-      currentStreak=0; $("feedback").innerText="Not quite. Try again!";
-    }
-  }
-};
+backToWelcomeBtn.addEventListener("click", () => {
+  showScreen(welcomeScreen);
+});
