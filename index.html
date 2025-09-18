@@ -7,72 +7,67 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Welcome Screen -->
-  <div id="welcome-screen" class="screen active">
-    <img src="memo-fox.png" alt="Memo the Fox" id="memo-image" />
-    <h1>Welcome to MEMO’s Detective Agency</h1>
-    <button id="hear-memo-btn">Hear Memo’s Voice</button>
-    <button id="first-time-btn">First-Time User</button>
-    <button id="returning-btn">Returning User</button>
-    <button id="music-toggle">Music: OFF</button>
+  <!-- ===== WELCOME SCREEN ===== -->
+  <div id="welcomeScreen" class="screen active">
+    <h1>MEMO’S DETECTIVE AGENCY</h1>
+    <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
+    <div class="button-row">
+      <button id="hearMemoBtn" class="primary">Hear Memo’s Voice</button>
+      <button id="firstTimeBtn" class="outline">First-Time User</button>
+      <button id="returningBtn" class="outline">Returning User</button>
+    </div>
+    <button id="musicToggle" class="linklike">Music is OFF. Tap to turn it ON</button>
   </div>
 
-  <!-- Parent Settings Screen -->
-  <div id="parent-settings" class="screen">
-    <h2>Parent Settings</h2>
-    <label for="child-name">Child’s Name:</label>
-    <input type="text" id="child-name" />
+  <!-- ===== PARENT SETTINGS ===== -->
+  <div id="parentSettings" class="screen hidden">
+    <div class="card">
+      <h2>Parent Settings</h2>
+      <label for="childNameInput">Child’s Name</label>
+      <input type="text" id="childNameInput" placeholder="Type the child’s name" inputmode="text" />
 
-    <label for="start-level">Starting Level:</label>
-    <select id="start-level">
-      <option value="1A">Level 1A</option>
-      <option value="1B">Level 1B</option>
-      <option value="1C">Level 1C</option>
-    </select>
+      <label for="startingLevel">Starting Level</label>
+      <select id="startingLevel">
+        <option value="1A">Level 1A (1–3, 1 missing)</option>
+        <option value="1B">Level 1B (1–3, 2 missing)</option>
+        <option value="1C">Level 1C (1–3, 2 missing, shuffled)</option>
+        <option value="2A">Level 2A (1–4, 1 missing)</option>
+        <option value="3A">Level 3A (1–5, 1 missing)</option>
+      </select>
 
-    <label><input type="checkbox" id="auto-level-up" /> Auto level-up after 5 correct</label>
-    <label><input type="checkbox" id="music-on" /> Music On</label>
+      <div>
+        <input type="checkbox" id="autoLevelUp" />
+        <label for="autoLevelUp">Auto level-up after 5 correct</label>
+      </div>
 
-    <label for="timer-select">Enable Timer:</label>
-    <select id="timer-select">
-      <option value="off">Off</option>
-      <option value="5">5 seconds</option>
-      <option value="10">10 seconds</option>
-      <option value="15">15 seconds</option>
-    </select>
-    <p class="note">Timer Mode: Numbers show briefly, then disappear.</p>
+      <div>
+        <input type="checkbox" id="enableTimer" />
+        <label for="enableTimer">Enable Timer (choose seconds)</label>
+        <select id="timerSeconds">
+          <option value="10">10s</option>
+          <option value="12">12s</option>
+          <option value="15">15s</option>
+        </select>
+      </div>
 
-    <button id="save-start">Save and Start</button>
+      <button id="saveSettingsBtn" class="primary">Save and Start</button>
+    </div>
   </div>
 
-  <!-- Gameplay Screen -->
-  <div id="game-screen" class="screen">
-    <h2 id="level-label"></h2>
-    <div id="numbers-display"></div>
-    <p id="instructions">Enter missing numbers separated by spaces:</p>
-    <input type="text" id="answer-input" />
-    <button id="submit-answer">Submit</button>
+  <!-- ===== GAME SCREEN ===== -->
+  <div id="gameScreen" class="screen hidden">
+    <h2 id="levelTitle">Level</h2>
+    <p id="instructionText"></p>
+    <div id="grid" class="grid"></div>
+    <div class="answer-row">
+      <input type="text" id="answerInput" placeholder="Type answer here..." />
+      <button id="submitBtn" class="primary">Submit</button>
+    </div>
     <p id="feedback"></p>
-    <p id="streak-counter"></p>
-    <div id="timer-display"></div>
+    <p id="streaks">Current streak: 0 | Longest: 0</p>
+    <div id="controlButtons" class="button-row"></div>
   </div>
 
-  <!-- Celebration Screen -->
-  <div id="celebration-screen" class="screen">
-    <h2 id="celebration-message">Congratulations!</h2>
-    <button id="stay-level">Stay on this level</button>
-    <button id="next-level">Next level</button>
-    <button id="end-game">End Game</button>
-  </div>
-
-  <!-- Progress Chart Screen -->
-  <div id="progress-screen" class="screen">
-    <h2>Progress Chart</h2>
-    <div id="progress-grid"></div>
-    <button id="back-to-welcome">Back to Welcome</button>
-  </div>
-
-  <!-- Make sure script.js is in the SAME folder as this HTML file -->
   <script src="script.js"></script>
 </body>
 </html>
