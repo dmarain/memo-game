@@ -1,106 +1,141 @@
-/* ========== BASE COLORS ========== */
-:root{
-  --blue:#2b4a6f;
-  --green:#4caf50;
-  --green-dark:#3e9443;
-  --bg:#eef6ff;
-  --card:#ffffff;
-  --text:#1b2a3b;
-  --muted:#6b7a8a;
-  --danger:#d9534f;
-  --shadow:0 10px 24px rgba(0,0,0,.08);
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-
-/* ========== BODY ========== */
-body{
-  margin:0; padding:0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing:antialiased;
-  text-align:center;
+.screen {
+  display: none;
+  padding: 20px;
 }
 
-h1{color:var(--blue); font-size:1.8rem; margin:24px 12px 8px}
-h2{color:var(--blue); font-size:1.4rem; margin:0 0 12px}
-
-/* ========== SCREEN LAYOUT ========== */
-.screen{display:none; padding:14px; min-height:100vh; align-items:center; justify-content:center}
-.screen.active{display:flex}
-.hidden{display:none}
-
-/* ========== CARD LAYOUT ========== */
-.card{
-  width:min(560px,92vw);
-  background:var(--card);
-  border-radius:14px;
-  box-shadow:var(--shadow);
-  padding:18px 18px 20px;
-  text-align:left;
-  margin:auto;
+.screen.active {
+  display: block;
 }
 
-/* ========== WELCOME SCREEN ========== */
-#welcomeScreen {
+/* Welcome Screen Gradient Background */
+#welcome-screen {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  gap: 14px;
+  align-items: center;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4, #9333ea);
+  color: white;
 }
 
-#memoImage{
-  width:min(38vw,220px);
-  height:auto;
-  margin:14px auto 10px;
-  display:block;
-  animation:pop 2s infinite;
+#welcome-screen h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
 }
 
-/* ========== BUTTONS ========== */
-.primary, .outline, .danger, .linklike{
-  font-size:1.06rem; border-radius:10px; padding:12px 16px; margin:8px 6px;
-  border:none; cursor:pointer;
+#welcome-screen button {
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: white;
+  color: #333;
+  transition: transform 0.2s;
 }
-.primary{background:var(--green); color:#fff}
-.primary:hover{background:var(--green-dark)}
-.outline{background:#fff; color:var(--blue); border:2px solid var(--blue)}
-.danger{background:var(--danger); color:#fff}
-.linklike{background:transparent; color:var(--blue); text-decoration:underline; padding:6px 8px; font-size:.98rem}
 
-.wide{width:100%}
-
-/* ========== FORM ELEMENTS ========== */
-.form-label{display:block; margin:12px 4px 6px; font-weight:600; color:var(--blue)}
-.form-input, .form-select{
-  width:100%; padding:12px 14px; font-size:1.06rem;
-  border:2px solid #d6deea; border-radius:10px; outline:none;
-  background:#f9fbff;
+#welcome-screen button:hover {
+  transform: scale(1.05);
+  background-color: #f3f3f3;
 }
-.form-input:focus, .form-select:focus{border-color:#9cb7dd; background:#fff}
-.answer{max-width:260px; text-align:left}  /* left-aligned text inside answer box */
 
-.form-row{display:flex; align-items:center; gap:12px; margin:12px 0 6px}
-.checkbox{display:flex; align-items:center; gap:10px; font-size:1.02rem; color:var(--text)}
-.form-select.inline{width:auto; min-width:96px}
+/* Parent Settings */
+#parent-settings {
+  background-color: #fefae0;
+  padding: 30px;
+}
 
-/* ========== GAME SCREEN ========== */
-#gameScreen .game-wrap{width:min(640px,94vw); margin:auto; text-align:center}
-.instructions{font-size:1.12rem; color:var(--muted); margin:8px 0 10px}
-.grid{display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:14px 0 8px}
-.grid .cell{width:64px; height:64px; line-height:64px; border:2px solid #333; border-radius:10px;
-  font-size:1.6rem; background:#fff; font-weight:600}
-.grid .missing{background:#ffefcf; color:#999}
+#parent-settings label {
+  display: block;
+  margin-top: 15px;
+  font-size: 1.1em;
+}
 
-.timer{font-size:1.25rem; color:var(--danger); margin:6px 0 8px}
-.answer-row{display:flex; justify-content:center; align-items:center; gap:10px; margin:12px 0 6px}
-.feedback{margin:10px 0; font-weight:700; font-size:1.14rem; color:var(--blue)}
-.streaks{margin:4px 0 6px; font-size:1.02rem; color:#333}
-.button-row{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px}
+#parent-settings input,
+#parent-settings select {
+  margin-top: 5px;
+  padding: 8px;
+  font-size: 1em;
+  width: 200px;
+}
 
-/* ========== ANIMATIONS ========== */
-@keyframes pop{0%,100%{transform:scale(1)} 50%{transform:scale(1.08)}}
+#save-start {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 1.2em;
+  background-color: #219ebc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.note {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 8px;
+}
+
+/* Gameplay */
+#numbers-display {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.number-box {
+  border: 2px solid #333;
+  padding: 20px;
+  font-size: 1.5em;
+  width: 60px;
+  text-align: center;
+}
+
+#answer-input {
+  text-align: left;
+  font-size: 1.2em;
+  padding: 8px;
+  width: 200px;
+}
+
+/* Celebration */
+#celebration-screen {
+  background-color: #e0f7fa;
+}
+
+#celebration-message {
+  font-size: 2.5em;
+  margin: 20px 0;
+  color: #d97706;
+}
+
+/* Progress Chart */
+#progress-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px;
+}
+
+.progress-level {
+  border: 2px solid #333;
+  padding: 15px;
+  border-radius: 6px;
+  background-color: #bbdefb;
+  font-weight: bold;
+}
+
+.separator {
+  grid-column: span 4;
+  border-top: 4px solid #f59e0b;
+  margin: 10px 0;
+}
