@@ -1,141 +1,130 @@
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: #f0f0f0;
+  background: #fff8f0; /* warm beige/orange */
+  margin: 0;
+  padding: 0;
 }
 
-.screen {
-  display: none;
-  padding: 20px;
-}
-
-.screen.active {
-  display: block;
-}
-
-/* Welcome Screen Gradient Background */
-#welcome-screen {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #3b82f6, #06b6d4, #9333ea);
-  color: white;
-}
-
-#welcome-screen h1 {
-  margin-bottom: 20px;
-  font-size: 2em;
-}
-
-#welcome-screen button {
-  margin: 10px;
-  padding: 12px 24px;
-  font-size: 1.2em;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: white;
+h1 {
+  font-size: 2rem;
   color: #333;
-  transition: transform 0.2s;
+  margin: 20px 0;
 }
 
-#welcome-screen button:hover {
-  transform: scale(1.05);
-  background-color: #f3f3f3;
+h2 {
+  font-size: 1.5rem;
+  color: #444;
 }
 
-/* Parent Settings */
-#parent-settings {
-  background-color: #fefae0;
-  padding: 30px;
-}
-
-#parent-settings label {
+img {
+  max-width: 200px;
+  margin: 15px auto;
   display: block;
-  margin-top: 15px;
-  font-size: 1.1em;
 }
 
-#parent-settings input,
-#parent-settings select {
-  margin-top: 5px;
-  padding: 8px;
-  font-size: 1em;
-  width: 200px;
-}
-
-#save-start {
-  margin-top: 20px;
-  padding: 12px 24px;
-  font-size: 1.2em;
-  background-color: #219ebc;
-  color: white;
+button {
+  margin: 8px;
+  padding: 10px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button.primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+button.outline {
+  border: 2px solid #333;
+  background: white;
+  color: #333;
+}
+
+button.linklike {
+  background: none;
+  color: #007bff;
+  text-decoration: underline;
+  font-size: 0.9rem;
+  border: none;
   cursor: pointer;
 }
 
-.note {
-  font-size: 0.9em;
-  color: #555;
-  margin-top: 8px;
-}
-
-/* Gameplay */
-#numbers-display {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.number-box {
-  border: 2px solid #333;
-  padding: 20px;
-  font-size: 1.5em;
-  width: 60px;
-  text-align: center;
-}
-
-#answer-input {
-  text-align: left;
-  font-size: 1.2em;
-  padding: 8px;
-  width: 200px;
-}
-
-/* Celebration */
-#celebration-screen {
-  background-color: #e0f7fa;
-}
-
-#celebration-message {
-  font-size: 2.5em;
-  margin: 20px 0;
-  color: #d97706;
-}
-
-/* Progress Chart */
-#progress-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 20px;
-}
-
-.progress-level {
-  border: 2px solid #333;
+.card {
+  background: #fff;
   padding: 15px;
-  border-radius: 6px;
-  background-color: #bbdefb;
+  margin: 20px auto;
+  border-radius: 8px;
+  max-width: 350px;
+  text-align: left;
+}
+
+.card label {
+  display: block;
+  margin: 10px 0 5px;
   font-weight: bold;
 }
 
-.separator {
-  grid-column: span 4;
-  border-top: 4px solid #f59e0b;
+.card input, .card select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.grid {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.grid .cell {
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  font-size: 1.6rem;
+  background: #fff;
+  font-weight: bold;
+  margin: 0 4px;
+}
+
+.grid .missing {
+  background: #ffefcf;
+  color: #999;
+}
+
+.answer-row {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+#answerInput {
+  max-width: 260px;
+  text-align: left;
+  padding: 6px;
+  font-size: 1rem;
+}
+
+#feedback {
   margin: 10px 0;
+  font-weight: 700;
+  color: #d32f2f;
+}
+
+#streaks {
+  margin: 4px 0 6px;
+  font-size: 1.02rem;
+  color: #333;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
