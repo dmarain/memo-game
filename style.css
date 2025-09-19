@@ -1,11 +1,11 @@
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f8ff;
+  text-align: center;
 }
 
-/* Each screen fills the viewport and replaces the previous one */
+/* Screen Layout */
 .screen {
   display: none;
   position: absolute;
@@ -14,8 +14,8 @@ body {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  padding: 20px;
 }
-
 .screen.active {
   display: block;
 }
@@ -23,237 +23,97 @@ body {
 /* Welcome Screen */
 #welcomeScreen {
   background: linear-gradient(135deg, #ff9999, #ff4d4d);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  color: white;
 }
-
 #welcomeScreen h1 {
-  font-size: 2em;
-  color: white;
-  text-shadow: 1px 1px 2px #000;
-  margin-bottom: 20px;
+  font-size: 1.8em;
 }
-
-#memoImage {
-  width: 200px;
-  max-width: 80%;
-  margin-bottom: 20px;
-}
-
 #welcomeScreen button {
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  padding: 14px 28px;
-  margin: 10px;
-  font-size: 1.1em;
+  display: block;
+  margin: 10px auto;
+  padding: 12px 24px;
+  font-size: 1em;
+  background: #ffffff;
+  border: 2px solid #cc0000;
+  border-radius: 6px;
   cursor: pointer;
-}
-
-#welcomeScreen button:hover {
-  background-color: #3d8b40;
 }
 
 /* Parent Screen */
 #parentScreen {
-  background: linear-gradient(135deg, #b6fcb6, #6fdc6f);
-  color: #033d03;
-  padding: 40px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: linear-gradient(135deg, #d0ebff, #74c0fc);
+  color: #003366;
 }
-
-#parentScreen h2 {
-  font-size: 2em;
-  margin-bottom: 20px;
-}
-
-#parentScreen input, #parentScreen select {
-  font-size: 1.3em;
-  margin: 15px 0;
-  padding: 12px;
-  width: 90%;
-  max-width: 350px;
-  border-radius: 10px;
-  border: 2px solid #2d662d;
-}
-
-#parentScreen label {
+#parentScreen input,
+#parentScreen select {
   display: block;
-  margin-top: 15px;
-  font-size: 1.1em;
-  color: #025502;
-}
-
-#saveStartBtn {
-  background-color: #ff9800;
-  color: white;
-  padding: 14px 28px;
-  border: none;
-  border-radius: 8px;
-  margin-top: 20px;
+  margin: 10px auto;
+  padding: 10px;
   font-size: 1.2em;
+  border-radius: 5px;
+  border: 1px solid #003366;
 }
-
-#saveStartBtn:hover {
-  background-color: #e67e00;
+#parentScreen button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #0066cc;
+  color: white;
+  font-size: 1.1em;
+  border-radius: 6px;
+}
+.errorMsg {
+  color: red;
+  font-weight: bold;
 }
 
 /* Game Screen */
 #gameScreen {
-  background: linear-gradient(135deg, #87cefa, #ffffff);
+  background: linear-gradient(135deg, #e6ffe6, #99ff99);
 }
-
-.memoSmall {
-  width: 120px;
-  display: block;
-  margin: 10px auto;
-}
-
-#numberGrid {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 20px 0;
-}
-
 .numberBox {
-  width: 60px;
-  height: 60px;
-  margin: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff8dc;
+  display: inline-block;
+  margin: 5px;
+  padding: 20px;
+  font-size: 1.5em;
   border: 2px solid #333;
-  font-size: 1.6em;
-  border-radius: 6px;
+  border-radius: 5px;
+  background: #fff8dc;
+  min-width: 40px;
 }
-
-#instructions {
-  font-size: 1.2em;
-  margin: 15px 0;
-}
-
 #instructions.red {
   color: red;
   font-weight: bold;
 }
-
-#answerInput {
-  font-size: 1.2em;
-  padding: 8px;
-  margin-top: 10px;
-  width: 60%;
-  max-width: 250px;
-}
-
-#submitBtn {
-  background-color: #2196F3;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  padding: 12px 24px;
-  margin-top: 12px;
-  font-size: 1.1em;
-}
-
-#submitBtn:hover {
-  background-color: #1565c0;
-}
-
-/* Feedback & Streaks */
 #feedback {
-  margin-top: 15px;
-  font-size: 1.4em;
-  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 10px;
 }
-
 .feedback-correct {
   color: green;
+  font-weight: bold;
 }
-
 .feedback-incorrect {
   color: red;
-}
-
-#streaks {
-  margin-top: 15px;
-  font-size: 1.2em;
   font-weight: bold;
 }
 
-#currentStreak { color: #2196F3; }
-#longestStreak { color: purple; }
-
-/* Control Buttons */
-#controlButtons button {
-  display: block;
-  width: 90%;
-  margin: 10px auto;
-  padding: 14px;
-  font-size: 1.1em;
-  border-radius: 8px;
-  border: none;
-  color: white;
-  background-color: #4CAF50;
-}
-
-#controlButtons button:hover {
-  background-color: #3d8b40;
-}
-
-/* Progress Chart */
+/* Progress Screen */
 #progressScreen {
-  background: linear-gradient(135deg, #ffe259, #ffa751);
+  background: linear-gradient(135deg, #fff3bf, #ffe066);
 }
-
 #progressTable {
-  width: 95%;
   margin: 20px auto;
   border-collapse: collapse;
-  font-size: 1.2em;
-  background-color: #fff;
+  width: 90%;
 }
-
 #progressTable th, #progressTable td {
-  border: 2px solid #333;
-  padding: 10px;
+  border: 1px solid #333;
+  padding: 8px;
 }
-
-#progressTable th {
-  background-color: #4cafef;
-  color: white;
-}
-
 #progressTable tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background: #f9f9f9;
 }
-
 #progressTable tr:last-child {
-  background-color: #ffd700;
+  background: #ffd700;
   font-weight: bold;
 }
-
-#progressButtons button {
-  display: block;
-  width: 90%;
-  margin: 10px auto;
-  padding: 14px;
-  font-size: 1.1em;
-  border-radius: 8px;
-  border: none;
-  color: white;
-}
-
-#endGameBtn { background-color: #f44336; }
-#sameLevelBtn { background-color: #4CAF50; }
-#nextLevelBtn { background-color: #2196F3; }
-
-#endGameBtn:hover { background-color: #c62828; }
-#sameLevelBtn:hover { background-color: #3d8b40; }
-#nextLevelBtn:hover { background-color: #1565c0; }
