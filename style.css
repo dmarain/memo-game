@@ -156,16 +156,15 @@ body {
   color: red;
   font-weight: bold;
 }
-
-/* Streak bar */
+/* Streak Bar */
 #streakBar {
   margin: 12px auto;
-  padding: 8px 12px;
-  font-size: 1.2em;
+  padding: 10px 16px;
+  font-size: 1.3em;
   font-weight: bold;
-  background: #e0e0ff;   /* light blue background */
-  color: #003366;
-  border-radius: 8px;
+  background: #e0e0ff;    /* light blue highlight */
+  color: #003366;         /* dark blue text */
+  border-radius: 10px;
   display: inline-block;
 }
 #controlButtons button {
