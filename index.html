@@ -9,7 +9,7 @@
 <body>
 
   <!-- Welcome Screen -->
-  <div id="welcomeScreen" class="screen">
+  <div id="welcomeScreen" class="screen active">
     <img src="memo-fox.png" alt="Memo the Fox" id="memoImage">
     <h1>Welcome to Memo’s Memory Mystery!</h1>
     <button id="voiceBtn">Hear Memo’s Voice</button>
@@ -18,7 +18,7 @@
   </div>
 
   <!-- Parent Setup Screen -->
-  <div id="parentScreen" class="screen hidden">
+  <div id="parentScreen" class="screen">
     <h2>Parent Settings</h2>
     <label for="childName">Child’s Name:</label>
     <input type="text" id="childName" placeholder="Enter name">
@@ -51,7 +51,7 @@
   </div>
 
   <!-- Gameplay Screen -->
-  <div id="gameScreen" class="screen hidden">
+  <div id="gameScreen" class="screen">
     <h2 id="levelTitle">Level 1A</h2>
     <div id="numberGrid"></div>
     <p id="instructions"></p>
@@ -65,7 +65,7 @@
   </div>
 
   <!-- Progress Chart Screen -->
-  <div id="progressScreen" class="screen hidden">
+  <div id="progressScreen" class="screen">
     <h2 id="progressTitle"></h2>
     <table id="progressTable"></table>
     <div id="progressButtons">
