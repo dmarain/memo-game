@@ -1,71 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MEMO’s Memory Mystery</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memo’s Memory Mystery</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- ===== WELCOME SCREEN ===== -->
-  <div id="welcomeScreen" class="screen active">
-    <h1>MEMO’S DETECTIVE AGENCY</h1>
-    <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
-    <div class="button-row">
-      <button id="hearMemoBtn" class="primary">Hear Memo’s Voice</button>
-      <button id="firstTimeBtn" class="outline">First-Time User</button>
-      <button id="returningBtn" class="outline">Returning User</button>
-    </div>
-    <button id="musicToggle" class="linklike">Music is OFF. Tap to turn it ON</button>
+
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen" class="screen">
+    <img src="memo-fox.png" alt="Memo the Fox" id="memoImage">
+    <h1>Welcome to Memo’s Memory Mystery!</h1>
+    <button id="voiceBtn">Hear Memo’s Voice</button>
+    <button id="firstTimeBtn">First Time User</button>
+    <button id="returningBtn">Returning User</button>
   </div>
 
-  <!-- ===== PARENT SETTINGS ===== -->
-  <div id="parentSettings" class="screen hidden">
-    <div class="card">
-      <h2>Parent Settings</h2>
-      <label for="childNameInput">Child’s Name</label>
-      <input type="text" id="childNameInput" placeholder="Type the child’s name" inputmode="text" />
+  <!-- Parent Setup Screen -->
+  <div id="parentScreen" class="screen hidden">
+    <h2>Parent Settings</h2>
+    <label for="childName">Child’s Name:</label>
+    <input type="text" id="childName" placeholder="Enter name">
 
-      <label for="startingLevel">Starting Level</label>
-      <select id="startingLevel">
-        <option value="1A">Level 1A (1–3, 1 missing)</option>
-        <option value="1B">Level 1B (1–3, 2 missing)</option>
-        <option value="1C">Level 1C (1–3, 2 missing, shuffled)</option>
-        <option value="2A">Level 2A (1–4, 1 missing)</option>
-        <option value="3A">Level 3A (1–5, 1 missing)</option>
-      </select>
+    <label for="startLevel">Starting Level:</label>
+    <select id="startLevel">
+      <option value="1A">Level 1A</option>
+      <option value="2A">Level 2A</option>
+      <option value="3A">Level 3A</option>
+      <option value="4A">Level 4A</option>
+      <option value="5A">Level 5A</option>
+    </select>
 
-      <div>
-        <input type="checkbox" id="autoLevelUp" />
-        <label for="autoLevelUp">Auto level-up after 5 correct</label>
-      </div>
+    <label>
+      <input type="checkbox" id="timerToggle">
+      Enable Timer (Numbers will disappear after a few seconds)
+    </label>
 
-      <div>
-        <input type="checkbox" id="enableTimer" />
-        <label for="enableTimer">Enable Timer (choose seconds)</label>
-        <select id="timerSeconds">
-          <option value="10">10s</option>
-          <option value="12">12s</option>
-          <option value="15">15s</option>
-        </select>
-      </div>
+    <label>
+      <input type="checkbox" id="autoNext">
+      Auto advance to next level after success
+    </label>
 
-      <button id="saveSettingsBtn" class="primary">Save and Start</button>
-    </div>
+    <label>
+      <input type="checkbox" id="musicToggle">
+      Play background music
+    </label>
+
+    <button id="saveStartBtn">Save & Start</button>
   </div>
 
-  <!-- ===== GAME SCREEN ===== -->
+  <!-- Gameplay Screen -->
   <div id="gameScreen" class="screen hidden">
-    <h2 id="levelTitle">Level</h2>
-    <p id="instructionText"></p>
-    <div id="grid" class="grid"></div>
-    <div class="answer-row">
-      <input type="text" id="answerInput" placeholder="Type answer here..." />
-      <button id="submitBtn" class="primary">Submit</button>
+    <h2 id="levelTitle">Level 1A</h2>
+    <div id="numberGrid"></div>
+    <p id="instructions"></p>
+    <input type="text" id="answerInput" placeholder="Enter missing numbers" autocomplete="off">
+    <div id="feedback"></div>
+    <p id="streaks">
+      Current Streak: <span id="currentStreak">0</span> |
+      Longest Streak: <span id="longestStreak">0</span>
+    </p>
+    <div id="controlButtons"></div>
+  </div>
+
+  <!-- Progress Chart Screen -->
+  <div id="progressScreen" class="screen hidden">
+    <h2 id="progressTitle"></h2>
+    <table id="progressTable"></table>
+    <div id="progressButtons">
+      <button id="endGameBtn">End Game</button>
+      <button id="sameLevelBtn">Return to Same Level</button>
+      <button id="nextLevelBtn">Next Level</button>
     </div>
-    <p id="feedback"></p>
-    <p id="streaks">Current streak: 0 | Longest: 0</p>
-    <div id="controlButtons" class="button-row"></div>
   </div>
 
   <script src="script.js"></script>
