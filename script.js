@@ -70,7 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!levelStats[level]) {
       levelStats[level] = { correct: 0, incorrect: 0, longest: 0, total: 0 };
     }
-    speak(`Okay ${childName}, let’s begin Level ${level}.`);
+    let displayName = childName.charAt(0).toUpperCase() + childName.slice(1);
+    speak(`Okay ${displayName}, let’s begin Level ${level}.`);
     generateRound(level);
   }
 
@@ -113,11 +114,18 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("instructions").innerText = instr;
     speak(instr);
 
-    document.getElementById("answerInput").value = "";
+    // Reset UI
+    let answerBox = document.getElementById("answerInput");
+    answerBox.value = "";
+    answerBox.disabled = true;
     document.getElementById("feedback").innerText = "";
     document.getElementById("controlButtons").innerHTML = "";
 
-    setTimeout(() => document.getElementById("answerInput").focus(), 1500);
+    // Enable input after Memo speaks (~2s delay)
+    setTimeout(() => {
+      answerBox.disabled = false;
+      answerBox.focus();
+    }, 2000);
   }
 
   // ===== Answer Checking =====
@@ -127,16 +135,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    checkAnswer();
+  });
+
   function checkAnswer() {
     let input = document.getElementById("answerInput").value.trim();
     if (!input) {
       document.getElementById("feedback").innerText = "Please enter your answer.";
+      document.getElementById("feedback").className = "";
       return;
     }
+
     let guess = input.split(" ").map(x => parseInt(x)).filter(x => !isNaN(x));
     guess.sort((a, b) => a - b);
 
     levelStats[currentLevel].total++;
+
+    let displayName = childName.charAt(0).toUpperCase() + childName.slice(1);
 
     if (JSON.stringify(guess) === JSON.stringify(expectedAnswer)) {
       currentStreak++;
@@ -145,8 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentStreak > levelStats[currentLevel].longest) {
         levelStats[currentLevel].longest = currentStreak;
       }
-      let msg = `${childName}, that’s ${currentStreak} in a row! ${randomPraise()}`;
+      let msg = `${displayName}, that’s ${currentStreak} in a row! ${randomPraise()}`;
       document.getElementById("feedback").innerText = msg;
+      document.getElementById("feedback").className = "feedback-correct";
       speak(msg);
 
       if (currentStreak % 5 === 0) {
@@ -157,8 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       levelStats[currentLevel].incorrect++;
       currentStreak = 0;
-      let msg = `Not quite, ${childName}. Try again next round.`;
+      let msg = `Not quite, ${displayName}. Try again next round.`;
       document.getElementById("feedback").innerText = msg;
+      document.getElementById("feedback").className = "feedback-incorrect";
       speak(msg);
       nextRoundButton();
     }
@@ -178,8 +196,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Celebration =====
   function bigCelebration() {
-    let msg = `Congratulations, ${childName}! Five in a row! You’re becoming a first-class detective!`;
+    let displayName = childName.charAt(0).toUpperCase() + childName.slice(1);
+    let msg = `Congratulations, ${displayName}! Five in a row! You’re becoming a first-class detective!`;
     document.getElementById("feedback").innerText = msg;
+    document.getElementById("feedback").className = "feedback-correct";
     speak(msg);
 
     document.getElementById("controlButtons").innerHTML = `
@@ -211,8 +231,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Progress Chart =====
   function showProgress(endGame = false) {
     showScreen("progressScreen");
+    let displayName = childName.charAt(0).toUpperCase() + childName.slice(1);
     document.getElementById("progressTitle").innerText =
-      `${childName}’s Progress Chart`;
+      `${displayName}’s Progress Chart`;
 
     let tableHTML = "<tr><th>Level</th><th>Correct</th><th>Incorrect</th><th>Longest Streak</th><th>Total</th></tr>";
 
@@ -247,6 +268,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("endGameBtn").addEventListener("click", () => {
     showScreen("welcomeScreen");
+  });
+
+  document.getElementById("sameLevelBtn").addEventListener("click", () => {
+    startLevel(currentLevel);
+  });
+
+  document.getElementById("nextLevelBtn").addEventListener("click", () => {
+    goToNextLevel();
   });
 
   // ===== Speech =====
