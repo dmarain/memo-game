@@ -1,3 +1,4 @@
+/* ===== Base Layout ===== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -20,73 +21,130 @@ body {
   display: block;
 }
 
-/* Welcome Screen */
+/* ===== Welcome Screen ===== */
 #welcomeScreen {
   background: linear-gradient(135deg, #ff9999, #ff4d4d);
   color: white;
 }
 #welcomeScreen h1 {
-  font-size: 1.8em;
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 #welcomeScreen button {
   display: block;
-  margin: 10px auto;
-  padding: 12px 24px;
-  font-size: 1em;
+  margin: 12px auto;
+  padding: 14px 28px;
+  font-size: 1.1em;
+  font-weight: bold;
   background: #ffffff;
   border: 2px solid #cc0000;
   border-radius: 6px;
   cursor: pointer;
 }
+#welcomeScreen button:hover {
+  background: #ffe6e6;
+}
 
-/* Parent Screen */
+/* Welcome Memo (big) */
+#memoImg {
+  width: 50%;          /* About half the screen */
+  max-width: 400px;    /* Prevents it from being huge */
+  margin: 20px auto;
+  display: block;
+}
+
+/* ===== Parent Screen ===== */
 #parentScreen {
   background: linear-gradient(135deg, #d0ebff, #74c0fc);
   color: #003366;
 }
+#parentScreen h2 {
+  font-size: 1.6em;
+  margin-bottom: 10px;
+}
 #parentScreen input,
 #parentScreen select {
   display: block;
-  margin: 10px auto;
-  padding: 10px;
+  margin: 12px auto;
+  padding: 12px;
   font-size: 1.2em;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid #003366;
+  width: 80%;
+  max-width: 300px;
 }
 #parentScreen button {
   margin-top: 20px;
-  padding: 12px 24px;
+  padding: 14px 28px;
   background: #0066cc;
   color: white;
-  font-size: 1.1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  border: none;
   border-radius: 6px;
+  cursor: pointer;
+}
+#parentScreen button:hover {
+  background: #0055aa;
 }
 .errorMsg {
   color: red;
   font-weight: bold;
+  margin-top: 10px;
 }
 
-/* Game Screen */
+/* ===== Game Screen ===== */
 #gameScreen {
   background: linear-gradient(135deg, #e6ffe6, #99ff99);
+}
+#levelTitle {
+  font-size: 1.6em;
+  margin-bottom: 10px;
 }
 .numberBox {
   display: inline-block;
   margin: 5px;
   padding: 20px;
-  font-size: 1.5em;
+  font-size: 1.6em;
   border: 2px solid #333;
-  border-radius: 5px;
+  border-radius: 6px;
   background: #fff8dc;
   min-width: 40px;
+}
+#instructions {
+  font-size: 1.2em;
+  margin-top: 10px;
 }
 #instructions.red {
   color: red;
   font-weight: bold;
 }
-#feedback {
+#answerInput {
+  margin-top: 15px;
+  padding: 12px;
   font-size: 1.2em;
-  margin-top: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  width: 60%;
+  max-width: 250px;
+}
+#submitBtn {
+  margin-top: 12px;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  font-weight: bold;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#submitBtn:hover {
+  background: #005fcc;
+}
+#feedback {
+  font-size: 1.3em;
+  margin-top: 15px;
 }
 .feedback-correct {
   color: green;
@@ -96,19 +154,43 @@ body {
   color: red;
   font-weight: bold;
 }
+#controlButtons button {
+  margin: 12px 8px;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #ffcc00;
+  border: none;
+}
+#controlButtons button:hover {
+  background: #e6b800;
+}
 
-/* Progress Screen */
+/* ===== Progress Screen ===== */
 #progressScreen {
   background: linear-gradient(135deg, #fff3bf, #ffe066);
+}
+#progressScreen h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
 }
 #progressTable {
   margin: 20px auto;
   border-collapse: collapse;
-  width: 90%;
+  width: 95%;
+  max-width: 500px;
+  background: white;
 }
-#progressTable th, #progressTable td {
+#progressTable th,
+#progressTable td {
   border: 1px solid #333;
-  padding: 8px;
+  padding: 10px;
+  font-size: 1.1em;
+}
+#progressTable th {
+  background: #ddd;
 }
 #progressTable tr:nth-child(even) {
   background: #f9f9f9;
@@ -116,4 +198,26 @@ body {
 #progressTable tr:last-child {
   background: #ffd700;
   font-weight: bold;
+}
+#progressScreen button {
+  display: block;
+  margin: 12px auto;
+  padding: 14px 28px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #ff704d;
+  color: white;
+  border: none;
+}
+#progressScreen button:hover {
+  background: #e65c3a;
+}
+
+/* ===== Shared Memo (small) ===== */
+.memoImgSmall {
+  width: 120px;
+  display: block;
+  margin: 10px auto;
 }
