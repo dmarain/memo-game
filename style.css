@@ -1,130 +1,156 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background: #fff8f0; /* warm beige/orange */
   margin: 0;
   padding: 0;
+  background: linear-gradient(135deg, #87cefa, #ffffff);
 }
 
-h1 {
-  font-size: 2rem;
-  color: #333;
-  margin: 20px 0;
+.screen {
+  display: none;
+  padding: 20px;
 }
 
-h2 {
-  font-size: 1.5rem;
-  color: #444;
-}
-
-img {
-  max-width: 200px;
-  margin: 15px auto;
+.screen.active {
   display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Welcome Screen */
+#welcomeScreen {
+  background: linear-gradient(135deg, #ffcc70, #ff7e5f);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#welcomeScreen h1 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#memoImage {
+  width: 200px;
+  max-width: 80%;
+  margin-bottom: 20px;
 }
 
 button {
-  margin: 8px;
-  padding: 10px 16px;
+  background-color: #4cafef;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-button.primary {
-  background-color: #4CAF50;
-  color: white;
-}
-
-button.outline {
-  border: 2px solid #333;
-  background: white;
-  color: #333;
-}
-
-button.linklike {
-  background: none;
-  color: #007bff;
-  text-decoration: underline;
-  font-size: 0.9rem;
-  border: none;
-  cursor: pointer;
-}
-
-.card {
-  background: #fff;
-  padding: 15px;
-  margin: 20px auto;
   border-radius: 8px;
-  max-width: 350px;
-  text-align: left;
-}
-
-.card label {
-  display: block;
-  margin: 10px 0 5px;
-  font-weight: bold;
-}
-
-.card input, .card select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 12px;
-  font-size: 1rem;
-}
-
-.grid {
-  display: flex;
-  justify-content: center;
-  margin: 20px;
-}
-
-.grid .cell {
-  width: 64px;
-  height: 64px;
-  line-height: 64px;
-  border: 2px solid #333;
-  border-radius: 10px;
-  font-size: 1.6rem;
-  background: #fff;
-  font-weight: bold;
-  margin: 0 4px;
-}
-
-.grid .missing {
-  background: #ffefcf;
-  color: #999;
-}
-
-.answer-row {
-  display: flex;
-  justify-content: center;
+  color: white;
+  padding: 12px 24px;
   margin: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3b8edb;
+}
+
+/* Parent Screen */
+#parentScreen {
+  background-color: #4a90e2;
+  color: white;
+  min-height: 100vh;
+}
+
+#parentScreen input, #parentScreen select {
+  font-size: 1.2em;
+  margin: 10px 0;
+  padding: 8px;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 6px;
+  border: none;
+}
+
+#parentScreen label {
+  display: block;
+  margin-top: 15px;
+  font-size: 1.1em;
+}
+
+/* Game Screen */
+#numberGrid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.numberBox {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff8dc;
+  border: 2px solid #333;
+  font-size: 1.5em;
+  border-radius: 6px;
 }
 
 #answerInput {
-  max-width: 260px;
-  text-align: left;
-  padding: 6px;
-  font-size: 1rem;
+  font-size: 1.2em;
+  padding: 8px;
+  margin-top: 10px;
+  width: 60%;
+  max-width: 250px;
 }
 
+/* Feedback & Streaks */
 #feedback {
-  margin: 10px 0;
-  font-weight: 700;
-  color: #d32f2f;
-}
-
-#streaks {
-  margin: 4px 0 6px;
-  font-size: 1.02rem;
+  margin-top: 15px;
+  font-size: 1.2em;
+  font-weight: bold;
   color: #333;
 }
 
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+#streaks {
+  margin-top: 10px;
+  font-size: 1.1em;
+  color: #444;
+}
+
+/* Progress Chart */
+#progressScreen {
+  background: linear-gradient(135deg, #ffe259, #ffa751);
+  min-height: 100vh;
+}
+
+#progressTable {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-size: 1.2em;
+  background-color: #fff;
+}
+
+#progressTable th, #progressTable td {
+  border: 2px solid #333;
+  padding: 10px;
+}
+
+#progressTable th {
+  background-color: #4cafef;
+  color: white;
+}
+
+#progressTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#progressTable tr:last-child {
+  background-color: #ffd700;
+  font-weight: bold;
 }
