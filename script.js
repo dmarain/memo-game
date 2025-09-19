@@ -1,3 +1,51 @@
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== Global Setup =====
+  let childName = "";
+  let currentLevel = "1A";
+  let autoNext = false;
+  let timerEnabled = false;
+
+  let currentStreak = 0;
+  let longestStreak = 0;
+  let expectedAnswer = [];
+
+  let levelStats = {}; // track stats per level
+
+  // Encouragement messages
+  const praiseMessages = [
+    "Great memory!",
+    "Awesome job!",
+    "You’re on fire!",
+    "Detective skills are sharp!",
+    "Keep going strong!"
+  ];
+
+  // ===== Screen Management =====
+  function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  // ===== Welcome Screen =====
+  document.getElementById("firstTimeBtn").addEventListener("click", () => {
+    showScreen("parentScreen");
+    setTimeout(() => document.getElementById("childName").focus(), 200);
+  });
+
+  document.getElementById("returningBtn").addEventListener("click", () => {
+    if (childName) {
+      startLevel(currentLevel);
+    } else {
+      showScreen("parentScreen");
+    }
+  });
+
+  document.getElementById("voiceBtn").addEventListener("click", () => {
+    speak("Welcome to Memo’s Memory Mystery! Let’s play together.");
+  });
+
+  // ... (leave the rest of your script exactly as it is)
+});
 // ===== Global Setup =====
 let childName = "";
 let currentLevel = "1A";
