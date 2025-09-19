@@ -7,10 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <!-- Welcome Screen -->
   <div id="welcomeScreen" class="screen active">
-    <img src="memo-fox.png" alt="Memo the Fox" id="memoImage">
+    <img src="memo-fox.png" alt="Memo the Fox" id="memoImg">
     <h1>Welcome to Memo’s Memory Mystery!</h1>
     <button id="voiceBtn">Hear Memo’s Voice</button>
     <button id="firstTimeBtn">First Time User</button>
@@ -19,11 +18,11 @@
 
   <!-- Parent Setup Screen -->
   <div id="parentScreen" class="screen">
-    <img src="memo-fox.png" alt="Memo the Fox" class="memoSmall">
+    <img src="memo-fox.png" alt="Memo the Fox" class="memoImgSmall">
     <h2>Parent Settings</h2>
+    <p>Please enter your child’s name and choose a starting level.</p>
     <label for="childName">Child’s Name:</label>
-    <input type="text" id="childName" placeholder="Enter name">
-
+    <input type="text" id="childName" placeholder="Enter name here">
     <label for="startLevel">Starting Level:</label>
     <select id="startLevel">
       <option value="1A">Level 1A</option>
@@ -32,51 +31,33 @@
       <option value="4A">Level 4A</option>
       <option value="5A">Level 5A</option>
     </select>
-
-    <label>
-      <input type="checkbox" id="timerToggle">
-      Enable Timer (numbers will disappear after a few seconds)
-    </label>
-
-    <label>
-      <input type="checkbox" id="autoNext">
-      Auto advance to next level after success
-    </label>
-
-    <label>
-      <input type="checkbox" id="musicToggle">
-      Play background music
-    </label>
-
+    <label><input type="checkbox" id="autoNext"> Auto Level-Up</label>
+    <label><input type="checkbox" id="timerToggle"> Enable Timer</label>
     <button id="saveStartBtn">Save & Start</button>
+    <p id="nameError" class="errorMsg"></p>
   </div>
 
-  <!-- Gameplay Screen -->
+  <!-- Game Screen -->
   <div id="gameScreen" class="screen">
-    <img src="memo-fox.png" alt="Memo the Fox" class="memoSmall">
-    <h2 id="levelTitle">Level 1A</h2>
+    <img src="memo-fox.png" alt="Memo the Fox" class="memoImgSmall">
+    <h2 id="levelTitle">Level</h2>
     <div id="numberGrid"></div>
     <p id="instructions"></p>
-    <input type="text" id="answerInput" placeholder="Enter missing number" autocomplete="off">
+    <input type="text" id="answerInput" placeholder="Enter missing numbers">
     <button id="submitBtn">Submit (or press Enter)</button>
-    <div id="feedback"></div>
-    <p id="streaks">
-      Current Streak: <span id="currentStreak">0</span> |
-      Longest Streak: <span id="longestStreak">0</span>
-    </p>
+    <p id="feedback"></p>
+    <p>Current Streak: <span id="currentStreak">0</span> | Longest Streak: <span id="longestStreak">0</span></p>
     <div id="controlButtons"></div>
   </div>
 
-  <!-- Progress Chart Screen -->
+  <!-- Progress Screen -->
   <div id="progressScreen" class="screen">
-    <img src="memo-fox.png" alt="Memo the Fox" class="memoSmall">
-    <h2 id="progressTitle"></h2>
+    <img src="memo-fox.png" alt="Memo the Fox" class="memoImgSmall">
+    <h2 id="progressTitle">Progress Chart</h2>
     <table id="progressTable"></table>
-    <div id="progressButtons">
-      <button id="endGameBtn">End Game</button>
-      <button id="sameLevelBtn">Return to Same Level</button>
-      <button id="nextLevelBtn">Next Level</button>
-    </div>
+    <button id="sameLevelBtn">Return to Same Level</button>
+    <button id="nextLevelBtn">Go to Next Level</button>
+    <button id="endGameBtn">End Game</button>
   </div>
 
   <script src="script.js"></script>
