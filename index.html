@@ -19,6 +19,7 @@
 
   <!-- Parent Setup Screen -->
   <div id="parentScreen" class="screen">
+    <img src="memo-fox.png" alt="Memo the Fox" class="memoSmall">
     <h2>Parent Settings</h2>
     <label for="childName">Child’s Name:</label>
     <input type="text" id="childName" placeholder="Enter name">
@@ -52,10 +53,12 @@
 
   <!-- Gameplay Screen -->
   <div id="gameScreen" class="screen">
+    <img src="memo-fox.png" alt="Memo the Fox" class="memoSmall">
     <h2 id="levelTitle">Level 1A</h2>
     <div id="numberGrid"></div>
     <p id="instructions"></p>
     <input type="text" id="answerInput" placeholder="Enter missing number" autocomplete="off">
+    <button id="submitBtn">Submit (or press Enter)</button>
     <div id="feedback"></div>
     <p id="streaks">
       Current Streak: <span id="currentStreak">0</span> |
@@ -66,6 +69,7 @@
 
   <!-- Progress Chart Screen -->
   <div id="progressScreen" class="screen">
+    <img src="memo-fox.png" alt="Memo the Fox" class="memoSmall">
     <h2 id="progressTitle"></h2>
     <table id="progressTable"></table>
     <div id="progressButtons">
