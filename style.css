@@ -57,22 +57,25 @@ body {
   background: linear-gradient(135deg, #b6fcb6, #6fdc6f);
   color: #033d03;
   min-height: 100vh;
-  padding: 30px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #parentScreen h2 {
-  font-size: 1.8em;
-  color: #024d02;
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
 #parentScreen input, #parentScreen select {
-  font-size: 1.2em;
+  font-size: 1.3em;
   margin: 15px 0;
-  padding: 10px;
-  width: 80%;
-  max-width: 320px;
-  border-radius: 6px;
-  border: 1px solid #333;
+  padding: 12px;
+  width: 90%;
+  max-width: 350px;
+  border-radius: 10px;
+  border: 2px solid #2d662d;
 }
 
 #parentScreen label {
@@ -100,6 +103,12 @@ body {
 #gameScreen {
   background: linear-gradient(135deg, #87cefa, #ffffff);
   min-height: 100vh;
+}
+
+.memoSmall {
+  width: 120px;
+  display: block;
+  margin: 10px auto;
 }
 
 #numberGrid {
@@ -140,28 +149,59 @@ body {
   max-width: 250px;
 }
 
+#submitBtn {
+  background-color: #2196F3;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 12px 24px;
+  margin-top: 12px;
+  font-size: 1.1em;
+}
+
+#submitBtn:hover {
+  background-color: #1565c0;
+}
+
 /* Feedback & Streaks */
 #feedback {
   margin-top: 15px;
-  font-size: 1.2em;
+  font-size: 1.4em;
   font-weight: bold;
-  color: #333;
+}
+
+.feedback-correct {
+  color: green;
+}
+
+.feedback-incorrect {
+  color: red;
 }
 
 #streaks {
-  margin-top: 10px;
+  margin-top: 15px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#currentStreak { color: #2196F3; }
+#longestStreak { color: purple; }
+
+/* Control Buttons */
+#controlButtons button {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 14px;
   font-size: 1.1em;
-  color: #444;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  background-color: #4CAF50;
 }
 
-#currentStreak {
-  color: #2196F3;
-  font-weight: bold;
-}
-
-#longestStreak {
-  color: purple;
-  font-weight: bold;
+#controlButtons button:hover {
+  background-color: #3d8b40;
 }
 
 /* Progress Chart */
@@ -171,7 +211,7 @@ body {
 }
 
 #progressTable {
-  width: 90%;
+  width: 95%;
   margin: 20px auto;
   border-collapse: collapse;
   font-size: 1.2em;
@@ -198,11 +238,13 @@ body {
 }
 
 #progressButtons button {
-  margin: 10px;
-  padding: 14px 28px;
-  border: none;
-  border-radius: 8px;
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 14px;
   font-size: 1.1em;
+  border-radius: 8px;
+  border: none;
   color: white;
 }
 
@@ -212,4 +254,4 @@ body {
 
 #endGameBtn:hover { background-color: #c62828; }
 #sameLevelBtn:hover { background-color: #3d8b40; }
-#nextLevelBtn:hover { background-color: #1565c0; }
+#nextLevelBtn:hover { background-color: #1565c0; }7
