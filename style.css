@@ -5,9 +5,15 @@ body {
   padding: 0;
 }
 
+/* Each screen fills the viewport and replaces the previous one */
 .screen {
   display: none;
-  padding: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .screen.active {
@@ -17,7 +23,6 @@ body {
 /* Welcome Screen */
 #welcomeScreen {
   background: linear-gradient(135deg, #ff9999, #ff4d4d);
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,7 +61,6 @@ body {
 #parentScreen {
   background: linear-gradient(135deg, #b6fcb6, #6fdc6f);
   color: #033d03;
-  min-height: 100vh;
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
@@ -102,7 +106,6 @@ body {
 /* Game Screen */
 #gameScreen {
   background: linear-gradient(135deg, #87cefa, #ffffff);
-  min-height: 100vh;
 }
 
 .memoSmall {
@@ -207,7 +210,6 @@ body {
 /* Progress Chart */
 #progressScreen {
   background: linear-gradient(135deg, #ffe259, #ffa751);
-  min-height: 100vh;
 }
 
 #progressTable {
@@ -254,4 +256,4 @@ body {
 
 #endGameBtn:hover { background-color: #c62828; }
 #sameLevelBtn:hover { background-color: #3d8b40; }
-#nextLevelBtn:hover { background-color: #1565c0; }7
+#nextLevelBtn:hover { background-color: #1565c0; }
