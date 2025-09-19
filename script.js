@@ -33,9 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("returningBtn").addEventListener("click", () => {
     if (childName) {
+      showScreen("gameScreen");
       startLevel(currentLevel);
     } else {
-      showScreen("parentScreen");
+      let msg = "Please choose First Time User to set up your child’s name.";
+      alert(msg);
+      speak(msg);
     }
   });
 
@@ -45,7 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Parent Screen =====
   document.getElementById("saveStartBtn").addEventListener("click", () => {
-    childName = document.getElementById("childName").value.trim() || "Detective";
+    let inputName = document.getElementById("childName").value.trim();
+    if (!inputName) {
+      let msg = "Please enter a child’s name before continuing.";
+      alert(msg);
+      speak(msg);
+      return;
+    }
+    childName = inputName;
     currentLevel = document.getElementById("startLevel").value;
     autoNext = document.getElementById("autoNext").checked;
     timerEnabled = document.getElementById("timerToggle").checked;
@@ -119,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answerBox.value = "";
     answerBox.disabled = true;
     document.getElementById("feedback").innerText = "";
+    document.getElementById("feedback").className = "";
     document.getElementById("controlButtons").innerHTML = "";
 
     // Enable input after Memo speaks (~2s delay)
