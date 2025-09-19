@@ -3,7 +3,6 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #87cefa, #ffffff);
 }
 
 .screen {
@@ -15,10 +14,9 @@ body {
   display: block;
 }
 
-
 /* Welcome Screen */
 #welcomeScreen {
-  background: linear-gradient(135deg, #ffcc70, #ff7e5f);
+  background: linear-gradient(135deg, #ff9999, #ff4d4d);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,7 +26,8 @@ body {
 
 #welcomeScreen h1 {
   font-size: 2em;
-  color: #333;
+  color: white;
+  text-shadow: 1px 1px 2px #000;
   margin-bottom: 20px;
 }
 
@@ -38,45 +37,71 @@ body {
   margin-bottom: 20px;
 }
 
-button {
-  background-color: #4cafef;
+#welcomeScreen button {
+  background-color: #4CAF50;
   border: none;
   border-radius: 8px;
   color: white;
-  padding: 12px 24px;
+  padding: 14px 28px;
   margin: 10px;
-  font-size: 1em;
+  font-size: 1.1em;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #3b8edb;
+#welcomeScreen button:hover {
+  background-color: #3d8b40;
 }
 
 /* Parent Screen */
 #parentScreen {
-  background-color: #4a90e2;
-  color: white;
+  background: linear-gradient(135deg, #b6fcb6, #6fdc6f);
+  color: #033d03;
   min-height: 100vh;
+  padding: 30px;
+}
+
+#parentScreen h2 {
+  font-size: 1.8em;
+  color: #024d02;
 }
 
 #parentScreen input, #parentScreen select {
   font-size: 1.2em;
-  margin: 10px 0;
-  padding: 8px;
+  margin: 15px 0;
+  padding: 10px;
   width: 80%;
-  max-width: 300px;
+  max-width: 320px;
   border-radius: 6px;
-  border: none;
+  border: 1px solid #333;
 }
 
 #parentScreen label {
   display: block;
   margin-top: 15px;
   font-size: 1.1em;
+  color: #025502;
+}
+
+#saveStartBtn {
+  background-color: #ff9800;
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+#saveStartBtn:hover {
+  background-color: #e67e00;
 }
 
 /* Game Screen */
+#gameScreen {
+  background: linear-gradient(135deg, #87cefa, #ffffff);
+  min-height: 100vh;
+}
+
 #numberGrid {
   display: flex;
   justify-content: center;
@@ -85,16 +110,26 @@ button:hover {
 }
 
 .numberBox {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
+  width: 60px;
+  height: 60px;
+  margin: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff8dc;
   border: 2px solid #333;
-  font-size: 1.5em;
+  font-size: 1.6em;
   border-radius: 6px;
+}
+
+#instructions {
+  font-size: 1.2em;
+  margin: 15px 0;
+}
+
+#instructions.red {
+  color: red;
+  font-weight: bold;
 }
 
 #answerInput {
@@ -117,6 +152,16 @@ button:hover {
   margin-top: 10px;
   font-size: 1.1em;
   color: #444;
+}
+
+#currentStreak {
+  color: #2196F3;
+  font-weight: bold;
+}
+
+#longestStreak {
+  color: purple;
+  font-weight: bold;
 }
 
 /* Progress Chart */
@@ -151,3 +196,20 @@ button:hover {
   background-color: #ffd700;
   font-weight: bold;
 }
+
+#progressButtons button {
+  margin: 10px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  color: white;
+}
+
+#endGameBtn { background-color: #f44336; }
+#sameLevelBtn { background-color: #4CAF50; }
+#nextLevelBtn { background-color: #2196F3; }
+
+#endGameBtn:hover { background-color: #c62828; }
+#sameLevelBtn:hover { background-color: #3d8b40; }
+#nextLevelBtn:hover { background-color: #1565c0; }
