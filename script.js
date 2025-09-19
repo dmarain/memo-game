@@ -109,6 +109,10 @@ function startLevel(level) {
   if (!levelStats[level]) {
     levelStats[level] = { correct: 0, incorrect: 0, longest: 0, total: 0 };
   }
+
+  // NEW: Greet child by name
+  speak(`Okay ${childName}, let’s begin Level ${level}.`);
+
   generateRound(level);
 }
 
