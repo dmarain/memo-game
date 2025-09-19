@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startLevel(currentLevel);
     } else {
       let msg = "Please choose First Time User to set up your child’s name.";
-      alert(msg);
+      document.getElementById("nameError").innerText = msg;
       speak(msg);
     }
   });
@@ -51,14 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let inputName = document.getElementById("childName").value.trim();
     if (!inputName) {
       let msg = "Please enter a child’s name before continuing.";
-      alert(msg);
+      document.getElementById("nameError").innerText = msg;
       speak(msg);
       return;
     }
+    document.getElementById("nameError").innerText = "";
+
     childName = inputName;
     currentLevel = document.getElementById("startLevel").value;
     autoNext = document.getElementById("autoNext").checked;
     timerEnabled = document.getElementById("timerToggle").checked;
+
     showScreen("gameScreen");
     startLevel(currentLevel);
   });
@@ -298,4 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
     utter.voice = speechSynthesis.getVoices().find(v => v.name === "Samantha") || null;
     speechSynthesis.speak(utter);
   }
+
+  // ===== FORCE START ON WELCOME =====
+  showScreen("welcomeScreen");
 });
