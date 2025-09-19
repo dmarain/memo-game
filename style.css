@@ -15,9 +15,6 @@ body {
   display: block;
 }
 
-.hidden {
-  display: none;
-}
 
 /* Welcome Screen */
 #welcomeScreen {
