@@ -2,85 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memo’s Memory Mystery</title>
+  <title>MEMO'S MEMORY MYSTERY</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Welcome Screen -->
-  <div id="welcomeScreen" class="screen active">
-    <img src="memo-fox.png" alt="Memo the Fox" id="memoImg">
-    <h1>Welcome to Memo’s Memory Mystery!</h1>
-    <button id="voiceBtn">Hear Memo’s Voice</button>
+  <div id="welcomeScreen" class="screen">
+    <img id="memoImage" src="memo-fox.png" alt="Memo the Fox">
+    <h1>Welcome to MEMO’S Detective Agency</h1>
+    <button id="hearMemoBtn">Hear Memo’s Voice</button>
     <button id="firstTimeBtn">First Time User</button>
     <button id="returningBtn">Returning User</button>
   </div>
 
-  <!-- Parent Setup Screen -->
-  <div id="parentScreen" class="screen">
-    <img src="memo-fox.png" alt="Memo the Fox" class="memoImgSmall">
+  <!-- Parent Settings Screen -->
+  <div id="parentScreen" class="screen hidden">
     <h2>Parent Settings</h2>
-    <p>Please enter your child’s name and choose a starting level.</p>
-
-    <label for="childName">Child’s Name:</label>
-    <input type="text" id="childName" placeholder="Enter name here">
-    <p id="nameError" class="errorMsg"></p>
-
-    <label for="startLevel">Starting Level:</label>
-    <select id="startLevel">
-      <option value="1A">Level 1A</option>
-      <option value="1B">Level 1B</option>
-      <option value="1C">Level 1C</option>
-      <option value="2A">Level 2A</option>
-      <option value="2B">Level 2B</option>
-      <option value="2C">Level 2C</option>
-      <option value="3A">Level 3A</option>
-      <option value="3B">Level 3B</option>
-      <option value="3C">Level 3C</option>
-      <option value="4A">Level 4A</option>
-      <option value="4B">Level 4B</option>
-      <option value="4C">Level 4C</option>
-      <option value="5A">Level 5A</option>
-      <option value="5B">Level 5B</option>
-      <option value="5C">Level 5C</option>
-    </select>
-
-    <label><input type="checkbox" id="autoNext"> Auto Level-Up</label>
-    <p class="helperText">Automatically move to the next sublevel after 5 correct in a row.</p>
-
-    <label><input type="checkbox" id="timerToggle"> Enable Timer</label>
-    <p class="helperText">Numbers disappear after a few seconds. Great for memory training.</p>
-
-    <button id="saveStartBtn">Save & Start</button>
+    <label>Child's Name:
+      <input type="text" id="childNameInput">
+    </label>
+    <br>
+    <label>Starting Level:
+      <select id="levelSelect">
+        <option value="1A">Level 1A</option>
+        <option value="1B">Level 1B</option>
+        <option value="1C">Level 1C</option>
+        <option value="1D">Level 1D</option>
+      </select>
+    </label>
+    <br>
+    <label>
+      <input type="checkbox" id="autoNext"> Auto Level-Up after 5 in a row
+    </label>
+    <br>
+    <button id="saveSettingsBtn">Save and Start</button>
   </div>
 
   <!-- Game Screen -->
-  <div id="gameScreen" class="screen">
-    <img src="memo-fox.png" alt="Memo the Fox" class="memoImgSmall">
-    <h2 id="levelTitle">Level</h2>
-    <div id="numberGrid"></div>
+  <div id="gameScreen" class="screen hidden">
+    <h2 id="levelTitle"></h2>
     <p id="instructions"></p>
-
-    <input type="text" id="answerInput" placeholder="Enter missing numbers">
-    <button id="submitBtn">Submit (or press Enter)</button>
-
+    <div id="numberDisplay"></div>
+    <input type="text" id="answerInput" placeholder="Enter numbers separated by spaces">
+    <button id="submitBtn">Submit</button>
     <p id="feedback"></p>
-    <div id="streakBar">
-      Current Streak: <span id="currentStreak">0</span> |
-      Longest Streak: <span id="longestStreak">0</span>
-    </div>
-
+    <p id="streakDisplay"></p>
     <div id="controlButtons"></div>
   </div>
 
   <!-- Progress Screen -->
-  <div id="progressScreen" class="screen">
-    <img src="memo-fox.png" alt="Memo the Fox" class="memoImgSmall">
-    <h2 id="progressTitle">Progress Chart</h2>
-    <table id="progressTable"></table>
-    <button id="sameLevelBtn">Return to Same Level</button>
-    <button id="nextLevelBtn">Go to Next Level</button>
-    <button id="endGameBtn">End Game</button>
+  <div id="progressScreen" class="screen hidden">
+    <h2>Progress Chart</h2>
+    <div id="progressDetails"></div>
+    <button id="backToWelcome">Back to Welcome</button>
   </div>
 
   <script src="script.js"></script>
