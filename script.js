@@ -1,3 +1,5 @@
+alert("script.js loaded!");
+
 // ===== Global Setup =====
 let childName = "";
 let currentLevel = "1A";
