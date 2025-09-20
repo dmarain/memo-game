@@ -21,17 +21,17 @@ function showScreen(screenId) {
 }
 
 // ===== Welcome Screen =====
-document.getElementById("hearMemoBtn").addEventListener("click", () => {
-  speak("Welcome to MEMO’s Detective Agency. I need your help to find the missing numbers!");
-});
+// document.getElementById("hearMemoBtn").addEventListener("click", () => {
+// speak("Welcome to MEMO’s Detective Agency. I need your help to find the missing numbers!");
+// });
 
-document.getElementById("firstTimeBtn").addEventListener("click", () => {
-  showScreen("parentScreen");
-});
+// document.getElementById("firstTimeBtn").addEventListener("click", () => {
+  // showScreen("parentScreen");
+// });
 
-document.getElementById("returningBtn").addEventListener("click", () => {
-  showScreen("returningScreen");
-});
+// document.getElementById("returningBtn").addEventListener("click", () => {
+  // showScreen("returningScreen");
+// });
 
 // ===== Returning User Name Entry =====
 document.getElementById("returningSubmitBtn").addEventListener("click", () => {
@@ -234,4 +234,17 @@ function speak(text) {
 // ===== On Load =====
 window.onload = () => {
   showScreen("welcomeScreen");
+
+  // Welcome Screen button listeners
+  document.getElementById("hearMemoBtn").addEventListener("click", () => {
+    speak("Welcome to MEMO’s Detective Agency. I need your help to find the missing numbers!");
+  });
+
+  document.getElementById("firstTimeBtn").addEventListener("click", () => {
+    showScreen("parentScreen");
+  });
+
+  document.getElementById("returningBtn").addEventListener("click", () => {
+    showScreen("returningScreen");
+  });
 };
