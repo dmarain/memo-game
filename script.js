@@ -248,3 +248,20 @@ window.onload = () => {
     showScreen("returningScreen");
   });
 };
+// ===== Debug Test =====
+window.onload = () => {
+  alert("Window.onload fired — script is running!");
+
+  // Welcome Screen button listeners
+  document.getElementById("hearMemoBtn").addEventListener("click", () => {
+    alert("Hear Memo button clicked!");
+  });
+
+  document.getElementById("firstTimeBtn").addEventListener("click", () => {
+    alert("First Time User button clicked!");
+  });
+
+  document.getElementById("returningBtn").addEventListener("click", () => {
+    alert("Returning User button clicked!");
+  });
+};
