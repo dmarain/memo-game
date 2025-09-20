@@ -1,5 +1,4 @@
 // ===== Global Setup =====
-/* 09-20 11:48 */
 let childName = "";
 let currentLevel = "1A";
 let autoNext = false;
@@ -31,8 +30,35 @@ document.getElementById("firstTimeBtn").addEventListener("click", () => {
 });
 
 document.getElementById("returningBtn").addEventListener("click", () => {
-  // For now, resume from last level
-  showScreen("parentScreen");
+  showScreen("returningScreen");
+});
+
+// ===== Returning User Name Entry =====
+document.getElementById("returningSubmitBtn").addEventListener("click", () => {
+  let enteredName = document.getElementById("returningNameInput").value.trim().toUpperCase();
+  if (!enteredName) {
+    document.getElementById("returningFeedback").innerText = "Please enter a name.";
+    return;
+  }
+
+  let storedData = JSON.parse(localStorage.getItem(enteredName));
+
+  if (storedData) {
+    childName = enteredName;
+    currentLevel = storedData.lastLevel || "1A";
+    showScreen("gameScreen");
+    startLevel(currentLevel);
+  } else {
+    document.getElementById("returningFeedback").innerText = "Name not recognized. Please enter through Parent Settings.";
+    setTimeout(() => {
+      showScreen("parentScreen");
+      document.getElementById("childNameInput").value = enteredName;
+    }, 1500);
+  }
+});
+
+document.getElementById("backToWelcomeBtn").addEventListener("click", () => {
+  showScreen("welcomeScreen");
 });
 
 // ===== Parent Settings =====
@@ -40,6 +66,10 @@ document.getElementById("saveSettingsBtn").addEventListener("click", () => {
   childName = document.getElementById("childNameInput").value.trim().toUpperCase();
   currentLevel = document.getElementById("levelSelect").value;
   autoNext = document.getElementById("autoNext").checked;
+
+  // Save data for future returning users
+  let storedData = { lastLevel: currentLevel, stats: levelStats[currentLevel] };
+  localStorage.setItem(childName, JSON.stringify(storedData));
 
   currentStreak = 0;
   longestStreak = 0;
@@ -159,6 +189,8 @@ function celebrateStreak() {
   document.getElementById("nextLevelBtn").addEventListener("click", () => {
     currentLevel = getNextLevel(currentLevel);
     currentStreak = 0;
+    // Save updated level
+    localStorage.setItem(childName, JSON.stringify({ lastLevel: currentLevel, stats: levelStats[currentLevel] }));
     startLevel(currentLevel);
   });
 
@@ -198,6 +230,7 @@ function speak(text) {
   synth.cancel();
   synth.speak(utter);
 }
+
 // ===== On Load =====
 window.onload = () => {
   showScreen("welcomeScreen");
