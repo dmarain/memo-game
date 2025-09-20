@@ -198,3 +198,7 @@ function speak(text) {
   synth.cancel();
   synth.speak(utter);
 }
+// ===== On Load =====
+window.onload = () => {
+  showScreen("welcomeScreen");
+};
