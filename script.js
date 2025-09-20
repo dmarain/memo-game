@@ -267,3 +267,37 @@ window.onload = () => {
     alert("Returning User button clicked!");
   });
 };
+// ===== On Load =====
+window.onload = () => {
+  showScreen("welcomeScreen");
+  alert("Window.onload fired — script is running!");
+
+  // Debug listeners
+  const hearBtn = document.getElementById("hearMemoBtn");
+  const firstBtn = document.getElementById("firstTimeBtn");
+  const returnBtn = document.getElementById("returningBtn");
+
+  if (hearBtn) {
+    hearBtn.addEventListener("click", () => {
+      alert("Hear Memo button clicked!");
+    });
+  } else {
+    alert("hearMemoBtn not found!");
+  }
+
+  if (firstBtn) {
+    firstBtn.addEventListener("click", () => {
+      alert("First Time User button clicked!");
+    });
+  } else {
+    alert("firstTimeBtn not found!");
+  }
+
+  if (returnBtn) {
+    returnBtn.addEventListener("click", () => {
+      alert("Returning User button clicked!");
+    });
+  } else {
+    alert("returningBtn not found!");
+  }
+};
