@@ -16,8 +16,8 @@ let levelStats = {
 
 // ===== Utility =====
 function showScreen(screenId) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-  document.getElementById(screenId).classList.remove("hidden");
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(screenId).classList.add("active");
 }
 
 // ===== Returning User Name Entry =====
