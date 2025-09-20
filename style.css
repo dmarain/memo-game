@@ -1,4 +1,4 @@
-/* General Layout 09-20 11:51 */
+/* General Layout */
 body {
   font-family: Arial, sans-serif;
   background: linear-gradient(to bottom, #fdf6e3, #f1f1f1);
@@ -22,7 +22,8 @@ body {
 
 /* Memo Image */
 #memoImage {
-  width: 220px;
+  max-width: 300px;
+  width: 80%;
   height: auto;
   margin: 20px auto;
   display: block;
