@@ -36,9 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
       showScreen("gameScreen");
       startLevel(currentLevel);
     } else {
-      let msg = "Please choose First Time User to set up your child’s name.";
-      document.getElementById("nameError").innerText = msg;
-      speak(msg);
+      showScreen("parentScreen");
+      setTimeout(() => document.getElementById("childName").focus(), 200);
     }
   });
 
@@ -135,11 +134,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("feedback").className = "";
     document.getElementById("controlButtons").innerHTML = "";
 
-    // Enable input after Memo speaks (~2s delay)
+    // Enable input after Memo speaks (~1s delay for responsiveness)
     setTimeout(() => {
       answerBox.disabled = false;
       answerBox.focus();
-    }, 2000);
+    }, 1000);
+
+    // Safety focus
+    answerBox.focus();
   }
 
   // ===== Answer Checking =====
