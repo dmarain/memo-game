@@ -1,5 +1,3 @@
-alert("script.js loaded!");
-
 // ===== Global Setup =====
 let childName = "";
 let currentLevel = "1A";
@@ -21,19 +19,6 @@ function showScreen(screenId) {
   document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
   document.getElementById(screenId).classList.remove("hidden");
 }
-
-// ===== Welcome Screen =====
-// document.getElementById("hearMemoBtn").addEventListener("click", () => {
-// speak("Welcome to MEMO’s Detective Agency. I need your help to find the missing numbers!");
-// });
-
-// document.getElementById("firstTimeBtn").addEventListener("click", () => {
-  // showScreen("parentScreen");
-// });
-
-// document.getElementById("returningBtn").addEventListener("click", () => {
-  // showScreen("returningScreen");
-// });
 
 // ===== Returning User Name Entry =====
 document.getElementById("returningSubmitBtn").addEventListener("click", () => {
@@ -249,55 +234,4 @@ window.onload = () => {
   document.getElementById("returningBtn").addEventListener("click", () => {
     showScreen("returningScreen");
   });
-};
-// ===== Debug Test =====
-window.onload = () => {
-  alert("Window.onload fired — script is running!");
-
-  // Welcome Screen button listeners
-  document.getElementById("hearMemoBtn").addEventListener("click", () => {
-    alert("Hear Memo button clicked!");
-  });
-
-  document.getElementById("firstTimeBtn").addEventListener("click", () => {
-    alert("First Time User button clicked!");
-  });
-
-  document.getElementById("returningBtn").addEventListener("click", () => {
-    alert("Returning User button clicked!");
-  });
-};
-// ===== On Load =====
-window.onload = () => {
-  showScreen("welcomeScreen");
-  alert("Window.onload fired — script is running!");
-
-  // Debug listeners
-  const hearBtn = document.getElementById("hearMemoBtn");
-  const firstBtn = document.getElementById("firstTimeBtn");
-  const returnBtn = document.getElementById("returningBtn");
-
-  if (hearBtn) {
-    hearBtn.addEventListener("click", () => {
-      alert("Hear Memo button clicked!");
-    });
-  } else {
-    alert("hearMemoBtn not found!");
-  }
-
-  if (firstBtn) {
-    firstBtn.addEventListener("click", () => {
-      alert("First Time User button clicked!");
-    });
-  } else {
-    alert("firstTimeBtn not found!");
-  }
-
-  if (returnBtn) {
-    returnBtn.addEventListener("click", () => {
-      alert("Returning User button clicked!");
-    });
-  } else {
-    alert("returningBtn not found!");
-  }
 };
