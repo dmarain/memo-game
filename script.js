@@ -94,7 +94,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let missingCount = 1;
     if (level.endsWith("B")) missingCount = 2;
-    if (level.endsWith("C")) missingCount = Math.min(3, n - 1);
+    if (level.endsWith("C")) missingCount = 1 + Math.floor(Math.random() * 2); // 1 or 2
+
+    // Shuffle numbers at C level
+    if (level.endsWith("C")) {
+      allNumbers.sort(() => Math.random() - 0.5);
+    }
 
     let missing = [];
     while (missing.length < missingCount) {
@@ -129,19 +134,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reset UI
     let answerBox = document.getElementById("answerInput");
     answerBox.value = "";
-    answerBox.disabled = true;
+    answerBox.disabled = false;
     document.getElementById("feedback").innerText = "";
     document.getElementById("feedback").className = "";
     document.getElementById("controlButtons").innerHTML = "";
 
-    // Enable input after Memo speaks (~1s delay for responsiveness)
     setTimeout(() => {
-      answerBox.disabled = false;
       answerBox.focus();
     }, 1000);
-
-    // Safety focus
-    answerBox.focus();
   }
 
   // ===== Answer Checking =====
@@ -167,8 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
     guess.sort((a, b) => a - b);
 
     levelStats[currentLevel].total++;
-
     let displayName = childName.charAt(0).toUpperCase() + childName.slice(1);
+
+    // Disable submit until next round
+    document.getElementById("submitBtn").disabled = true;
 
     if (JSON.stringify(guess) === JSON.stringify(expectedAnswer)) {
       currentStreak++;
@@ -177,24 +179,27 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentStreak > levelStats[currentLevel].longest) {
         levelStats[currentLevel].longest = currentStreak;
       }
-      let msg = `${displayName}, that’s ${currentStreak} in a row! ${randomPraise()}`;
+      let msg = `${displayName}, that’s ${currentStreak} in a row! ${randomPraise()} Click Next Round to continue.`;
       document.getElementById("feedback").innerText = msg;
       document.getElementById("feedback").className = "feedback-correct";
       speak(msg);
 
-      if (currentStreak % 5 === 0) {
-        bigCelebration();
-      } else {
-        nextRoundButton();
-      }
+      showNextRoundButton();
     } else {
       levelStats[currentLevel].incorrect++;
       currentStreak = 0;
-      let msg = `Not quite, ${displayName}. Try again next round.`;
+      let msg = `Not quite, ${displayName}. Try again.`;
       document.getElementById("feedback").innerText = msg;
       document.getElementById("feedback").className = "feedback-incorrect";
       speak(msg);
-      nextRoundButton();
+
+      // Clear input and retry same round
+      setTimeout(() => {
+        let answerBox = document.getElementById("answerInput");
+        answerBox.value = "";
+        document.getElementById("submitBtn").disabled = false;
+        answerBox.focus();
+      }, 1500);
     }
 
     document.getElementById("currentStreak").innerText = currentStreak;
@@ -205,9 +210,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return praiseMessages[Math.floor(Math.random() * praiseMessages.length)];
   }
 
-  function nextRoundButton() {
+  function showNextRoundButton() {
     document.getElementById("controlButtons").innerHTML =
-      `<button onclick="document.dispatchEvent(new CustomEvent('nextRound'))">Next Round</button>`;
+      `<button id="nextRoundBtn">Next Round</button>`;
+    document.getElementById("nextRoundBtn").addEventListener("click", () => {
+      document.getElementById("submitBtn").disabled = false;
+      generateRound(currentLevel);
+    });
   }
 
   // ===== Celebration =====
@@ -227,7 +236,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===== Level Navigation =====
-  document.addEventListener("nextRound", () => generateRound(currentLevel));
   document.addEventListener("staySame", () => generateRound(currentLevel));
   document.addEventListener("goNext", () => goToNextLevel());
   document.addEventListener("progress", () => showProgress());
@@ -278,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
     </tr>`;
 
     document.getElementById("progressTable").innerHTML = tableHTML;
-
     document.getElementById("endGameBtn").style.display = endGame ? "inline-block" : "none";
   }
 
@@ -304,6 +311,6 @@ document.addEventListener("DOMContentLoaded", () => {
     speechSynthesis.speak(utter);
   }
 
-  // ===== FORCE START ON WELCOME =====
+  // ===== Start at Welcome =====
   showScreen("welcomeScreen");
 });
