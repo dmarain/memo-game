@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-/* 09-20 11:50 */
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -12,8 +11,21 @@
     <img id="memoImage" src="memo-fox.png" alt="Memo the Fox">
     <h1>Welcome to MEMO’S Detective Agency</h1>
     <button id="hearMemoBtn">Hear Memo’s Voice</button>
+    <br><br>
     <button id="firstTimeBtn">First Time User</button>
     <button id="returningBtn">Returning User</button>
+  </div>
+
+  <!-- Returning User Name Entry -->
+  <div id="returningScreen" class="screen hidden">
+    <h2>Welcome Back</h2>
+    <label>Enter your name:
+      <input type="text" id="returningNameInput">
+    </label>
+    <br>
+    <button id="returningSubmitBtn">Continue</button>
+    <button id="backToWelcomeBtn">Back</button>
+    <p id="returningFeedback"></p>
   </div>
 
   <!-- Parent Settings Screen -->
