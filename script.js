@@ -245,7 +245,7 @@ function speak(text) {
 window.onload = () => {
   showScreen("welcomeScreen");
 
-  // Welcome Screen button listeners
+  // Welcome Screen buttons
   document.getElementById("hearMemoBtn").addEventListener("click", () => {
     speak("Welcome to MEMO’s Detective Agency. I need your help to find the missing numbers!");
   });
@@ -256,5 +256,55 @@ window.onload = () => {
 
   document.getElementById("returningBtn").addEventListener("click", () => {
     showScreen("returningScreen");
+  });
+
+  // Returning User submit
+  document.getElementById("returningSubmitBtn").addEventListener("click", () => {
+    let enteredName = document.getElementById("returningNameInput").value.trim().toUpperCase();
+    if (!enteredName) {
+      document.getElementById("returningFeedback").innerText = "Please enter a name.";
+      return;
+    }
+    let storedData = JSON.parse(localStorage.getItem(enteredName));
+    if (!storedData) {
+      document.getElementById("returningFeedback").innerText = "Name not recognized. Please use Parent Settings.";
+      return;
+    }
+    childName = enteredName;
+    currentLevel = storedData.lastLevel || "1A";
+    levelStats = storedData.stats || {};
+    currentStreak = 0;
+    longestStreak = 0;
+    showScreen("gameScreen");
+    startLevel(currentLevel);
+  });
+
+  // Parent Settings save
+  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+    childName = document.getElementById("childNameInput").value.trim().toUpperCase();
+    currentLevel = document.getElementById("levelSelect").value;
+    autoNext = document.getElementById("autoNext").checked;
+
+    if (!childName) {
+      alert("Please enter a child name.");
+      return;
+    }
+
+    // Save to localStorage
+    let storedData = {
+      lastLevel: currentLevel,
+      stats: levelStats[currentLevel] || { correct: 0, incorrect: 0, longest: 0, total: 0 }
+    };
+    localStorage.setItem(childName, JSON.stringify(storedData));
+
+    currentStreak = 0;
+    longestStreak = 0;
+    showScreen("gameScreen");
+    startLevel(currentLevel);
+  });
+
+  // Back to Welcome
+  document.getElementById("backToWelcome").addEventListener("click", () => {
+    showScreen("welcomeScreen");
   });
 };
