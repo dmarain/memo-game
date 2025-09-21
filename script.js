@@ -35,8 +35,25 @@ window.onload = () => {
   });
 
   // Save and Start (Parent Settings)
-  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
-    alert("🟢 Save and Start button clicked!");
-    showScreen("gameScreen");
-  });
-};
+document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+  const nameInput = document.getElementById("childNameInput").value.trim();
+  const levelInput = document.getElementById("levelSelect").value;
+
+  if (!nameInput) {
+    alert("Please enter a name before starting.");
+    return;
+  }
+
+  childName = nameInput.toUpperCase();
+  currentLevel = levelInput;
+
+  alert(`🟢 Starting game for ${childName} at ${currentLevel}`);
+
+  // Show game screen
+  showScreen("gameScreen");
+
+  // For now just placeholder content until we add generateRound
+  document.getElementById("levelTitle").innerText = "Level " + currentLevel;
+  document.getElementById("instructions").innerText = "This is where the round will appear.";
+  document.getElementById("numberDisplay").innerText = "[Numbers go here]";
+});
