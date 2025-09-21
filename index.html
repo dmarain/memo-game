@@ -3,77 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MEMO’S Memory Mystery</title>
+  <title>MEMO’s Memory Mystery</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Welcome Screen -->
+  <!-- ===== Welcome Screen ===== -->
   <div id="welcomeScreen" class="screen active">
-    <img id="memoImage" src="memo-fox.png" alt="Memo the Fox" />
+    <img src="memo-fox.png" alt="Memo the Fox" class="memo-image" />
     <h1>Welcome to MEMO’S Detective Agency</h1>
     <button id="hearMemoBtn">Hear Memo’s Voice</button>
     <button id="firstTimeBtn">First Time User</button>
     <button id="returningBtn">Returning User</button>
   </div>
 
-  <!-- Parent Settings -->
-  <div id="parentScreen" class="screen hidden">
+  <!-- ===== Parent Settings ===== -->
+  <div id="parentScreen" class="screen">
     <h2>Parent Settings</h2>
-    <label>
-      Child's Name:
-      <input type="text" id="childNameInput" />
-    </label>
-    <br>
-    <label>
-      Starting Level:
+    <label>Child's Name: <input type="text" id="childNameInput" /></label><br />
+    <label>Starting Level:
       <select id="levelSelect">
         <option value="1A">Level 1A</option>
         <option value="1B">Level 1B</option>
         <option value="1C">Level 1C</option>
         <option value="1D">Level 1D</option>
       </select>
-    </label>
-    <br>
-    <label>
-      <input type="checkbox" id="autoNext" />
-      Auto Level-Up after 5 in a row
-    </label>
-    <br>
+    </label><br />
+    <label><input type="checkbox" id="autoNext" /> Auto Level-Up after 5 in a row</label><br />
     <button id="saveSettingsBtn">Save and Start</button>
   </div>
 
-  <!-- Returning User Screen -->
-  <div id="returningScreen" class="screen hidden">
+  <!-- ===== Returning User ===== -->
+  <div id="returningScreen" class="screen">
     <h2>Returning User</h2>
-    <label>
-      Enter Your Name:
-      <input type="text" id="returningNameInput" />
-    </label>
-    <br>
+    <label>Enter your name: <input type="text" id="returningNameInput" /></label><br />
     <button id="returningSubmitBtn">Start Game</button>
     <p id="returningFeedback"></p>
   </div>
 
-  <!-- Game Screen -->
-  <div id="gameScreen" class="screen hidden">
+  <!-- ===== Game Screen ===== -->
+  <div id="gameScreen" class="screen">
     <h2 id="levelTitle"></h2>
     <p id="instructions"></p>
-    <div id="numberDisplay"></div>
-    <input type="text" id="answerInput" placeholder="Enter numbers separated by spaces" />
+    <div id="numberDisplay" class="number-boxes"></div>
+    <input id="answerInput" type="text" placeholder="Enter numbers separated by spaces" />
     <button id="submitBtn">Submit</button>
     <p id="feedback"></p>
     <p id="streakDisplay">Current streak: 0</p>
     <div id="controlButtons"></div>
   </div>
 
-  <!-- Progress Screen -->
-  <div id="progressScreen" class="screen hidden">
-    <h2>Progress Chart</h2>
-    <div id="progressDetails"></div>
-    <button id="backToWelcome">Back to Welcome</button>
-  </div>
-
-  <!-- ✅ Correct script link -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
