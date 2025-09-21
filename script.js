@@ -62,12 +62,15 @@ function generateRound(level) {
   document.getElementById("numberDisplay").innerText = display.join(" ");
 
   let instr = `Find the ${missingCount} missing number${missingCount > 1 ? "s" : ""} from 1 to ${maxNum}. Enter numbers separated by spaces.`;
-  document.getElementById("instructions").innerText = instr;
-  speak(instr);
+  // Set instructions text + have Memo speak them
+document.getElementById("instructions").innerText = instr;
+speak(instr);
 
-  // Autofocus (fix for iPhone Safari)
-  let answerBox = document.getElementById("answerInput");
-  setTimeout(() => answerBox.focus(), 300);
+// Stronger autofocus fix for iPhone Safari
+let answerBox = document.getElementById("answerInput");
+if (answerBox) {
+  answerBox.focus({ preventScroll: true });    // immediate focus
+  setTimeout(() => answerBox.focus({ preventScroll: true }), 400); // delayed retry
 }
 
 // ===== Answer Check =====
