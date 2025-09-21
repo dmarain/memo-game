@@ -33,10 +33,17 @@ document.getElementById("returningSubmitBtn").addEventListener("click", () => {
   if (storedData) {
     childName = enteredName;
     currentLevel = storedData.lastLevel || "1A";
+
+    // Ensure stats object exists
+    if (!levelStats[currentLevel]) {
+      levelStats[currentLevel] = { correct: 0, incorrect: 0, longest: 0, total: 0 };
+    }
+
     showScreen("gameScreen");
     startLevel(currentLevel);
   } else {
-    document.getElementById("returningFeedback").innerText = "Name not recognized. Please enter through Parent Settings.";
+    document.getElementById("returningFeedback").innerText =
+      "Name not recognized. Please enter through Parent Settings.";
     setTimeout(() => {
       showScreen("parentScreen");
       document.getElementById("childNameInput").value = enteredName;
@@ -87,7 +94,7 @@ function generateRound(level) {
   if (level === "1A") { maxNum = 3; missingCount = 1; }
   if (level === "1B") { maxNum = 3; missingCount = 1; }
   if (level === "1C") { maxNum = 3; missingCount = 2; }
-  if (level === "1D") { maxNum = 3; missingCount = 1; }
+  if (level === "1D") { maxNum = 3; missingCount = 2; } // FIXED
 
   numbers = [];
   for (let i = 1; i <= maxNum; i++) numbers.push(i);
@@ -110,7 +117,10 @@ function generateRound(level) {
   document.getElementById("instructions").innerText = instr;
   speak(instr);
 
-  setTimeout(() => document.getElementById("answerInput").focus(), 300);
+  // FIXED: stronger autofocus for iPhone Safari
+  let answerBox = document.getElementById("answerInput");
+  answerBox.focus();
+  setTimeout(() => answerBox.focus(), 300);
 }
 
 // ===== Submit Answer =====
@@ -120,9 +130,18 @@ document.getElementById("answerInput").addEventListener("keypress", e => {
 });
 
 function checkAnswer() {
-  let input = document.getElementById("answerInput").value.trim();
+  let inputBox = document.getElementById("answerInput");
+  let submitBtn = document.getElementById("submitBtn");
+
+  // FIXED: prevent double submissions
+  inputBox.disabled = true;
+  submitBtn.disabled = true;
+
+  let input = inputBox.value.trim();
   if (input === "") {
     document.getElementById("feedback").innerText = "Please input a number before clicking Submit.";
+    inputBox.disabled = false;
+    submitBtn.disabled = false;
     return;
   }
 
@@ -152,7 +171,11 @@ function checkAnswer() {
   levelStats[currentLevel].total++;
   document.getElementById("controlButtons").innerHTML =
     `<button id="nextRoundBtn">Next Round</button>`;
-  document.getElementById("nextRoundBtn").addEventListener("click", () => generateRound(currentLevel));
+  document.getElementById("nextRoundBtn").addEventListener("click", () => {
+    inputBox.disabled = false;
+    submitBtn.disabled = false;
+    generateRound(currentLevel);
+  });
 }
 
 // ===== Streak Celebration =====
