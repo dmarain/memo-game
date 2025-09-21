@@ -33,4 +33,10 @@ window.onload = () => {
   document.getElementById("returningBtn").addEventListener("click", () => {
     showScreen("returningScreen");
   });
+
+  // Save and Start (Parent Settings)
+  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+    alert("🟢 Save and Start button clicked!");
+    showScreen("gameScreen");
+  });
 };
